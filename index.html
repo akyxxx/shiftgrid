@@ -11,13 +11,17 @@
     
     <style>
         :root {
+            /* Dark Teal Theme Palette derived from logo */
             --bg-base: #0a0f0d;
             --surface: #121a16;
             --surface-border: #1e2c24;
-            --accent-lime: #c6f642;
-            --accent-hover: #b0e032;
+            --primary-blue: #0066ff;
+            --primary-purple: #6600ff;
+            --accent-gradient: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+            --accent-hover: #5500dd; /* Slightly darker purple for hover */
             --text-main: #ffffff;
             --text-muted: #8b9d93;
+            --error: #ff5c5c;
         }
 
         * {
@@ -40,125 +44,120 @@
 
         .auth-card {
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             background: var(--surface);
             border: 1px solid var(--surface-border);
-            border-radius: 20px;
-            padding: 32px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
+        /* Logo Styling */
         .logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
+            text-align: center;
         }
 
         .logo-img {
-            width: 48px;
-            height: 48px;
-            object-fit: contain;
-            border-radius: 12px;
+            width: 110px; /* Adjusted size */
+            height: auto;
+            margin-bottom: 16px;
         }
 
-        .logo-text {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text-main);
-            letter-spacing: -0.5px;
-        }
-
-        .logo-text span {
-            color: var(--accent-lime);
+        .logo-tagline {
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 500;
         }
 
         .welcome-header {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 36px;
+            width: 100%;
         }
 
         .welcome-header h1 {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
             margin-bottom: 8px;
         }
 
         .welcome-header p {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--text-muted);
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: left;
         }
 
         .form-label {
             display: block;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             color: var(--text-main);
-        }
-
-        .form-input-wrapper {
-            position: relative;
         }
 
         .form-input {
             width: 100%;
             background: var(--bg-base);
-            border: 1px solid var(--surface-border);
-            border-radius: 10px;
-            padding: 12px 16px;
+            border: 2px solid var(--surface-border); /* Thicker border */
+            border-radius: 12px;
+            padding: 16px;
             color: var(--text-main);
-            font-size: 14px;
+            font-size: 15px;
             outline: none;
             transition: border-color 0.2s;
         }
 
+        /* Focus state uses gradient border logic via box-shadow */
         .form-input:focus {
-            border-color: var(--accent-lime);
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.15);
         }
 
-        .toggle-password {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
+        .form-input::placeholder {
             color: var(--text-muted);
-            display: flex;
-            align-items: center;
+            opacity: 0.7;
         }
 
         .form-options {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 13px;
-            margin-bottom: 24px;
+            font-size: 14px;
+            margin-bottom: 32px;
+            width: 100%;
         }
 
         .remember-me {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             color: var(--text-muted);
             cursor: pointer;
         }
 
         .remember-me input {
-            accent-color: var(--accent-lime);
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-blue);
+            cursor: pointer;
         }
 
         .forgot-link {
-            color: var(--accent-lime);
+            color: var(--primary-blue);
             text-decoration: none;
+            font-weight: 600;
         }
 
         .forgot-link:hover {
@@ -167,16 +166,17 @@
 
         .btn-primary {
             width: 100%;
-            background: var(--accent-lime);
-            color: var(--bg-base);
+            background: var(--accent-gradient);
+            color: #ffffff;
             border: none;
-            border-radius: 10px;
-            padding: 14px;
-            font-size: 15px;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(198, 246, 66, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 102, 255, 0.3);
             transition: background 0.2s, transform 0.1s;
+            margin-bottom: 24px;
         }
 
         .btn-primary:hover {
@@ -184,57 +184,19 @@
         }
 
         .btn-primary:active {
-            transform: scale(0.98);
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 24px 0;
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid var(--surface-border);
-        }
-
-        .divider::before { margin-right: .75em; }
-        .divider::after { margin-left: .75em; }
-
-        .btn-google {
-            width: 100%;
-            background: transparent;
-            border: 1px solid var(--surface-border);
-            border-radius: 10px;
-            padding: 12px;
-            color: var(--text-main);
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-google:hover {
-            background: rgba(255, 255, 255, 0.03);
+            transform: scale(0.99); /* Subtle click effect */
         }
 
         .auth-footer {
             text-align: center;
-            margin-top: 24px;
-            font-size: 13px;
+            font-size: 14px;
             color: var(--text-muted);
+            width: 100%;
+            margin-top: auto; /* Pushes to bottom of card if needed */
         }
 
         .auth-footer a {
-            color: var(--accent-lime);
+            color: var(--primary-blue);
             text-decoration: none;
             font-weight: 600;
         }
@@ -242,41 +204,46 @@
         .auth-footer a:hover {
             text-decoration: underline;
         }
+
+        /* Responsive Adjustments */
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 30px;
+            }
+            .welcome-header h1 {
+                font-size: 22px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <div class="auth-card">
-        <!-- Brand Logo Header using your uploaded PNG image -->
+        <!-- Brand Logo Header -->
         <div class="logo-container">
             <img src="SiftGrid logo.png" alt="ShiftGrid Logo" class="logo-img">
-            <span class="logo-text">shift<span>grid</span></span>
+            <div class="logo-tagline">Attendance • Salary • People • Insights</div>
         </div>
 
         <div class="welcome-header">
             <h1>Welcome Back!</h1>
-            <p>Sign in to access your shift tracker and salary records.</p>
+            <p>Sign in to manage attendance, track salaries, and gain workforce insights.</p>
         </div>
 
         <form id="loginForm" onsubmit="handleLogin(event)">
             <div class="form-group">
-                <label class="form-label">Email address*</label>
-                <input type="email" class="form-input" placeholder="example@gmail.com" required>
+                <label class="form-label">Email address</label>
+                <input type="email" class="form-input" placeholder="name@company.com" required>
             </div>
 
             <div class="form-group">
-                <label class="form-label">Password*</label>
-                <div class="form-input-wrapper">
-                    <input type="password" id="passwordInput" class="form-input" placeholder="••••••••" required>
-                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">
-                        <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                    </button>
-                </div>
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" placeholder="••••••••" required>
             </div>
 
             <div class="form-options">
                 <label class="remember-me">
-                    <input type="checkbox"> Remember me
+                    <input type="checkbox" checked> Remember me
                 </label>
                 <a href="#" class="forgot-link">Forgot Password?</a>
             </div>
@@ -284,38 +251,17 @@
             <button type="submit" class="btn-primary">Sign in</button>
         </form>
 
-        <div class="divider">Or continue with</div>
-
-        <button type="button" class="btn-google" onclick="handleGoogleLogin()">
-            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.2v3.15C3.18 21.32 7.28 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.2C.44 8.13 0 9.99 0 12s.44 3.87 1.2 5.42l4.08-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.28 0 3.18 2.68 1.2 6.58l4.08 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
-            Google
-        </button>
-
         <div class="auth-footer">
-            Don’t have an account? <a href="#">Sign up</a>
+            Don’t have an account? <a href="#">Contact your administrator</a>
         </div>
     </div>
 
     <script>
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('passwordInput');
-            const eyeIcon = document.getElementById('eyeIcon');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
-            }
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            alert("Firebase Auth integration hook ready.");
-        }
-
-        function handleGoogleLogin() {
-            alert("Google Sign-In hook ready.");
+        // Placeholder function for form submission handling
+        function handleLogin(event) {
+            event.preventDefault();
+            // Add your Firebase Auth logic here
+            alert("Sign-in attempt processed. Redirecting to dashboard...");
         }
     </script>
 </body>
