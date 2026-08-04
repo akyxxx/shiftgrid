@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShiftGrid — Sign In</title>
+    <title>ShiftGrid — Dashboard</title>
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,6 +40,17 @@
             padding: 20px;
         }
 
+        /* Loading Screen */
+        .loading-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Auth Card View */
         .auth-card {
             width: 100%;
             max-width: 420px;
@@ -48,9 +59,49 @@
             border-radius: 24px;
             padding: 32px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
+        }
+
+        /* Dashboard Container View */
+        .dashboard-container {
+            width: 100%;
+            max-width: 600px;
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .dashboard-header {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 20px;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info h2 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .user-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .btn-logout {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
         }
 
         .logo-container {
@@ -132,9 +183,6 @@
             font-weight: 600;
             cursor: pointer;
         }
-        .forgot-password-link:hover {
-            text-decoration: underline;
-        }
 
         .btn-primary {
             width: 100%;
@@ -170,13 +218,8 @@
             border-bottom: 1px solid var(--surface-border);
         }
 
-        .divider::before {
-            margin-right: 10px;
-        }
-
-        .divider::after {
-            margin-left: 10px;
-        }
+        .divider::before { margin-right: 10px; }
+        .divider::after { margin-left: 10px; }
 
         .btn-google {
             width: 100%;
@@ -192,11 +235,6 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: border-color 0.2s;
-        }
-
-        .btn-google:hover {
-            border-color: var(--text-muted);
         }
 
         .auth-footer {
@@ -210,9 +248,6 @@
             color: var(--primary-blue);
             text-decoration: none;
             font-weight: 600;
-        }
-        .auth-footer a:hover {
-            text-decoration: underline;
         }
 
         .status-message {
@@ -240,7 +275,13 @@
 </head>
 <body>
 
-    <div class="auth-card">
+    <!-- Loading Indicator -->
+    <div id="loadingScreen" class="loading-screen">
+        <p>Loading ShiftGrid...</p>
+    </div>
+
+    <!-- VIEW 1: Auth Screen -->
+    <div id="authView" class="auth-card">
         <div class="logo-container">
             <img src="SiftGrid logo.png" alt="ShiftGrid Logo" class="logo-img">
         </div>
@@ -282,10 +323,26 @@
         </div>
     </div>
 
+    <!-- VIEW 2: Main Dashboard -->
+    <div id="dashboardView" class="dashboard-container">
+        <div class="dashboard-header">
+            <div class="user-info">
+                <h2 id="dashUserEmail">Welcome</h2>
+                <p id="dashUserRole">Role: Employee</p>
+            </div>
+            <button type="button" class="btn-logout" onclick="handleLogout()">Sign Out</button>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--surface-border); border-radius: 20px; padding: 24px; text-align: center;">
+            <h3 style="font-size: 16px; margin-bottom: 8px;">Dashboard Active</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Your shifts are configured and ready to track!</p>
+        </div>
+    </div>
+
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -303,14 +360,45 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
+        // Listen for Auth State Changes on Page Load
+        onAuthStateChanged(auth, async (user) => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const authView = document.getElementById('authView');
+            const dashboardView = document.getElementById('dashboardView');
+
+            if (user) {
+                // User is signed in, check if setup is completed
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+
+                if (!userDoc.exists() || !userDoc.data().shiftsConfigured) {
+                    // Not configured yet, redirect to setup
+                    window.location.href = "setup.html";
+                } else {
+                    // Fully configured user -> Show Dashboard
+                    loadingScreen.style.display = 'none';
+                    authView.style.display = 'none';
+                    dashboardView.style.display = 'flex';
+
+                    document.getElementById('dashUserEmail').innerText = user.email || 'User';
+                    const data = userDoc.data();
+                    document.getElementById('dashUserRole').innerText = `Role: ${data.role || 'employee'} ${data.pendingManagerRequest ? '(Manager Pending)' : ''}`;
+                }
+            } else {
+                // Not signed in -> Show Login View
+                loadingScreen.style.display = 'none';
+                dashboardView.style.display = 'none';
+                authView.style.display = 'flex';
+            }
+        });
+
         window.handleEmailLogin = async function(event) {
             event.preventDefault();
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
 
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                await checkUserSetupAndRedirect(userCredential.user);
+                await signInWithEmailAndPassword(auth, email, password);
             } catch (error) {
                 showAlert(error.message, "error");
             }
@@ -321,7 +409,6 @@
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
                 
-                // Ensure user doc exists
                 const userDocRef = doc(db, "users", user.uid);
                 const userDoc = await getDoc(userDocRef);
                 if (!userDoc.exists()) {
@@ -331,8 +418,6 @@
                         shiftsConfigured: false
                     }, { merge: true });
                 }
-
-                await checkUserSetupAndRedirect(user);
             } catch (error) {
                 showAlert(error.message, "error");
             }
@@ -341,7 +426,7 @@
         window.handleForgotPassword = async function() {
             const email = document.getElementById('loginEmail').value.trim();
             if (!email) {
-                showAlert("Please enter your email address above first, then click Forgot Password.", "error");
+                showAlert("Please enter your email address above first.", "error");
                 return;
             }
 
@@ -353,16 +438,9 @@
             }
         };
 
-        async function checkUserSetupAndRedirect(user) {
-            const userDocRef = doc(db, "users", user.uid);
-            const userDoc = await getDoc(userDocRef);
-
-            if (!userDoc.exists() || !userDoc.data().shiftsConfigured) {
-                window.location.href = "setup.html";
-            } else {
-                window.location.href = "index.html"; // Main dashboard view if already set up
-            }
-        }
+        window.handleLogout = async function() {
+            await signOut(auth);
+        };
 
         function showAlert(message, type) {
             const alertBox = document.getElementById('statusAlert');
