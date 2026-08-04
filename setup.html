@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShiftGrid — Account Setup</title>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-base: #0a0f0d;
+            --surface: #121a16;
+            --surface-border: #1e2c24;
+            --primary-blue: #2563eb;
+            --primary-blue-hover: #1d4ed8;
+            --text-main: #ffffff;
+            --text-muted: #8b9d93;
+            --error-color: #ef4444;
+            --success-color: #22c55e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .setup-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .logo-img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 20px;
+        }
+
+        .welcome-header {
+            text-align: center;
+            margin-bottom: 24px;
+            width: 100%;
+        }
+
+        .welcome-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .welcome-header p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .role-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .role-option-btn {
+            background: var(--bg-base);
+            border: 1px solid var(--surface-border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            color: var(--text-main);
+            font-size: 15px;
+            font-weight: 600;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .role-option-btn span {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .role-option-btn.selected {
+            border-color: var(--primary-blue);
+            background: rgba(37, 99, 235, 0.08);
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--primary-blue);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-blue-hover);
+        }
+
+        .status-message {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .status-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            display: block;
+        }
+        .status-message.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="setup-card">
+        <div class="logo-container">
+            <img src="SiftGrid logo.png" alt="ShiftGrid Logo" class="logo-img">
+        </div>
+
+        <div class="welcome-header">
+            <h1>Account Setup</h1>
+            <p>Select your intended role to finalize your profile.</p>
+        </div>
+
+        <div id="statusAlert" class="status-message"></div>
+
+        <div class="role-options">
+            <div class="role-option-btn selected" id="optEmployee" onclick="selectRole('employee')">
+                Employee / Staff <span>Standard workspace access to track shifts and salaries.</span>
+            </div>
+            <div class="role-option-btn" id="optManager" onclick="selectRole('manager')">
+                Manager <span>Operational oversight (Requires Admin approval).</span>
+            </div>
+        </div>
+
+        <button type="button" id="confirmRoleBtn" class="btn-primary" onclick="saveRoleAndRedirect()">Continue</button>
+    </div>
+
+    <!-- Firebase SDK Imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, addReference, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA93AnibNs8iaNwYuy1tJglGXXqeY6p2oo",
+          authDomain: "shift-salary-tracker.firebaseapp.com",
+          projectId: "shift-salary-tracker",
+          storageBucket: "shift-salary-tracker.firebasestorage.app",
+          messagingSenderId: "719444723616",
+          appId: "1:719444723616:web:56b421b3d8d49f6b8946c5",
+          measurementId: "G-V8V657F1S0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let selectedRole = 'employee';
+
+        window.selectRole = function(role) {
+            selectedRole = role;
+            const optEmp = document.getElementById('optEmployee');
+            const optMgr = document.getElementById('optManager');
+
+            if (role === 'employee') {
+                optEmp.classList.add('selected');
+                optMgr.classList.remove('selected');
+            } else {
+                optMgr.classList.add('selected');
+                optEmp.classList.remove('selected');
+            }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+                
+                // If user already has a resolved active role, skip setup
+                if (userDoc.exists() && userDoc.data().role && userDoc.data().role !== 'pending_manager') {
+                    window.location.href = "dashboard.html";
+                }
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+
+        window.saveRoleAndRedirect = async function() {
+            if (!currentUser) return;
+
+            try {
+                const userDocRef = doc(db, "users", currentUser.uid);
+
+                if (selectedRole === 'employee') {
+                    // Automatically provisioned
+                    await setDoc(userDocRef, { 
+                        role: 'employee', 
+                        email: currentUser.email,
+                        updatedAt: new Date().toISOString()
+                    }, { merge: true });
+                    
+                    showAlert("Setup complete! Redirecting...", "success");
+                    setTimeout(() => { window.location.href = "dashboard.html"; }, 1000);
+                } else if (selectedRole === 'manager') {
+                    // Set role as pending and record a request for admin review
+                    await setDoc(userDocRef, { 
+                        role: 'pending_manager', 
+                        email: currentUser.email,
+                        updatedAt: new Date().toISOString()
+                    }, { merge: true });
+
+                    // Add request entry into a 'requests' collection for you to check
+                    await addDoc(collection(db, "requests"), {
+                        uid: currentUser.uid,
+                        email: currentUser.email,
+                        requestedRole: 'manager',
+                        status: 'pending',
+                        createdAt: new Date().toISOString()
+                    });
+
+                    showAlert("Manager request sent to Admin! Pending approval.", "success");
+                    setTimeout(() => { 
+                        // Route them to a waiting state or back to index/dashboard with restricted access message
+                        window.location.href = "index.html"; 
+                    }, 2000);
+                }
+            } catch (error) {
+                showAlert("Error saving profile: " + error.message, "error");
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('statusAlert');
+            alertBox.className = `status-message ${type}`;
+            alertBox.innerText = message;
+        }
+    </script>
+</body>
+</html>
