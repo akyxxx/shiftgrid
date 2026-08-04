@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShiftGrid — Mobile Shift & Salary Tracker</title>
+    <title>ShiftGrid — Login & Management</title>
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,11 +51,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
         }
 
         .logo-container {
             margin-bottom: 20px;
-            text-align: center;
         }
 
         .logo-img {
@@ -66,8 +66,7 @@
         }
 
         .welcome-header {
-            text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
             width: 100%;
         }
 
@@ -84,22 +83,17 @@
         }
 
         .form-group {
-            margin-bottom: 18px;
             width: 100%;
+            margin-bottom: 16px;
             text-align: left;
         }
 
-        .form-label {
+        .form-group label {
             display: block;
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
+            color: var(--text-muted);
             margin-bottom: 6px;
-            color: var(--text-main);
-        }
-
-        .input-wrapper {
-            position: relative;
-            width: 100%;
         }
 
         .form-input {
@@ -107,7 +101,7 @@
             background: var(--bg-base);
             border: 1px solid var(--surface-border);
             border-radius: 12px;
-            padding: 14px 16px;
+            padding: 14px;
             color: var(--text-main);
             font-size: 15px;
             outline: none;
@@ -116,58 +110,6 @@
 
         .form-input:focus {
             border-color: var(--primary-blue);
-        }
-
-        .form-input::placeholder {
-            color: var(--text-muted);
-            opacity: 0.5;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--text-muted);
-            font-size: 16px;
-        }
-
-        .form-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            margin-bottom: 24px;
-            width: 100%;
-        }
-
-        .remember-me {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-
-        .remember-me input {
-            width: 16px;
-            height: 16px;
-            accent-color: var(--primary-blue);
-            cursor: pointer;
-        }
-
-        .auth-link {
-            color: var(--text-muted);
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .auth-link:hover {
-            color: var(--text-main);
-            text-decoration: underline;
         }
 
         .btn-primary {
@@ -181,70 +123,23 @@
             font-weight: 700;
             cursor: pointer;
             transition: background 0.2s, transform 0.1s;
-            margin-bottom: 20px;
+            margin-top: 8px;
         }
 
         .btn-primary:hover {
             background: var(--primary-blue-hover);
         }
 
-        .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 13px;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid var(--surface-border);
-        }
-
-        .divider::before { margin-right: 12px; }
-        .divider::after { margin-left: 12px; }
-
-        .btn-social {
-            width: 100%;
-            background: var(--bg-base);
-            border: 1px solid var(--surface-border);
-            color: var(--text-main);
-            border-radius: 12px;
-            padding: 14px;
+        .toggle-mode {
+            margin-top: 20px;
             font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .toggle-mode span {
+            color: var(--primary-blue);
+            cursor: pointer;
             font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: background 0.2s;
-            margin-bottom: 24px;
-        }
-
-        .btn-social:hover {
-            background: var(--surface-border);
-        }
-
-        .auth-footer {
-            text-align: center;
-            font-size: 14px;
-            color: var(--text-muted);
-            width: 100%;
-        }
-
-        .auth-footer a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .auth-footer a:hover {
-            text-decoration: underline;
         }
 
         .status-message {
@@ -268,56 +163,58 @@
             border: 1px solid rgba(34, 197, 94, 0.2);
             display: block;
         }
+
+        #appWorkspace {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 24px;
+            padding: 32px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
-    <div class="auth-card">
+    <!-- Authentication Card -->
+    <div class="auth-card" id="authCard">
         <div class="logo-container">
             <img src="SiftGrid logo.png" alt="ShiftGrid Logo" class="logo-img">
         </div>
 
-        <div class="welcome-header" id="headerTitle">
-            <h1>Welcome Back!</h1>
-            <p>Sign in to access your shift tracker and salary records.</p>
+        <div class="welcome-header">
+            <h1 id="formTitle">Welcome Back</h1>
+            <p id="formSubtitle">Sign in to manage your shifts and schedule.</p>
         </div>
 
         <div id="statusAlert" class="status-message"></div>
 
-        <form id="authForm" onsubmit="handleAuthSubmit(event)" style="width: 100%;">
+        <form id="authForm" onsubmit="handleAuth(event)" style="width: 100%;">
             <div class="form-group">
-                <label class="form-label">Email address*</label>
-                <input type="email" id="emailInput" class="form-input" placeholder="name@company.com" required>
+                <label>Email Address</label>
+                <input type="email" id="emailInput" class="form-input" placeholder="name@example.com" required>
             </div>
-
+            
             <div class="form-group">
-                <label class="form-label">Password*</label>
-                <div class="input-wrapper">
-                    <input type="password" id="passwordInput" class="form-input" placeholder="••••••••" required>
-                    <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
-                </div>
+                <label>Password</label>
+                <input type="password" id="passwordInput" class="form-input" placeholder="••••••••" required>
             </div>
 
-            <div class="form-options" id="formOptions">
-                <label class="remember-me">
-                    <input type="checkbox" id="rememberMeCheck" checked> Remember me
-                </label>
-                <a onclick="triggerPasswordReset()" class="auth-link">Forgot Password?</a>
-            </div>
-
-            <button type="submit" id="submitBtn" class="btn-primary">Sign in</button>
+            <button type="submit" id="submitBtn" class="btn-primary">Sign In</button>
         </form>
 
-        <div class="divider" id="socialDivider">Or continue with</div>
-
-        <button type="button" id="googleBtn" class="btn-social" onclick="handleGoogleSignIn()">
-            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.2v3.15C3.21 21.32 7.28 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.6H1.2C.44 8.14 0 9.88 0 12s.44 3.86 1.2 5.4l4.07-3.16z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.28 0 3.21 2.68 1.2 6.6l4.07 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
-            Google
-        </button>
-
-        <div class="auth-footer" id="authFooterText">
-            Don’t have an account? <a onclick="toggleMode('signup')">Sign up</a>
+        <div class="toggle-mode" id="toggleText">
+            Don't have an account? <span onclick="toggleMode()">Sign Up</span>
         </div>
+    </div>
+
+    <!-- App Workspace (Shown after successful login and approval) -->
+    <div id="appWorkspace">
+        <h1>ShiftGrid Workspace</h1>
+        <p id="userRoleDisplay" style="color: var(--text-muted); margin: 15px 0;"></p>
+        <button onclick="handleLogout()" class="btn-primary" style="background: var(--error-color);">Sign Out</button>
     </div>
 
     <!-- Firebase SDK Imports -->
@@ -327,13 +224,10 @@
             getAuth, 
             signInWithEmailAndPassword, 
             createUserWithEmailAndPassword, 
-            signInWithPopup, 
-            GoogleAuthProvider, 
-            sendPasswordResetEmail,
-            setPersistence,
-            browserLocalPersistence,
-            browserSessionPersistence
+            signOut, 
+            onAuthStateChanged 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyA93AnibNs8iaNwYuy1tJglGXXqeY6p2oo",
@@ -347,114 +241,72 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const googleProvider = new GoogleAuthProvider();
+        const db = getFirestore(app);
 
-        let currentMode = 'signin'; 
+        let isSignUp = false;
 
-        window.togglePassword = function() {
-            const pwd = document.getElementById('passwordInput');
-            pwd.type = pwd.type === 'password' ? 'text' : 'password';
+        window.toggleMode = function() {
+            isSignUp = !isSignUp;
+            document.getElementById('formTitle').innerText = isSignUp ? "Create Account" : "Welcome Back";
+            document.getElementById('formSubtitle').innerText = isSignUp ? "Register to start using ShiftGrid." : "Sign in to manage your shifts and schedule.";
+            document.getElementById('submitBtn').innerText = isSignUp ? "Sign Up" : "Sign In";
+            document.getElementById('toggleText').innerHTML = isSignUp 
+                ? `Already have an account? <span onclick="toggleMode()">Sign In</span>` 
+                : `Don't have an account? <span onclick="toggleMode()">Sign Up</span>`;
         }
 
-        window.toggleMode = function(mode) {
-            currentMode = mode;
-            const header = document.getElementById('headerTitle');
-            const submitBtn = document.getElementById('submitBtn');
-            const footer = document.getElementById('authFooterText');
-            const options = document.getElementById('formOptions');
-            const divider = document.getElementById('socialDivider');
-            const googleBtn = document.getElementById('googleBtn');
-            const pwdGroup = document.getElementById('passwordInput').closest('.form-group');
-            
-            hideAlert();
-
-            if (mode === 'signup') {
-                header.innerHTML = `<h1>Create Account</h1><p>Start tracking your shifts and salaries with ShiftGrid.</p>`;
-                submitBtn.innerText = "Sign up";
-                options.style.display = 'none';
-                pwdGroup.style.display = 'block';
-                divider.style.display = 'flex';
-                googleBtn.style.display = 'flex';
-                footer.innerHTML = `Already have an account? <a onclick="toggleMode('signin')">Sign in</a>`;
-            } else if (mode === 'signin') {
-                header.innerHTML = `<h1>Welcome Back!</h1><p>Sign in to access your shift tracker and salary records.</p>`;
-                submitBtn.innerText = "Sign in";
-                options.style.display = 'flex';
-                pwdGroup.style.display = 'block';
-                divider.style.display = 'flex';
-                googleBtn.style.display = 'flex';
-                footer.innerHTML = `Don’t have an account? <a onclick="toggleMode('signup')">Sign up</a>`;
-            } else if (mode === 'reset') {
-                header.innerHTML = `<h1>Reset Password</h1><p>Enter your email address and we'll send you a recovery link.</p>`;
-                submitBtn.innerText = "Send Reset Link";
-                pwdGroup.style.display = 'none';
-                options.style.display = 'none';
-                divider.style.display = 'none';
-                googleBtn.style.display = 'none';
-                footer.innerHTML = `Remembered your password? <a onclick="toggleMode('signin')">Sign in</a>`;
-            }
-        }
-
-        window.triggerPasswordReset = function() {
-            toggleMode('reset');
-        }
-
-        window.handleAuthSubmit = async function(event) {
+        window.handleAuth = async function(event) {
             event.preventDefault();
-            const email = document.getElementById('emailInput').value.trim();
+            const email = document.getElementById('emailInput').value;
             const password = document.getElementById('passwordInput').value;
-            const rememberMe = document.getElementById('rememberMeCheck').checked;
-
-            hideAlert();
 
             try {
-                const persistenceType = rememberMe ? browserLocalPersistence : browserSessionPersistence;
-                await setPersistence(auth, persistenceType);
-
-                if (currentMode === 'signin') {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    showAlert("Successfully signed in! Redirecting...", "success");
-                    setTimeout(() => { window.location.href = "dashboard.html"; }, 1200);
-                } 
-                else if (currentMode === 'signup') {
+                if (isSignUp) {
                     await createUserWithEmailAndPassword(auth, email, password);
-                    showAlert("Account created successfully! Redirecting...", "success");
-                    setTimeout(() => { window.location.href = "dashboard.html"; }, 1200);
-                } 
-                else if (currentMode === 'reset') {
-                    if (!email) {
-                        showAlert("Please enter your email address first.", "error");
-                        return;
-                    }
-                    await sendPasswordResetEmail(auth, email);
-                    showAlert("Password reset email sent! Check your inbox.", "success");
+                    // New user goes to setup to pick a role
+                    window.location.href = "setup.html";
+                } else {
+                    await signInWithEmailAndPassword(auth, email, password);
                 }
             } catch (error) {
                 showAlert(error.message, "error");
             }
         }
 
-        window.handleGoogleSignIn = async function() {
-            hideAlert();
-            try {
-                await signInWithPopup(auth, googleProvider);
-                showAlert("Google sign-in successful! Redirecting...", "success");
-                setTimeout(() => { window.location.href = "dashboard.html"; }, 1200);
-            } catch (error) {
-                showAlert(error.message, "error");
-            }
+        window.handleLogout = function() {
+            signOut(auth).then(() => {
+                window.location.reload();
+            });
         }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const userDocRef = doc(db, "users", user.uid);
+                    const userDoc = await getDoc(userDocRef);
+
+                    if (!userDoc.exists() || !userDoc.data().role) {
+                        // If user doesn't have a role configured, redirect to setup
+                        window.location.href = "setup.html";
+                    } else if (userDoc.data().role === 'pending_manager') {
+                        showAlert("Your Manager request is pending admin approval.", "error");
+                        await signOut(auth);
+                    } else {
+                        // Authorized user, show workspace
+                        document.getElementById('authCard').style.display = 'none';
+                        document.getElementById('appWorkspace').style.display = 'block';
+                        document.getElementById('userRoleDisplay').innerText = `Logged in as: ${user.email} (${userDoc.data().role.toUpperCase()})`;
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        });
 
         function showAlert(message, type) {
             const alertBox = document.getElementById('statusAlert');
             alertBox.className = `status-message ${type}`;
             alertBox.innerText = message;
-        }
-
-        function hideAlert() {
-            const alertBox = document.getElementById('statusAlert');
-            alertBox.className = `status-message`;
-            alertBox.innerText = '';
         }
     </script>
 </body>
