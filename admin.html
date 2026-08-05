@@ -101,16 +101,17 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // TODO: Replace with your actual Firebase configuration matching your project
+        // Integrated shift-salary-tracker Firebase Credentials
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyA93AnibNs8iaNwYuy1tJglGXXqeY6p2oo",
+            authDomain: "shift-salary-tracker.firebaseapp.com",
+            projectId: "shift-salary-tracker",
+            storageBucket: "shift-salary-tracker.firebasestorage.app",
+            messagingSenderId: "719444723616",
+            appId: "1:719444723616:web:56b421b3d8d49f6b8946c5",
+            measurementId: "G-V8V657F1S0"
         };
 
         const app = initializeApp(firebaseConfig);
