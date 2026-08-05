@@ -305,7 +305,6 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // Loop-Free Router Logic
         onAuthStateChanged(auth, async (user) => {
             const loadingScreen = document.getElementById('loadingScreen');
             const authView = document.getElementById('authView');
@@ -315,7 +314,6 @@
                     const userDocRef = doc(db, "users", user.uid);
                     const userDoc = await getDoc(userDocRef);
 
-                    // Check if shift setup is already completed
                     if (userDoc.exists() && userDoc.data().shiftsConfigured) {
                         window.location.href = "dashboard.html";
                     } else {
@@ -323,11 +321,9 @@
                     }
                 } catch (e) {
                     console.error("Firestore read error:", e);
-                    // Fallback to dashboard if offline/error
                     window.location.href = "dashboard.html";
                 }
             } else {
-                // Not logged in: Show Auth Form
                 loadingScreen.style.display = 'none';
                 authView.style.display = 'flex';
             }
