@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShiftGrid — Dashboard & Profile</title>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-base: #080d0a;
+            --surface: #0f1a14;
+            --surface-card: #15231c;
+            --surface-border: #1e3025;
+            --primary-blue: #0066ff;
+            --primary-blue-hover: #0052cc;
+            --accent-green: #22c55e;
+            --accent-green-bg: rgba(34, 197, 94, 0.12);
+            --accent-gold: #f59e0b;
+            --accent-gold-bg: rgba(245, 158, 11, 0.15);
+            --text-main: #ffffff;
+            --text-muted: #8ba093;
+            --error-color: #ef4444;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px;
+            padding-bottom: 50px;
+        }
+
+        /* Top Status Banner */
+        .preview-banner {
+            width: 100%;
+            max-width: 580px;
+            background: rgba(0, 102, 255, 0.12);
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #93c5fd;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 580px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* HEADER CARD */
+        .dashboard-header {
+            background: #0d1511;
+            border: 1px solid var(--surface-border);
+            border-radius: 28px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .user-profile-summary {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .avatar-circle {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #0066ff;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(0, 102, 255, 0.3);
+        }
+
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .user-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.2px;
+        }
+
+        .badge-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .staff-badge {
+            font-size: 11px;
+            font-weight: 800;
+            color: #3b82f6;
+            background: rgba(30, 58, 138, 0.4);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .user-email-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .gear-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #7dd3fc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .gear-btn:hover {
+            background: rgba(0, 102, 255, 0.2);
+            border-color: var(--primary-blue);
+            color: #ffffff;
+            transform: rotate(45deg);
+        }
+
+        .gear-btn:active {
+            transform: scale(0.92);
+        }
+
+        /* Cards & Section Styling */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Pay Cycle Banner */
+        .cycle-banner {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .cycle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .cycle-tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: #93c5fd;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pay-date-badge {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            color: #e0e7ff;
+        }
+
+        .amount-display {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .amount-display span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #93c5fd;
+        }
+
+        .cycle-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 12px;
+        }
+
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #93c5fd;
+        }
+
+        .stat-val {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        /* Dynamic Shift Log List */
+        .quick-shift-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quick-shift-row {
+            background: var(--surface-card);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        .quick-shift-row:hover {
+            background: #1a2c23;
+        }
+
+        .shift-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .shift-info-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .shift-info-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .btn-quick-log {
+            background: var(--primary-blue);
+            color: #ffffff;
+            border: none;
+            border-radius: 24px;
+            padding: 10px 22px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-quick-log:hover {
+            background: var(--primary-blue-hover);
+        }
+
+        .btn-quick-log:active {
+            transform: scale(0.96);
+        }
+
+        /* Controls & Inputs */
+        .custom-select, .input-control {
+            background: var(--surface-card);
+            color: var(--text-main);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            outline: none;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .btn-action {
+            width: 100%;
+            background: var(--primary-blue);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-action:hover {
+            background: var(--primary-blue-hover);
+        }
+
+        .btn-secondary {
+            padding: 10px 14px;
+            background: var(--surface-card);
+            border: 1px solid var(--surface-border);
+            color: var(--text-main);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: #1a2c23;
+        }
+
+        /* History Stack */
+        .history-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        .history-row {
+            background: var(--surface-card);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-title {
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sat-badge {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            background: var(--accent-gold-bg);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .history-amount {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .btn-remove {
+            background: transparent;
+            border: none;
+            color: var(--error-color);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 2px 6px;
+        }
+
+        /* MODAL DIALOG FOR PROFILE SETTINGS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(6px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 28px;
+            width: 100%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+            animation: modalFade 0.2s ease-out;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--surface-border);
+            padding-bottom: 14px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .modal-close-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .modal-close-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .photo-upload-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--surface-card);
+            padding: 12px;
+            border-radius: var(--radius-md);
+        }
+
+        .photo-preview {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #0066ff;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .account-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--surface-border);
+            font-size: 13px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Status Banner -->
+    <div class="preview-banner">
+        <span>⚡ ShiftGrid — Attendance & Pay Tracker</span>
+        <span id="modeTag" style="font-weight: 600; color: #22c55e;">● Standalone Ready</span>
+    </div>
+
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        
+        <!-- HEADER UI -->
+        <div class="dashboard-header">
+            <div class="user-profile-summary">
+                <div class="avatar-circle">
+                    <span id="headerAvatarInitials">TS</span>
+                    <img id="headerPhoto" alt="Profile Picture" />
+                </div>
+                <div class="user-details">
+                    <span id="headerName" class="user-name">Loading User...</span>
+                    <div class="badge-row">
+                        <span id="userRoleBadge" class="staff-badge">EMPLOYEE</span>
+                        <span id="headerEmail" class="user-email-sub">...</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- GEAR ICON BUTTON -->
+            <button class="gear-btn" onclick="openProfileModal()" title="Profile Settings">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Pay Cycle Tracker Banner -->
+        <div class="cycle-banner">
+            <div class="cycle-header">
+                <span class="cycle-tag" id="currentCycleTag">Active Tracker</span>
+                <span class="pay-date-badge" id="payoutDateBadge">Processing...</span>
+            </div>
+            <div class="amount-display" id="cycleEarningsDisplay">0 <span>LKR</span></div>
+            
+            <div class="cycle-stats">
+                <div class="stat-box">
+                    <span class="stat-label">Shifts Tracked</span>
+                    <span class="stat-val" id="cycleShiftCount">0 Shifts</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Active Cycle Period</span>
+                    <span class="stat-val" id="cyclePeriodRange">-- to --</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DYNAMIC SHIFT RECORDER -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Log Today's Shift</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span id="satBonusNotice" style="font-size: 11px; color: var(--accent-gold); display: none;">⚡ Saturday (+50%)</span>
+                    <input type="date" id="shiftDateInput" class="input-control" onchange="renderQuickLogList()">
+                </div>
+            </div>
+
+            <div id="quickShiftList" class="quick-shift-list">
+                <!-- Dynamically rendered from user setup -->
+            </div>
+        </div>
+
+        <!-- Attendance Records with Month Filtering -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title" id="historyTitle">Attendance Records</span>
+                <div class="filter-group">
+                    <select id="monthFilter" class="custom-select" onchange="filterHistoryByMonth()">
+                        <!-- Dynamic Month Options -->
+                    </select>
+                </div>
+            </div>
+
+            <div id="historyContainer" class="history-stack">
+                <div class="empty-state">No attendance logged for this month.</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PROFILE & SETTINGS MODAL DIALOG -->
+    <div id="profileModal" class="modal-overlay" onclick="closeProfileModal(event)">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">⚙️ User Profile & Settings</span>
+                <button class="modal-close-btn" onclick="closeProfileModal()">✕</button>
+            </div>
+
+            <div class="input-group">
+                <label>Profile Picture</label>
+                <div class="photo-upload-wrapper">
+                    <div class="photo-preview">
+                        <span id="pickerInitials">TS</span>
+                        <img id="pickerPhoto" alt="Upload Preview" />
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <label for="imageFileInput" class="btn-secondary" style="cursor: pointer;">📷 Upload Custom Image</label>
+                        <input type="file" id="imageFileInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                        <button type="button" class="btn-secondary" style="font-size: 11px; color: var(--text-muted);" onclick="removeCustomPhoto()">Remove Photo</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Display Name</label>
+                <input type="text" id="editNameInput" class="input-control" value="Tharaka Sandaruwan" style="padding: 12px; font-size: 14px;">
+            </div>
+
+            <div class="input-group">
+                <label>Contact Phone</label>
+                <input type="text" id="editPhoneInput" class="input-control" value="+94 77 123 4567" style="padding: 12px; font-size: 14px;">
+            </div>
+
+            <button class="btn-action" onclick="saveProfileChanges()">Save Profile Changes</button>
+
+            <!-- Account Info -->
+            <div style="border-top: 1px solid var(--surface-border); padding-top: 14px; margin-top: 6px;">
+                <div class="account-info-row">
+                    <span style="color: var(--text-muted);">Account Email</span>
+                    <span id="accEmail" style="font-weight: 600;">staff@shiftgrid.com</span>
+                </div>
+                <div class="account-info-row">
+                    <span style="color: var(--text-muted);">Account Status</span>
+                    <span style="font-weight: 700; color: var(--accent-green);">Active Employee</span>
+                </div>
+            </div>
+
+            <!-- Management & Export Actions -->
+            <div style="display: flex; gap: 8px; flex-direction: column; margin-top: 6px;">
+                <a href="setup.html" class="btn-secondary">⚙️ Manage Shift Presets & Pay Rates</a>
+                <button class="btn-secondary" onclick="exportAttendanceCSV()">📥 Download Attendance Report (.CSV)</button>
+                <button class="btn-secondary" style="color: var(--error-color); border-color: rgba(239, 68, 68, 0.3);" onclick="clearDemoData()">Reset Saved Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script Implementation -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA93AnibNs8iaNwYuy1tJglGXXqeY6p2oo",
+          authDomain: "shift-salary-tracker.firebaseapp.com",
+          projectId: "shift-salary-tracker",
+          storageBucket: "shift-salary-tracker.firebasestorage.app",
+          messagingSenderId: "719444723616",
+          appId: "1:719444723616:web:56b421b3d8d49f6b8946c5",
+          measurementId: "G-V8V657F1S0"
+        };
+
+        // User defined shifts (Dynamic setup)
+        let userShifts = [
+            { name: "Day Shift", rate: 2500, saturdayRate: 3750, time: "08:00 AM - 05:00 PM" },
+            { name: "Night Shift", rate: 3000, saturdayRate: 4500, time: "08:00 PM - 05:00 AM" },
+            { name: "Special Shift", rate: 3500, saturdayRate: 5250, time: "Custom Hours" }
+        ];
+
+        let payCyclesConfig = [
+            { name: "Monthly Overview", startDay: 1, endDay: 31, payoutDay: 28 }
+        ];
+
+        let currentUser = null;
+        let db = null;
+        let base64ProfilePhoto = null;
+        let shiftLogs = [];
+        let userProfileData = {};
+
+        function getYearMonthKey(dateObj) {
+            const d = new Date(dateObj);
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        // Initialize App
+        initMonthSelector();
+        initShiftDatePicker();
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            db = getFirestore(app);
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    currentUser = user;
+                    document.getElementById('modeTag').innerText = "● Cloud Synced";
+                    await loadUserData();
+                } else {
+                    loadLocalData();
+                }
+            });
+        } catch (e) {
+            console.log("Running in Standalone Mode.");
+            loadLocalData();
+        }
+
+        async function loadUserData() {
+            try {
+                const docRef = doc(db, "users", currentUser.uid);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    userProfileData = docSnap.data();
+                    if (userProfileData.shifts && userProfileData.shifts.length > 0) {
+                        userShifts = userProfileData.shifts; 
+                    }
+                    if (userProfileData.payCycles) payCyclesConfig = userProfileData.payCycles;
+                    if (userProfileData.logs) shiftLogs = userProfileData.logs;
+                }
+            } catch (e) {
+                console.warn("Using local cache:", e);
+                loadLocalData();
+            }
+
+            updateProfileUI();
+            renderQuickLogList();
+            renderDashboardStats();
+            filterHistoryByMonth();
+        }
+
+        function loadLocalData() {
+            const cachedShifts = localStorage.getItem('shiftgrid_shifts');
+            if (cachedShifts) {
+                const parsed = JSON.parse(cachedShifts);
+                if (parsed && parsed.length > 0) userShifts = parsed;
+            }
+
+            const cachedLogs = localStorage.getItem('shiftgrid_logs');
+            if (cachedLogs) shiftLogs = JSON.parse(cachedLogs);
+
+            updateProfileUI();
+            renderQuickLogList();
+            renderDashboardStats();
+            filterHistoryByMonth();
+        }
+
+        function getInitials(name) {
+            if (!name) return "TS";
+            const parts = name.trim().split(' ');
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[1][0]).toUpperCase();
+            }
+            return name.substring(0, 2).toUpperCase();
+        }
+
+        function updateProfileUI() {
+            const displayName = userProfileData.displayName || (currentUser ? currentUser.displayName || currentUser.email.split('@')[0] : 'Tharaka Sandaruwan');
+            const email = currentUser ? currentUser.email : 'staff@shiftgrid.com';
+            const role = userProfileData.role || 'EMPLOYEE';
+            const phone = userProfileData.phone || '+94 77 123 4567';
+
+            document.getElementById('headerName').innerText = displayName;
+            document.getElementById('headerEmail').innerText = email;
+            document.getElementById('accEmail').innerText = email;
+            document.getElementById('userRoleBadge').innerText = role;
+
+            const initials = getInitials(displayName);
+            document.getElementById('headerAvatarInitials').innerText = initials;
+            document.getElementById('pickerInitials').innerText = initials;
+
+            document.getElementById('editNameInput').value = displayName;
+            document.getElementById('editPhoneInput').value = phone;
+
+            if (userProfileData.avatarUrl || base64ProfilePhoto) {
+                updateAvatarUI(userProfileData.avatarUrl || base64ProfilePhoto);
+            }
+        }
+
+        function initShiftDatePicker() {
+            const dateInput = document.getElementById('shiftDateInput');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+        }
+
+        // Render Shift List dynamically from setup
+        window.renderQuickLogList = function() {
+            const dateVal = document.getElementById('shiftDateInput').value;
+            if (!dateVal) return;
+
+            const selectedDate = new Date(dateVal);
+            const isSaturday = selectedDate.getDay() === 6;
+            
+            document.getElementById('satBonusNotice').style.display = isSaturday ? 'inline' : 'none';
+
+            const container = document.getElementById('quickShiftList');
+            container.innerHTML = '';
+
+            userShifts.forEach((shift, idx) => {
+                const baseRate = shift.rate || shift.weekdayRate || 0;
+                const finalPay = isSaturday ? (shift.saturdayRate || baseRate * 1.5) : baseRate;
+                const formattedPay = finalPay.toLocaleString();
+
+                let timeDetails = '';
+                if (shift.time) {
+                    timeDetails = `${shift.time} • `;
+                } else if (shift.startTime && shift.endTime) {
+                    timeDetails = `${shift.startTime} - ${shift.endTime} • `;
+                }
+
+                container.innerHTML += `
+                    <div class="quick-shift-row">
+                        <div class="shift-info">
+                            <span class="shift-info-title">${shift.name}</span>
+                            <span class="shift-info-sub">${timeDetails}LKR ${formattedPay}</span>
+                        </div>
+                        <button class="btn-quick-log" onclick="quickLogShift(${idx})">+ Log</button>
+                    </div>
+                `;
+            });
+        };
+
+        // Instant Log Action
+        window.quickLogShift = async function(shiftIndex) {
+            const dateVal = document.getElementById('shiftDateInput').value;
+            if (!dateVal) return;
+
+            const shift = userShifts[shiftIndex];
+            const shiftDate = new Date(dateVal);
+            const isSaturday = shiftDate.getDay() === 6;
+
+            const baseRate = shift.rate || shift.weekdayRate || 0;
+            const finalPay = isSaturday ? (shift.saturdayRate || baseRate * 1.5) : baseRate;
+
+            const newEntry = {
+                id: 'log_' + Date.now(),
+                date: dateVal,
+                shiftName: shift.name,
+                pay: finalPay,
+                isSaturday: isSaturday,
+                yearMonth: getYearMonthKey(shiftDate)
+            };
+
+            shiftLogs.unshift(newEntry);
+            localStorage.setItem('shiftgrid_logs', JSON.stringify(shiftLogs));
+
+            if (currentUser && db) {
+                try {
+                    const docRef = doc(db, "users", currentUser.uid);
+                    await setDoc(docRef, { logs: shiftLogs }, { merge: true });
+                } catch (e) {
+                    console.error("Cloud sync failed:", e);
+                }
+            }
+
+            renderDashboardStats();
+            filterHistoryByMonth();
+
+            alert(`Logged ${shift.name} for ${dateVal}!`);
+        };
+
+        function renderDashboardStats() {
+            const now = new Date();
+            const currentDay = now.getDate();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+
+            let cycleName = "Monthly Overview";
+            let payoutText = "Standard Tracking";
+            let startDate = new Date(currentYear, currentMonth, 1);
+            let endDate = new Date(currentYear, currentMonth + 1, 0);
+
+            if (payCyclesConfig && payCyclesConfig.length > 0) {
+                const activeCycle = payCyclesConfig.find(c => currentDay >= c.startDay && currentDay <= c.endDay) || payCyclesConfig[0];
+                cycleName = activeCycle.name;
+                payoutText = `Paid on ${activeCycle.payoutDay}th`;
+                startDate = new Date(currentYear, currentMonth, activeCycle.startDay);
+                endDate = new Date(currentYear, currentMonth, activeCycle.endDay > 30 ? 30 : activeCycle.endDay);
+            }
+
+            document.getElementById('currentCycleTag').innerText = cycleName;
+            document.getElementById('payoutDateBadge').innerText = payoutText;
+            document.getElementById('cyclePeriodRange').innerText = `${startDate.getDate()}/${startDate.getMonth()+1} – ${endDate.getDate()}/${endDate.getMonth()+1}`;
+
+            let cycleTotal = 0;
+            let cycleShifts = 0;
+
+            shiftLogs.forEach(log => {
+                const logDate = new Date(log.date);
+                if (logDate >= startDate && logDate <= endDate) {
+                    cycleTotal += log.pay;
+                    cycleShifts++;
+                }
+            });
+
+            document.getElementById('cycleEarningsDisplay').innerHTML = `${cycleTotal.toLocaleString()} <span>LKR</span>`;
+            document.getElementById('cycleShiftCount').innerText = `${cycleShifts} Shifts`;
+        }
+
+        // Filter and Render Logs
+        window.filterHistoryByMonth = function() {
+            const selectedKey = document.getElementById('monthFilter').value;
+            const filtered = shiftLogs.filter(log => (log.yearMonth || getYearMonthKey(log.date)) === selectedKey);
+            const monthText = document.getElementById('monthFilter').options[document.getElementById('monthFilter').selectedIndex]?.text || '';
+            
+            document.getElementById('historyTitle').innerText = `${monthText} Records`;
+            renderLogsUI(filtered);
+        };
+
+        function renderLogsUI(logsArray) {
+            const container = document.getElementById('historyContainer');
+
+            if (!logsArray || logsArray.length === 0) {
+                container.innerHTML = `<div class="empty-state">No attendance records found for this period.</div>`;
+                return;
+            }
+
+            container.innerHTML = "";
+            logsArray.forEach((log) => {
+                const row = document.createElement('div');
+                row.className = 'history-row';
+                row.innerHTML = `
+                    <div>
+                        <div class="history-title">
+                            ${log.shiftName}
+                            ${log.isSaturday ? '<span class="sat-badge">WEEKEND</span>' : ''}
+                        </div>
+                        <div class="history-time">${log.date}</div>
+                    </div>
+                    <div class="history-right">
+                        <span class="history-amount">${(log.pay || 0).toLocaleString()} LKR</span>
+                        <button class="btn-remove" onclick="deleteShiftLog('${log.id}')" title="Delete">✕</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        window.deleteShiftLog = async function(logId) {
+            if (!confirm("Remove this shift entry?")) return;
+
+            shiftLogs = shiftLogs.filter(l => l.id !== logId);
+            localStorage.setItem('shiftgrid_logs', JSON.stringify(shiftLogs));
+
+            if (currentUser && db) {
+                try {
+                    const docRef = doc(db, "users", currentUser.uid);
+                    await updateDoc(docRef, { logs: shiftLogs });
+                } catch(e) { console.error(e); }
+            }
+
+            renderDashboardStats();
+            filterHistoryByMonth();
+        };
+
+        // Export CSV
+        window.exportAttendanceCSV = function() {
+            const selectedKey = document.getElementById('monthFilter').value;
+            const filtered = shiftLogs.filter(log => (log.yearMonth || getYearMonthKey(log.date)) === selectedKey);
+
+            if (filtered.length === 0) {
+                alert("No attendance records to export for this period.");
+                return;
+            }
+
+            let csv = "Shift Name,Date,Weekend Bonus,Amount (LKR)\n";
+            filtered.forEach(l => {
+                csv += `"${l.shiftName}","${l.date}","${l.isSaturday ? 'Yes' : 'No'}",${l.pay}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', `ShiftGrid_Attendance_${selectedKey}.csv`);
+            a.click();
+        };
+
+        function initMonthSelector() {
+            const select = document.getElementById('monthFilter');
+            select.innerHTML = "";
+            const now = new Date();
+
+            for (let i = 0; i < 12; i++) {
+                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const key = getYearMonthKey(d);
+                const label = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                
+                const opt = document.createElement('option');
+                opt.value = key;
+                opt.innerText = label;
+                select.appendChild(opt);
+            }
+        }
+
+        // Profile Modal Handlers
+        window.openProfileModal = function() {
+            document.getElementById('profileModal').classList.add('active');
+        };
+
+        window.closeProfileModal = function(e) {
+            if (!e || e.target.id === 'profileModal' || e.target.classList.contains('modal-close-btn')) {
+                document.getElementById('profileModal').classList.remove('active');
+            }
+        };
+
+        // Profile Photo Handling
+        window.handleImageUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                base64ProfilePhoto = e.target.result;
+                updateAvatarUI(base64ProfilePhoto);
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.removeCustomPhoto = function() {
+            base64ProfilePhoto = null;
+            userProfileData.avatarUrl = null;
+            updateAvatarUI(null);
+        };
+
+        function updateAvatarUI(photoUrl) {
+            const headImg = document.getElementById('headerPhoto');
+            const headInitials = document.getElementById('headerAvatarInitials');
+            const pickImg = document.getElementById('pickerPhoto');
+            const pickInitials = document.getElementById('pickerInitials');
+
+            if (photoUrl) {
+                headImg.src = photoUrl;
+                headImg.style.display = 'block';
+                headInitials.style.display = 'none';
+
+                pickImg.src = photoUrl;
+                pickImg.style.display = 'block';
+                pickInitials.style.display = 'none';
+            } else {
+                headImg.style.display = 'none';
+                headInitials.style.display = 'block';
+
+                pickImg.style.display = 'none';
+                pickInitials.style.display = 'block';
+            }
+        }
+
+        window.saveProfileChanges = async function() {
+            const nameVal = document.getElementById('editNameInput').value.trim();
+            const phoneVal = document.getElementById('editPhoneInput').value.trim();
+
+            userProfileData.displayName = nameVal;
+            userProfileData.phone = phoneVal;
+            if (base64ProfilePhoto) userProfileData.avatarUrl = base64ProfilePhoto;
+
+            updateProfileUI();
+
+            if (currentUser && db) {
+                try {
+                    const docRef = doc(db, "users", currentUser.uid);
+                    await setDoc(docRef, {
+                        displayName: userProfileData.displayName,
+                        phone: userProfileData.phone,
+                        avatarUrl: userProfileData.avatarUrl || ""
+                    }, { merge: true });
+                } catch(e) { console.error(e); }
+            }
+
+            closeProfileModal();
+            alert("Profile settings saved!");
+        };
+
+        window.clearDemoData = function() {
+            if (!confirm("Are you sure you want to clear all logged attendance?")) return;
+            shiftLogs = [];
+            localStorage.removeItem('shiftgrid_logs');
+            renderDashboardStats();
+            filterHistoryByMonth();
+            closeProfileModal();
+        };
+    </script>
+</body>
+</html>
