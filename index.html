@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShiftGrid — Portal</title>
+    <title>ShiftGrid — Auth Portal</title>
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,7 +41,6 @@
             padding: 20px;
         }
 
-        /* Loading Screen */
         .loading-screen {
             display: flex;
             flex-direction: column;
@@ -51,7 +50,6 @@
             font-size: 14px;
         }
 
-        /* Auth Card View */
         .auth-card {
             width: 100%;
             max-width: 420px;
@@ -209,6 +207,7 @@
             color: var(--primary-blue);
             text-decoration: none;
             font-weight: 600;
+            cursor: pointer;
         }
 
         .status-message {
@@ -241,35 +240,35 @@
         <p>Connecting to ShiftGrid...</p>
     </div>
 
-    <!-- Auth View (Shows when logged out) -->
+    <!-- Auth Card -->
     <div id="authView" class="auth-card">
         <div class="logo-container">
             <img src="SiftGrid logo.png" alt="ShiftGrid Logo" class="logo-img">
         </div>
 
         <div class="welcome-header">
-            <h1>Welcome Back</h1>
-            <p>Sign in to manage your shifts and schedule.</p>
+            <h1 id="authTitle">Welcome Back</h1>
+            <p id="authSubtitle">Sign in to manage your shifts and schedule.</p>
         </div>
 
         <div id="statusAlert" class="status-message"></div>
 
-        <form class="auth-form" id="loginForm" onsubmit="handleEmailLogin(event)">
+        <form class="auth-form" id="authForm" onsubmit="handleAuthSubmit(event)">
             <div class="input-group">
                 <label>Email Address</label>
-                <input type="email" id="loginEmail" placeholder="name@example.com" required>
+                <input type="email" id="authEmail" placeholder="name@example.com" required>
             </div>
             
             <div class="input-group">
                 <label>Password</label>
-                <input type="password" id="loginPassword" placeholder="••••••••" required>
+                <input type="password" id="authPassword" placeholder="••••••••" required>
             </div>
 
-            <div class="forgot-password-row">
+            <div class="forgot-password-row" id="forgotRow">
                 <a class="forgot-password-link" onclick="handleForgotPassword()">Forgot Password?</a>
             </div>
 
-            <button type="submit" class="btn-primary">Sign In</button>
+            <button type="submit" class="btn-primary" id="btnSubmit">Sign In</button>
         </form>
 
         <div class="divider">or</div>
@@ -279,15 +278,15 @@
             Sign in with Google
         </button>
 
-        <div class="auth-footer">
-            Don't have an account? <a href="signup.html">Sign Up</a>
+        <div class="auth-footer" id="authFooter">
+            Don't have an account? <a onclick="toggleAuthMode('signup')">Sign Up</a>
         </div>
     </div>
 
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -305,6 +304,9 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
+        let currentMode = 'login'; // 'login' or 'signup'
+
+        // Centralized Router Logic
         onAuthStateChanged(auth, async (user) => {
             const loadingScreen = document.getElementById('loadingScreen');
             const authView = document.getElementById('authView');
@@ -314,6 +316,7 @@
                     const userDocRef = doc(db, "users", user.uid);
                     const userDoc = await getDoc(userDocRef);
 
+                    // Check if shift setup is already completed
                     if (userDoc.exists() && userDoc.data().shiftsConfigured) {
                         window.location.href = "dashboard.html";
                     } else {
@@ -329,13 +332,42 @@
             }
         });
 
-        window.handleEmailLogin = async function(event) {
+        window.toggleAuthMode = function(mode) {
+            currentMode = mode;
+            const title = document.getElementById('authTitle');
+            const subtitle = document.getElementById('authSubtitle');
+            const btn = document.getElementById('btnSubmit');
+            const forgotRow = document.getElementById('forgotRow');
+            const footer = document.getElementById('authFooter');
+            
+            showAlert("", "");
+
+            if (mode === 'signup') {
+                title.innerText = "Create Account";
+                subtitle.innerText = "Get started tracking your shifts and salary.";
+                btn.innerText = "Sign Up";
+                forgotRow.style.display = "none";
+                footer.innerHTML = `Already have an account? <a onclick="toggleAuthMode('login')">Sign In</a>`;
+            } else {
+                title.innerText = "Welcome Back";
+                subtitle.innerText = "Sign in to manage your shifts and schedule.";
+                btn.innerText = "Sign In";
+                forgotRow.style.display = "flex";
+                footer.innerHTML = `Don't have an account? <a onclick="toggleAuthMode('signup')">Sign Up</a>`;
+            }
+        };
+
+        window.handleAuthSubmit = async function(event) {
             event.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value;
 
             try {
-                await signInWithEmailAndPassword(auth, email, password);
+                if (currentMode === 'signup') {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                } else {
+                    await signInWithEmailAndPassword(auth, email, password);
+                }
             } catch (error) {
                 showAlert(error.message, "error");
             }
@@ -350,7 +382,7 @@
         };
 
         window.handleForgotPassword = async function() {
-            const email = document.getElementById('loginEmail').value.trim();
+            const email = document.getElementById('authEmail').value.trim();
             if (!email) {
                 showAlert("Please enter your email address above first.", "error");
                 return;
@@ -366,6 +398,10 @@
 
         function showAlert(message, type) {
             const alertBox = document.getElementById('statusAlert');
+            if (!message) {
+                alertBox.style.display = 'none';
+                return;
+            }
             alertBox.className = `status-message ${type}`;
             alertBox.innerText = message;
         }
