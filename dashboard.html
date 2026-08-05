@@ -814,6 +814,11 @@
                 <span class="val-status" id="modalAccountStatus">Active Member</span>
             </div>
 
+            <!-- Dynamic Admin Access Button (Displays only when role === 'MANAGER') -->
+            <a id="adminPanelLink" class="btn-modal-link" href="admin.html" style="display:none; background: #2e1065; border: 1px solid #7e22ce; color: #f3e8ff;">
+                👑 Open Manager Admin Panel
+            </a>
+
             <a class="btn-modal-link" href="setup.html">⚙️ Reconfigure Shift Presets & Pay Cycle</a>
             <button class="btn-modal-link" onclick="downloadCSVReport()">📥 Download Attendance Report (.CSV)</button>
             <button class="btn-modal-link btn-reset" onclick="resetSavedData()">Reset Saved Shift Data</button>
@@ -863,6 +868,7 @@
             return parts[0][0].toUpperCase();
         }
 
+        // FIXED MANAGER ROLE UI DISPATCH
         function updateAccountUI(name, email, photoUrl, role) {
             const displayName = name || (email ? email.split('@')[0] : 'User');
             document.getElementById('profileNameDisplay').innerText = displayName;
@@ -871,14 +877,24 @@
             document.getElementById('modalAccountEmail').innerText = email || '';
 
             const badgeEl = document.getElementById('profileRoleBadge');
-            if (window.managerRoleRequested) {
+            const adminLinkEl = document.getElementById('adminPanelLink');
+
+            // Explicit Priority: APPROVED MANAGER > PENDING MANAGER > STANDARD ROLE
+            if (role === "MANAGER") {
+                badgeEl.innerText = "MANAGER";
+                badgeEl.style.backgroundColor = "#6b21a8";
+                badgeEl.style.color = "#f3e8ff";
+                if (adminLinkEl) adminLinkEl.style.display = "flex";
+            } else if (window.managerRoleRequested === true || window.managerRoleRequested === 'true') {
                 badgeEl.innerText = "PENDING MANAGER";
                 badgeEl.style.backgroundColor = "#854d0e";
                 badgeEl.style.color = "#fef08a";
-            } else if (role) {
-                badgeEl.innerText = role;
+                if (adminLinkEl) adminLinkEl.style.display = "none";
+            } else {
+                badgeEl.innerText = role || "EMPLOYEE";
                 badgeEl.style.backgroundColor = "#1e3a8a";
                 badgeEl.style.color = "#93c5fd";
+                if (adminLinkEl) adminLinkEl.style.display = "none";
             }
 
             const avatarContainer = document.getElementById('profileAvatarDisplay');
@@ -895,7 +911,7 @@
             }
         }
 
-        // Live Firestore sync using onSnapshot (Instantly unlocks dashboard when Admin Approves!)
+        // Live Firestore Sync with Proper Role Parsing
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
@@ -906,6 +922,7 @@
                     onSnapshot(userDocRef, (userDoc) => {
                         if (userDoc.exists()) {
                             const data = userDoc.data();
+                            
                             if (data.shifts && data.shifts.length > 0) {
                                 window.configuredShifts = data.shifts;
                                 localStorage.setItem('shiftgrid_shifts', JSON.stringify(data.shifts));
@@ -915,16 +932,19 @@
                                 localStorage.setItem('shiftgrid_paycycle', JSON.stringify(data.payCycleConfig));
                             }
                             if (data.managerRoleRequested !== undefined) {
-                                window.managerRoleRequested = data.managerRoleRequested;
-                                localStorage.setItem('shiftgrid_managerRequested', data.managerRoleRequested);
+                                const isReq = data.managerRoleRequested === true || data.managerRoleRequested === 'true';
+                                window.managerRoleRequested = isReq;
+                                localStorage.setItem('shiftgrid_managerRequested', isReq);
                             }
                             if (data.templateRequested !== undefined) {
                                 window.templateRequested = data.templateRequested;
                                 localStorage.setItem('shiftgrid_templateRequested', data.templateRequested);
                             }
-                            updateAccountUI(data.displayName || user.displayName, user.email, data.photoURL || user.photoURL, data.role || "EMPLOYEE");
 
-                            // Re-render UI live when approval changes
+                            const effectiveRole = data.role || "EMPLOYEE";
+                            updateAccountUI(data.displayName || user.displayName, user.email, data.photoURL || user.photoURL, effectiveRole);
+
+                            // Re-render UI live when approval state updates
                             window.renderAvailableShifts();
                             window.updateHistoryView();
                         }
