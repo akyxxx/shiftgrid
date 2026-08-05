@@ -36,7 +36,7 @@
             padding-bottom: 50px;
         }
 
-        /* --- Advanced Brand Logo Header Showcase --- */
+        /* --- Brand Logo Header Showcase --- */
         .brand-showcase {
             background: linear-gradient(135deg, #0e1726 0%, #080d16 100%);
             border: 1px solid #1a293d;
@@ -324,7 +324,6 @@
             font-weight: 700;
         }
 
-        /* Custom Date Picker Trigger Button */
         .date-picker-btn {
             background: #142235;
             color: #60a5fa;
@@ -339,7 +338,6 @@
             gap: 6px;
         }
 
-        /* History Filter Controls Header */
         .history-controls {
             display: flex;
             align-items: center;
@@ -356,7 +354,6 @@
             outline: none;
         }
 
-        /* Shift Options List */
         .shift-list {
             display: flex;
             flex-direction: column;
@@ -400,7 +397,6 @@
             background-color: var(--primary-blue-hover);
         }
 
-        /* Monthly Records History */
         .history-list {
             display: flex;
             flex-direction: column;
@@ -456,7 +452,7 @@
             padding: 20px 0;
         }
 
-        /* Modern Calendar Popup Modal */
+        /* Calendar Modal */
         .cal-modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -547,7 +543,7 @@
             cursor: default;
         }
 
-        /* Settings Modal Overlay */
+        /* Settings Modal */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -677,7 +673,7 @@
 </head>
 <body>
 
-    <!-- Modern Brand Header Showcase -->
+    <!-- Brand Header Showcase -->
     <div class="brand-showcase">
         <div class="brand-logo-container">
             <div class="logo-icon-box">
@@ -743,10 +739,7 @@
             </button>
         </div>
 
-        <!-- Available Configured Shifts Render Container -->
-        <div class="shift-list" id="availableShiftsContainer">
-            <!-- Dynamically populated from configured shifts -->
-        </div>
+        <div class="shift-list" id="availableShiftsContainer"></div>
     </div>
 
     <!-- Attendance & Salary History Section -->
@@ -755,34 +748,21 @@
             <h3 class="section-title" id="historySectionTitle">August 2026 Records</h3>
             <div class="history-controls">
                 <select class="history-select" id="historyMonthSelect" onchange="updateHistoryView()">
-                    <option value="0">Jan</option>
-                    <option value="1">Feb</option>
-                    <option value="2">Mar</option>
-                    <option value="3">Apr</option>
-                    <option value="4">May</option>
-                    <option value="5">Jun</option>
-                    <option value="6">Jul</option>
-                    <option value="7" selected>Aug</option>
-                    <option value="8">Sep</option>
-                    <option value="9">Oct</option>
-                    <option value="10">Nov</option>
-                    <option value="11">Dec</option>
+                    <option value="0">Jan</option><option value="1">Feb</option><option value="2">Mar</option>
+                    <option value="3">Apr</option><option value="4">May</option><option value="5">Jun</option>
+                    <option value="6">Jul</option><option value="7" selected>Aug</option><option value="8">Sep</option>
+                    <option value="9">Oct</option><option value="10">Nov</option><option value="11">Dec</option>
                 </select>
                 <select class="history-select" id="historyYearSelect" onchange="updateHistoryView()">
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026" selected>2026</option>
-                    <option value="2027">2027</option>
+                    <option value="2024">2024</option><option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option>
                 </select>
             </div>
         </div>
 
-        <div class="history-list" id="recordsContainer">
-            <!-- Dynamic Records populated by JS -->
-        </div>
+        <div class="history-list" id="recordsContainer"></div>
     </div>
 
-    <!-- 📅 Modern Interactive Calendar Modal -->
+    <!-- Calendar Modal -->
     <div class="cal-modal-overlay" id="calendarModal">
         <div class="cal-card">
             <div class="cal-header">
@@ -790,20 +770,15 @@
                 <span class="cal-title" id="calMonthYearTitle">August 2026</span>
                 <button class="cal-nav-btn" onclick="changeCalMonth(1)">►</button>
             </div>
-
             <div class="cal-weekdays">
                 <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
             </div>
-
-            <div class="cal-days-grid" id="calDaysGrid">
-                <!-- Day tiles generated dynamically -->
-            </div>
-
+            <div class="cal-days-grid" id="calDaysGrid"></div>
             <button class="btn-primary-block" style="margin-bottom:0;" onclick="closeCalendarModal()">Done / Select</button>
         </div>
     </div>
 
-    <!-- ⚙️ Settings Modal -->
+    <!-- Settings Modal -->
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-card">
             <div class="modal-header">
@@ -868,7 +843,6 @@
 
         let currentUser = null;
 
-        // Default Shift Presets Fallback
         const defaultSSShifts = [
             { id: "shift_d", name: "Day Shift (D)", time: "7:00 AM – 6:00 PM", rate: 2000 },
             { id: "shift_e", name: "Evening Shift (E)", time: "6:00 PM – 11:30 PM", rate: 1800 },
@@ -879,6 +853,8 @@
 
         window.configuredShifts = JSON.parse(localStorage.getItem('shiftgrid_shifts')) || defaultSSShifts;
         window.userPayCycleConfig = JSON.parse(localStorage.getItem('shiftgrid_paycycle')) || { type: 'mid-month', payDay: 25 };
+        window.managerRoleRequested = localStorage.getItem('shiftgrid_managerRequested') === 'true';
+        window.templateRequested = localStorage.getItem('shiftgrid_templateRequested') === 'true';
 
         function getInitials(name) {
             if (!name) return "U";
@@ -894,8 +870,13 @@
             document.getElementById('profileEmailDisplay').innerText = email;
             document.getElementById('modalAccountEmail').innerText = email;
 
-            if (role) {
-                document.getElementById('profileRoleBadge').innerText = role;
+            const badgeEl = document.getElementById('profileRoleBadge');
+            if (window.managerRoleRequested) {
+                badgeEl.innerText = "PENDING MANAGER";
+                badgeEl.style.backgroundColor = "#854d0e";
+                badgeEl.style.color = "#fef08a";
+            } else if (role) {
+                badgeEl.innerText = role;
             }
 
             const avatarContainer = document.getElementById('profileAvatarDisplay');
@@ -915,7 +896,6 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
-                
                 updateAccountUI(user.displayName, user.email, user.photoURL, "EMPLOYEE");
 
                 try {
@@ -924,17 +904,22 @@
 
                     if (userDoc.exists()) {
                         const data = userDoc.data();
-                        
                         if (data.shifts && data.shifts.length > 0) {
                             window.configuredShifts = data.shifts;
                             localStorage.setItem('shiftgrid_shifts', JSON.stringify(data.shifts));
                         }
-
                         if (data.payCycleConfig) {
                             window.userPayCycleConfig = data.payCycleConfig;
                             localStorage.setItem('shiftgrid_paycycle', JSON.stringify(data.payCycleConfig));
                         }
-
+                        if (data.managerRoleRequested !== undefined) {
+                            window.managerRoleRequested = data.managerRoleRequested;
+                            localStorage.setItem('shiftgrid_managerRequested', data.managerRoleRequested);
+                        }
+                        if (data.templateRequested !== undefined) {
+                            window.templateRequested = data.templateRequested;
+                            localStorage.setItem('shiftgrid_templateRequested', data.templateRequested);
+                        }
                         updateAccountUI(data.displayName || user.displayName, user.email, data.photoURL || user.photoURL, data.role || "EMPLOYEE");
                     }
                 } catch (e) {
@@ -971,19 +956,30 @@
         
         let selectedLogDate = new Date(2026, 7, 5);
         let calViewDate = new Date(selectedLogDate.getTime());
-
         let shiftRecords = JSON.parse(localStorage.getItem('shiftgrid_records')) || [];
 
         function saveRecordsToStorage() {
             localStorage.setItem('shiftgrid_records', JSON.stringify(shiftRecords));
         }
 
-        // --- RENDER CONFIGURED SHIFTS DIRECTLY FROM SETUP/TEMPLATE ---
         function renderAvailableShifts() {
             const container = document.getElementById('availableShiftsContainer');
             if (!container) return;
 
+            container.innerHTML = '';
+
+            if (window.templateRequested) {
+                container.innerHTML = `
+                    <div style="background: rgba(37, 99, 235, 0.1); border: 1px solid rgba(37, 99, 235, 0.3); border-radius: 16px; padding: 18px; text-align: center; color: #93c5fd; font-size: 13px;">
+                        ⏳ <strong>Official Shift Template Pending Admin Approval</strong><br>
+                        <span style="font-size: 11px; color: var(--text-muted); margin-top: 6px; display: block;">Shift options are hidden during the pending review period.</span>
+                    </div>
+                `;
+                return;
+            }
+
             const shiftsToRender = window.configuredShifts || [];
+            
             if (shiftsToRender.length === 0) {
                 container.innerHTML = `
                     <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 12px;">
@@ -992,8 +988,6 @@
                 `;
                 return;
             }
-
-            container.innerHTML = '';
 
             shiftsToRender.forEach(s => {
                 const currentRate = s.rate !== undefined ? s.rate : (s.normal || 0);
@@ -1012,7 +1006,6 @@
             });
         }
 
-        // --- CALENDAR LOGIC ---
         function openCalendarModal() {
             calViewDate = new Date(selectedLogDate.getTime());
             renderCalendar();
@@ -1031,7 +1024,6 @@
         function renderCalendar() {
             const year = calViewDate.getFullYear();
             const month = calViewDate.getMonth();
-            
             document.getElementById('calMonthYearTitle').innerText = `${monthNames[month]} ${year}`;
 
             const firstDay = new Date(year, month, 1).getDay();
@@ -1074,7 +1066,6 @@
             document.getElementById('shiftDateDisplay').innerText = `${m}/${d}/${y}`;
         }
 
-        // --- PAY CYCLE CALCULATOR ---
         function calculateDynamicPayCycle(targetDate) {
             const config = window.userPayCycleConfig || { type: 'mid-month', payDay: 25 };
             const year = targetDate.getFullYear();
@@ -1118,7 +1109,6 @@
 
             const container = document.getElementById('recordsContainer');
             container.innerHTML = '';
-
             let totalEarnings = 0;
 
             if (filteredShifts.length === 0) {
@@ -1126,7 +1116,7 @@
             } else {
                 filteredShifts.forEach(rec => {
                     totalEarnings += rec.amount;
-                    const html = `
+                    container.insertAdjacentHTML('afterbegin', `
                         <div class="history-item" id="${rec.id}">
                             <div>
                                 <div class="history-title">${rec.title}</div>
@@ -1137,41 +1127,46 @@
                                 <button class="btn-delete" onclick="deleteRecord('${rec.id}')">✕</button>
                             </div>
                         </div>
-                    `;
-                    container.insertAdjacentHTML('afterbegin', html);
+                    `);
                 });
             }
 
-            const refDate = new Date(selYear, selMonth, 15);
+            const now = new Date();
+            const isCurrentMonth = (selYear === now.getFullYear() && selMonth === now.getMonth());
+            const refDate = isCurrentMonth ? now : new Date(selYear, selMonth, 1);
             const cycle = calculateDynamicPayCycle(refDate);
 
-            document.getElementById('cycleLabel').innerText = cycle.label;
+            let periodText = cycle.periodText;
+            let labelText = cycle.label;
+
+            if (!isCurrentMonth) {
+                labelText = "MONTHLY CYCLE";
+                const lastDay = new Date(selYear, selMonth + 1, 0).getDate();
+                periodText = `01/${String(selMonth + 1).padStart(2, '0')} – ${lastDay}/${String(selMonth + 1).padStart(2, '0')}`;
+            }
+
+            document.getElementById('cycleLabel').innerText = labelText;
             document.getElementById('payDateBadge').innerText = cycle.payDayText;
-            document.getElementById('cyclePeriodText').innerText = cycle.periodText;
+            document.getElementById('cyclePeriodText').innerText = periodText;
             document.getElementById('cycleEarnings').innerHTML = `${totalEarnings.toLocaleString()} <span class="currency">LKR</span>`;
             document.getElementById('shiftsCount').innerText = `${filteredShifts.length} Shifts`;
         }
 
-        // --- SHIFT LOGGING ACTIONS ---
         function logShift(title, amount) {
             const y = selectedLogDate.getFullYear();
             const m = String(selectedLogDate.getMonth() + 1).padStart(2, '0');
             const d = String(selectedLogDate.getDate()).padStart(2, '0');
-            const dateStr = `${y}-${m}-${d}`;
-
-            const newRec = {
+            
+            shiftRecords.push({
                 id: 'rec-' + Date.now(),
                 title: title,
                 amount: amount,
-                date: dateStr
-            };
-
-            shiftRecords.push(newRec);
+                date: `${y}-${m}-${d}`
+            });
             saveRecordsToStorage();
 
             document.getElementById('historyMonthSelect').value = selectedLogDate.getMonth();
             document.getElementById('historyYearSelect').value = selectedLogDate.getFullYear();
-
             updateHistoryView();
         }
 
@@ -1181,7 +1176,6 @@
             updateHistoryView();
         }
 
-        // --- SETTINGS MODAL ---
         function openSettingsModal() { document.getElementById('settingsModal').style.display = 'flex'; }
         function closeSettingsModal() { document.getElementById('settingsModal').style.display = 'none'; }
 
@@ -1190,8 +1184,7 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(evt) {
-                    const imgUrl = evt.target.result;
-                    const imgHtml = `<img src="${imgUrl}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+                    const imgHtml = `<img src="${evt.target.result}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
                     document.getElementById('modalAvatarPreview').innerHTML = imgHtml;
                     document.getElementById('profileAvatarDisplay').innerHTML = imgHtml;
                 };
@@ -1210,18 +1203,14 @@
             const newName = document.getElementById('inputDisplayName').value;
             if (newName.trim()) {
                 document.getElementById('profileNameDisplay').innerText = newName;
-                if (window.saveProfileToCloud) {
-                    window.saveProfileToCloud(newName);
-                }
+                if (window.saveProfileToCloud) window.saveProfileToCloud(newName);
             }
             closeSettingsModal();
         }
 
         function downloadCSVReport() {
             let csv = "Date,Shift Title,Earnings (LKR)\n";
-            shiftRecords.forEach(r => {
-                csv += `${r.date},${r.title},${r.amount}\n`;
-            });
+            shiftRecords.forEach(r => { csv += `${r.date},${r.title},${r.amount}\n`; });
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1239,7 +1228,6 @@
             }
         }
 
-        // Init
         document.addEventListener('DOMContentLoaded', () => {
             updateShiftDateDisplay();
             renderAvailableShifts();
