@@ -131,7 +131,6 @@
             background: rgba(37, 99, 235, 0.08);
         }
 
-        /* Shift Builder Styles */
         .template-banner {
             width: 100%;
             background: rgba(37, 99, 235, 0.1);
@@ -342,20 +341,20 @@
             <button type="button" class="btn-primary" onclick="proceedToShiftCreation()">Next: Shift Setup</button>
         </div>
 
-        <!-- PAGE 2: Shift Creation (Manual Builder + Optional SS Template Side-Option) -->
+        <!-- PAGE 2: Shift Creation -->
         <div id="pageShiftCreation" class="step-container">
             <div class="welcome-header">
                 <h1>Configure Shifts</h1>
                 <p>Build your shifts manually, or load the SS preset template as a shortcut.</p>
             </div>
 
-            <!-- Optional SS Template Side Banner -->
+            <!-- SS Template Preset Shortcut -->
             <div class="template-banner">
                 <span class="template-banner-text">Want a quick shortcut? Load the <b>SS</b> preset template.</span>
                 <button type="button" class="btn-text-action" onclick="loadSSTemplate()">Load SS Template</button>
             </div>
 
-            <!-- Manual Shift Input Form (Single Rate Box) -->
+            <!-- Manual Shift Input Form -->
             <div class="shift-form-grid">
                 <div class="input-group">
                     <label>Shift Name</label>
@@ -367,7 +366,7 @@
                 </div>
                 <div class="input-group">
                     <label>Shift Rate (LKR)</label>
-                    <input type="number" id="inputRate" placeholder="e.g. 2000">
+                    <input type="number" id="inputRate" placeholder="e.g. 2000" onkeydown="if(event.key==='Enter') addCustomShift()">
                 </div>
                 <button type="button" class="btn-secondary" onclick="addCustomShift()">+ Add Custom Shift</button>
             </div>
@@ -406,15 +405,22 @@
         let currentUser = null;
         let selectedRole = 'employee';
         let userShifts = [];
+        let payCyclesConfig = null;
         let usedTemplateGroup = 'Custom';
 
-        // Official SS Template Data (kept fully intact for the shortcut button)
+        // Official SS Template Shift Rates
         const ssTemplateShifts = [
-            { name: "Day (D)", time: "7:00 AM – 6:00 PM", rate: 2000, normal: 2000, saturday: 3000 },
-            { name: "Evening (E)", time: "6:00 PM – 11:30 PM", rate: 1800, normal: 1800, saturday: 2700 },
-            { name: "Mega (M)", time: "6:00 PM – 3:00 AM", rate: 2700, normal: 2700, saturday: 4050 },
-            { name: "Double (D+E)", time: "7:00 AM – 11:30 PM", rate: 3800, normal: 3800, saturday: 5700 },
-            { name: "Full Day Double (D+M)", time: "7:00 AM – 3:00 AM next day", rate: 4700, normal: 4700, saturday: 7050 }
+            { id: "shift_d", name: "Day Shift (D)", time: "7:00 AM – 6:00 PM", rate: 2000, normal: 2000, saturday: 3000 },
+            { id: "shift_e", name: "Evening Shift (E)", time: "6:00 PM – 11:30 PM", rate: 1800, normal: 1800, saturday: 2700 },
+            { id: "shift_m", name: "Mega Shift (M)", time: "6:00 PM – 3:00 AM", rate: 2700, normal: 2700, saturday: 4050 },
+            { id: "shift_de", name: "Double Shift (D + E)", time: "7:00 AM – 11:30 PM", rate: 3800, normal: 3800, saturday: 5700 },
+            { id: "shift_dm", name: "Full Day Double (D + M)", time: "7:00 AM – 3:00 AM next day", rate: 4700, normal: 4700, saturday: 7050 }
+        ];
+
+        // SS Template Specific Pay Cycles
+        const ssPayCycles = [
+            { id: "cycle_1", name: "Mid-Month Cycle", startDay: 1, endDay: 15, payoutDay: 25, payoutMonth: "current" },
+            { id: "cycle_2", name: "End-Month Cycle", startDay: 16, endDay: 31, payoutDay: 10, payoutMonth: "next" }
         ];
 
         window.selectRole = function(role) {
@@ -438,9 +444,10 @@
 
         window.loadSSTemplate = function() {
             userShifts = [...ssTemplateShifts];
+            payCyclesConfig = [...ssPayCycles];
             usedTemplateGroup = 'SS';
             renderShiftsList();
-            showAlert("SS Template loaded successfully!", "success");
+            showAlert("SS Template & Pay Cycles loaded successfully!", "success");
         }
 
         window.addCustomShift = function() {
@@ -457,10 +464,10 @@
             userShifts.push({ name, time, rate });
             usedTemplateGroup = 'Custom';
 
-            // Clear inputs
             document.getElementById('inputName').value = '';
             document.getElementById('inputTime').value = '';
             document.getElementById('inputRate').value = '';
+            document.getElementById('inputName').focus();
 
             renderShiftsList();
         }
@@ -485,7 +492,7 @@
                         <div class="shift-item-info">
                             <span class="s-name">${s.name}</span>
                             <span class="s-time">${s.time}</span>
-                            <span class="s-rates">Rate: ${displayRate} LKR</span>
+                            <span class="s-rates">Rate: ${displayRate} LKR ${s.saturday ? `(Sat: ${s.saturday} LKR)` : ''}</span>
                         </div>
                         <button type="button" class="btn-delete-shift" onclick="removeShift(${idx})">Remove</button>
                     </div>
@@ -515,10 +522,20 @@
             }
 
             try {
-                const userDocRef = doc(db, "users", currentUser.uid);
                 const isManagerReq = (selectedRole === 'manager');
 
-                await setDoc(userDocRef, { 
+                // LocalStorage save
+                localStorage.setItem('shiftgrid_shifts', JSON.stringify(userShifts));
+                if (payCyclesConfig) {
+                    localStorage.setItem('shiftgrid_payCycles', JSON.stringify(payCyclesConfig));
+                }
+                localStorage.setItem('shiftgrid_role', 'employee');
+                localStorage.setItem('shiftgrid_templateGroup', usedTemplateGroup);
+                localStorage.setItem('shiftgrid_shiftsConfigured', 'true');
+
+                const userDocRef = doc(db, "users", currentUser.uid);
+
+                const profilePayload = { 
                     role: 'employee', 
                     pendingManagerRequest: isManagerReq,
                     shifts: userShifts,
@@ -526,7 +543,13 @@
                     shiftsConfigured: true,
                     email: currentUser.email,
                     updatedAt: new Date().toISOString()
-                }, { merge: true });
+                };
+
+                if (payCyclesConfig) {
+                    profilePayload.payCycles = payCyclesConfig;
+                }
+
+                await setDoc(userDocRef, profilePayload, { merge: true });
 
                 if (isManagerReq) {
                     await addDoc(collection(db, "requests"), {
