@@ -1102,6 +1102,7 @@
             btn.innerText = "Requesting...";
 
             const isManagerRequest = selectedRole === 'manager';
+            const selectedCycle = document.getElementById('payCycleSelect').value;
 
             try {
                 templateRequested = true;
@@ -1112,6 +1113,7 @@
                 localStorage.setItem('shiftgrid_requestedRole', selectedRole);
                 localStorage.setItem('shiftgrid_role', 'employee'); // Default active role until granted
                 localStorage.setItem('shiftgrid_managerStatus', isManagerRequest ? 'pending' : 'approved');
+                localStorage.setItem('shiftgrid_payCycle', selectedCycle);
 
                 if (currentUser) {
                     // Log Template Access Request
@@ -1142,6 +1144,7 @@
                         managerStatus: isManagerRequest ? 'pending' : 'approved',
                         templateRequested: true,
                         shiftsConfigured: true,
+                        payCycle: selectedCycle,
                         email: currentUser.email,
                         updatedAt: new Date().toISOString()
                     }, { merge: true });
