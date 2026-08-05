@@ -844,11 +844,19 @@
         let currentUser = null;
 
         const defaultSSShifts = [
+<<<<<<< HEAD
             { id: "shift_d", name: "Day Shift (D)", time: "7:00 AM – 6:00 PM", rate: 2000 },
             { id: "shift_e", name: "Evening Shift (E)", time: "6:00 PM – 11:30 PM", rate: 1800 },
             { id: "shift_m", name: "Mega Shift (M)", time: "6:00 PM – 3:00 AM", rate: 2700 },
             { id: "shift_de", name: "Double Shift (D + E)", time: "7:00 AM – 11:30 PM", rate: 3800 },
             { id: "shift_dm", name: "Full Day Double (D + M)", time: "7:00 AM – 3:00 AM next day", rate: 4700 }
+=======
+            { id: "shift_d", name: "Day Shift (D)", time: "7:00 AM – 6:00 PM", rate: 2000, dayBonusPercent: 50, bonusDays: ["Sat"] },
+            { id: "shift_e", name: "Evening Shift (E)", time: "6:00 PM – 11:30 PM", rate: 1800, dayBonusPercent: 50, bonusDays: ["Sat"] },
+            { id: "shift_m", name: "Mega Shift (M)", time: "6:00 PM – 3:00 AM", rate: 2700, dayBonusPercent: 50, bonusDays: ["Sat"] },
+            { id: "shift_de", name: "Double Shift (D + E)", time: "7:00 AM – 11:30 PM", rate: 3800, dayBonusPercent: 50, bonusDays: ["Sat"] },
+            { id: "shift_dm", name: "Full Day Double (D + M)", time: "7:00 AM – 3:00 AM next day", rate: 4700, dayBonusPercent: 50, bonusDays: ["Sat"] }
+>>>>>>> a679c4b (Fix pay cycle persistence, Saturday bonus, and cycle-scoped earnings reset)
         ];
 
         function getPayCycleFromStorage() {
@@ -979,6 +987,24 @@
             localStorage.setItem('shiftgrid_records', JSON.stringify(shiftRecords));
         }
 
+<<<<<<< HEAD
+=======
+        const WEEKDAY_ABBR = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+        function getEffectiveRate(shift, date) {
+            const base = shift.rate !== undefined ? shift.rate : (shift.normal || 0);
+            const bonusDays = Array.isArray(shift.bonusDays) ? shift.bonusDays : [];
+            const bonusPercent = shift.dayBonusPercent || 0;
+            const dayAbbr = WEEKDAY_ABBR[date.getDay()];
+            const isBonusDay = bonusPercent > 0 && bonusDays.includes(dayAbbr);
+            return {
+                amount: isBonusDay ? Math.round(base * (1 + bonusPercent / 100)) : base,
+                isBonusDay,
+                bonusPercent
+            };
+        }
+
+>>>>>>> a679c4b (Fix pay cycle persistence, Saturday bonus, and cycle-scoped earnings reset)
         function renderAvailableShifts() {
             const container = document.getElementById('availableShiftsContainer');
             if (!container) return;
@@ -1007,8 +1033,15 @@
             }
 
             shiftsToRender.forEach(s => {
+<<<<<<< HEAD
                 const currentRate = s.rate !== undefined ? s.rate : (s.normal || 0);
                 const rateLabel = `LKR ${currentRate.toLocaleString()}`;
+=======
+                const { amount: currentRate, isBonusDay, bonusPercent } = getEffectiveRate(s, selectedLogDate);
+                const rateLabel = isBonusDay
+                    ? `LKR ${currentRate.toLocaleString()} <span style="color: var(--accent-green); font-weight:600;">(+${bonusPercent}% bonus)</span>`
+                    : `LKR ${currentRate.toLocaleString()}`;
+>>>>>>> a679c4b (Fix pay cycle persistence, Saturday bonus, and cycle-scoped earnings reset)
                 const timeText = s.time ? s.time : 'Custom Hours';
 
                 container.innerHTML += `
@@ -1085,7 +1118,11 @@
 
         function calculateDynamicPayCycle(targetDate) {
             const config = window.userPayCycleConfig || { type: 'mid-month', payDay: 25 };
+<<<<<<< HEAD
             let rawType = (typeof config === 'string' ? config : (config.type || 'mid-month')).toLowerCase().replace('_', '-');
+=======
+            let rawType = (typeof config === 'string' ? config : (config.type || 'mid-month')).toLowerCase().replace(/_/g, '-');
+>>>>>>> a679c4b (Fix pay cycle persistence, Saturday bonus, and cycle-scoped earnings reset)
             const payDay = (typeof config === 'object' && config.payDay) ? config.payDay : 25;
 
             const year = targetDate.getFullYear();
@@ -1098,28 +1135,65 @@
             let label = "MONTHLY CYCLE";
             let periodText = `01/${monthStr} – ${lastDay}/${monthStr}`;
             let payDayText = `Paid on ${payDay}th`;
+<<<<<<< HEAD
 
             if (rawType === 'month-end' || rawType === 'month_end') {
                 label = "MONTH-END CYCLE";
                 periodText = `16/${monthStr} – ${lastDay}/${monthStr}`;
                 payDayText = `Paid on 10th (Next Mo.)`;
+=======
+            let startDay = 1;
+            let endDay = lastDay;
+
+            if (rawType === 'month-end') {
+                label = "MONTH-END CYCLE";
+                periodText = `16/${monthStr} – ${lastDay}/${monthStr}`;
+                payDayText = `Paid on 10th (Next Mo.)`;
+                startDay = 16;
+                endDay = lastDay;
+>>>>>>> a679c4b (Fix pay cycle persistence, Saturday bonus, and cycle-scoped earnings reset)
             } else if (rawType === 'mid-month' || rawType === 'bi-weekly' || rawType === 'dual') {
                 if (day <= 15) {
                     label = "MID-MONTH CYCLE (PART 1)";
                     periodText = `01/${monthStr} – 15/${monthStr}`;
                     payDayText = `Paid on ${payDay}th`;
+<<<<<<< HEAD
+=======
+                    startDay = 1;
+                    endDay = 15;
+>>>>>>> a679c4b (Fix pay cycle persistence, Saturday bonus, and cycle-scoped earnings reset)
                 } else {
                     label = "END-MONTH CYCLE (PART 2)";
                     periodText = `16/${monthStr} – ${lastDay}/${monthStr}`;
                     payDayText = `Paid on 10th (Next Mo.)`;
+<<<<<<< HEAD
+=======
+                    startDay = 16;
+                    endDay = lastDay;
+>>>>>>> a679c4b (Fix pay cycle persistence, Saturday bonus, and cycle-scoped earnings reset)
                 }
             } else if (rawType === 'weekly') {
                 label = "WEEKLY CYCLE";
                 periodText = "Current Week";
                 payDayText = "Every Friday";
+<<<<<<< HEAD
             }
 
             return { label, periodText, payDayText };
+=======
+                const weekStart = new Date(targetDate);
+                weekStart.setDate(targetDate.getDate() - targetDate.getDay());
+                const weekEnd = new Date(weekStart);
+                weekEnd.setDate(weekStart.getDate() + 6);
+                // Only valid when the week doesn't cross a month boundary; falls back to full month otherwise.
+                if (weekStart.getMonth() === month && weekEnd.getMonth() === month) {
+                    startDay = weekStart.getDate();
+                    endDay = weekEnd.getDate();
+                }
+            }
+
+            return { label, periodText, payDayText, startDay, endDay };
+>>>>>>> a679c4b (Fix pay cycle persistence, Saturday bonus, and cycle-scoped earnings reset)
         }
 
         function updateHistoryView() {
@@ -1135,13 +1209,19 @@
 
             const container = document.getElementById('recordsContainer');
             container.innerHTML = '';
+<<<<<<< HEAD
             let totalEarnings = 0;
+=======
+>>>>>>> a679c4b (Fix pay cycle persistence, Saturday bonus, and cycle-scoped earnings reset)
 
             if (filteredShifts.length === 0) {
                 container.innerHTML = `<div class="empty-history">No shift attendance logged for ${monthNames[selMonth]} ${selYear}.</div>`;
             } else {
                 filteredShifts.forEach(rec => {
+<<<<<<< HEAD
                     totalEarnings += rec.amount;
+=======
+>>>>>>> a679c4b (Fix pay cycle persistence, Saturday bonus, and cycle-scoped earnings reset)
                     container.insertAdjacentHTML('afterbegin', `
                         <div class="history-item" id="${rec.id}">
                             <div>
@@ -1164,6 +1244,7 @@
 
             let periodText = cycle.periodText;
             let labelText = cycle.label;
+<<<<<<< HEAD
 
             if (!isCurrentMonth) {
                 labelText = "MONTHLY CYCLE";
@@ -1176,6 +1257,32 @@
             document.getElementById('cyclePeriodText').innerText = periodText;
             document.getElementById('cycleEarnings').innerHTML = `${totalEarnings.toLocaleString()} <span class="currency">LKR</span>`;
             document.getElementById('shiftsCount').innerText = `${filteredShifts.length} Shifts`;
+=======
+            let startDay = cycle.startDay;
+            let endDay = cycle.endDay;
+
+            if (!isCurrentMonth) {
+                labelText = "MONTHLY CYCLE";
+                const lastDayOfSelMonth = new Date(selYear, selMonth + 1, 0).getDate();
+                periodText = `01/${String(selMonth + 1).padStart(2, '0')} – ${lastDayOfSelMonth}/${String(selMonth + 1).padStart(2, '0')}`;
+                startDay = 1;
+                endDay = lastDayOfSelMonth;
+            }
+
+            // Cycle earnings/shift count only include records within this cycle's day range —
+            // so a new half (e.g. the 16th) starts fresh instead of carrying over the whole month.
+            const cycleShifts = filteredShifts.filter(rec => {
+                const recDay = new Date(rec.date).getDate();
+                return recDay >= startDay && recDay <= endDay;
+            });
+            const cycleEarningsTotal = cycleShifts.reduce((sum, r) => sum + r.amount, 0);
+
+            document.getElementById('cycleLabel').innerText = labelText;
+            document.getElementById('payDateBadge').innerText = cycle.payDayText;
+            document.getElementById('cyclePeriodText').innerText = periodText;
+            document.getElementById('cycleEarnings').innerHTML = `${cycleEarningsTotal.toLocaleString()} <span class="currency">LKR</span>`;
+            document.getElementById('shiftsCount').innerText = `${cycleShifts.length} Shifts`;
+>>>>>>> a679c4b (Fix pay cycle persistence, Saturday bonus, and cycle-scoped earnings reset)
         }
 
         function logShift(title, amount) {
