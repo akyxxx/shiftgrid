@@ -121,6 +121,7 @@
             padding: 14px;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         .role-card:hover {
@@ -134,15 +135,32 @@
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
         }
 
+        .role-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2px;
+        }
+
         .role-card-title {
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 2px;
         }
 
         .role-card-desc {
             font-size: 11px;
             color: var(--text-muted);
+        }
+
+        .role-badge-pending {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--warning);
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 2px 6px;
+            border-radius: 6px;
+            text-transform: uppercase;
         }
 
         /* Section Containers */
@@ -268,7 +286,7 @@
             width: 100%;
         }
 
-        /* Modern Day-Based Multiplier Section */
+        /* Day-Based Multiplier Section */
         .day-bonus-wrapper {
             background: rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border);
@@ -441,10 +459,7 @@
         .toast.success { background: rgba(16, 185, 129, 0.12); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); display: block; }
         .toast.warning { background: rgba(245, 158, 11, 0.12); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.3); display: block; }
 
-
-        /* ========================================================= */
-        /* UPGRADED ADVANCED TIME PICKER MODAL STYLES                */
-        /* ========================================================= */
+        /* ADVANCED TIME PICKER MODAL STYLES */
         @keyframes tpPopIn {
             from { opacity: 0; transform: scale(0.92) translateY(12px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
@@ -505,7 +520,6 @@
 
         .tp-close-btn:hover { color: var(--text-main); }
 
-        /* Quick Preset Time Pills */
         .tp-presets-row {
             display: flex;
             gap: 6px;
@@ -535,7 +549,6 @@
             background: rgba(59, 130, 246, 0.12);
         }
 
-        /* Big Digital Readout */
         .tp-digital-display {
             display: flex;
             align-items: center;
@@ -589,7 +602,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Segmented Mode Switcher (Hours / Minutes) */
         .tp-segmented-tabs {
             display: flex;
             background: var(--bg-base);
@@ -620,7 +632,6 @@
             border: 1px solid var(--border-accent);
         }
 
-        /* Number Grid */
         .tp-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -655,7 +666,6 @@
             box-shadow: 0 3px 10px var(--primary-glow);
         }
 
-        /* AM / PM Toggle Grid */
         .tp-ampm-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -704,7 +714,7 @@
 <body>
 
     <div class="setup-card">
-        <!-- Official Logo Header -->
+        <!-- Logo Header -->
         <div class="brand-header">
             <img src="SiftGrid logo.png" alt="ShiftGrid Logo" class="brand-logo-img">
         </div>
@@ -720,11 +730,16 @@
 
             <div class="role-options">
                 <div class="role-card selected" id="optEmployee" onclick="selectRole('employee')">
-                    <div class="role-card-title">Employee / Staff</div>
+                    <div class="role-card-header">
+                        <div class="role-card-title">Employee / Staff</div>
+                    </div>
                     <div class="role-card-desc">Standard access to log shifts, track OT & earnings.</div>
                 </div>
                 <div class="role-card" id="optManager" onclick="selectRole('manager')">
-                    <div class="role-card-title">Manager</div>
+                    <div class="role-card-header">
+                        <div class="role-card-title">Manager</div>
+                        <span class="role-badge-pending">Requires Approval</span>
+                    </div>
                     <div class="role-card-desc">Workspace oversight, team control & shift approvals.</div>
                 </div>
             </div>
@@ -833,22 +848,18 @@
                 </div>
             </div>
 
-            <button type="button" class="btn-main" onclick="finalizeSetup()">Complete Setup</button>
+            <button type="button" class="btn-main" id="btnCompleteSetup" onclick="finalizeSetup()">Complete Setup</button>
         </div>
     </div>
 
-    <!-- ========================================================= -->
-    <!-- UPGRADED ADVANCED TIME PICKER MODAL CONTAINER             -->
-    <!-- ========================================================= -->
+    <!-- ADVANCED TIME PICKER MODAL -->
     <div class="tp-modal-overlay" id="tpModal">
         <div class="tp-card">
-            <!-- Top Bar -->
             <div class="tp-top-bar">
                 <div class="tp-header" id="tpTargetLabel">Select Time</div>
                 <button type="button" class="tp-close-btn" onclick="closeTimePicker()">✕</button>
             </div>
 
-            <!-- Quick Preset Time Pills -->
             <div class="tp-presets-row">
                 <button type="button" class="tp-preset-chip" onclick="applyPresetTime('08', '00', 'AM')">08:00 AM</button>
                 <button type="button" class="tp-preset-chip" onclick="applyPresetTime('09', '00', 'AM')">09:00 AM</button>
@@ -857,7 +868,6 @@
                 <button type="button" class="tp-preset-chip" onclick="applyPresetTime('11', '00', 'PM')">11:00 PM</button>
             </div>
 
-            <!-- Interactive Digital Display -->
             <div class="tp-digital-display">
                 <div class="tp-digit-box active" id="dispHour" onclick="setPickerTab('hours')">08</div>
                 <div class="tp-digit-colon">:</div>
@@ -865,22 +875,18 @@
                 <div class="tp-ampm-badge" id="dispAmPm">AM</div>
             </div>
 
-            <!-- Mode Switcher (Hours / Minutes) -->
             <div class="tp-segmented-tabs">
                 <button type="button" class="tp-tab-btn active" id="tabHoursBtn" onclick="setPickerTab('hours')">Hours</button>
                 <button type="button" class="tp-tab-btn" id="tabMinutesBtn" onclick="setPickerTab('minutes')">Minutes</button>
             </div>
 
-            <!-- Numbers Grid Container -->
             <div class="tp-grid" id="tpNumbersGrid"></div>
 
-            <!-- AM / PM Selector -->
             <div class="tp-ampm-grid">
                 <button type="button" class="tp-ampm-btn active" id="btnAM" onclick="setAmPm('AM')">AM (Morning)</button>
                 <button type="button" class="tp-ampm-btn" id="btnPM" onclick="setAmPm('PM')">PM (Evening)</button>
             </div>
 
-            <!-- Confirm Action -->
             <button type="button" class="tp-confirm-btn" onclick="savePickerTime()">Set Time</button>
         </div>
     </div>
@@ -908,7 +914,7 @@
         let selectedRole = 'employee';
         let customShifts = [];
         let templateRequested = false;
-        let selectedBonusDays = ['Sat']; // Default Saturday selected
+        let selectedBonusDays = ['Sat'];
 
         // Clock State Values
         let selectedStartClock = "08:00 AM";
@@ -918,7 +924,7 @@
         let tempHour = "08";
         let tempMin = "00";
         let tempAmPm = "AM";
-        let activeTab = "hours"; // 'hours' or 'minutes'
+        let activeTab = "hours";
 
         window.selectRole = (role) => {
             selectedRole = role;
@@ -1004,7 +1010,6 @@
             grid.innerHTML = '';
 
             if (activeTab === 'hours') {
-                // Hours Grid (1 to 12)
                 for (let i = 1; i <= 12; i++) {
                     const val = i < 10 ? `0${i}` : `${i}`;
                     const btn = document.createElement('button');
@@ -1013,7 +1018,6 @@
                     btn.innerText = val;
                     btn.onclick = () => {
                         tempHour = val;
-                        // Auto-advance to minutes view smoothly
                         activeTab = 'minutes';
                         updateReadout();
                         renderPickerGrid();
@@ -1021,7 +1025,6 @@
                     grid.appendChild(btn);
                 }
             } else {
-                // Minutes Grid (00 to 55 by 5s)
                 for (let i = 0; i < 60; i += 5) {
                     const val = i < 10 ? `0${i}` : `${i}`;
                     const btn = document.createElement('button');
@@ -1050,29 +1053,71 @@
             closeTimePicker();
         };
 
+        /* REQUEST TEMPLATE ACCESS & AUTO REDIRECT TO DASHBOARD */
         window.requestTemplateAccess = async () => {
             if (templateRequested) return;
 
+            const btn = document.getElementById('btnRequestTemplate');
+            btn.disabled = true;
+            btn.innerText = "Requesting...";
+
+            const isManagerRequest = selectedRole === 'manager';
+
             try {
+                templateRequested = true;
+                
+                // Save state locally
+                localStorage.setItem('shiftgrid_templateRequested', 'true');
+                localStorage.setItem('shiftgrid_shiftsConfigured', 'true');
+                localStorage.setItem('shiftgrid_requestedRole', selectedRole);
+                localStorage.setItem('shiftgrid_role', 'employee'); // Default active role until granted
+                localStorage.setItem('shiftgrid_managerStatus', isManagerRequest ? 'pending' : 'approved');
+
                 if (currentUser) {
+                    // Log Template Access Request
                     await addDoc(collection(db, "requests"), {
                         uid: currentUser.uid,
                         email: currentUser.email,
                         requestType: "template_access",
+                        roleContext: selectedRole,
                         status: "pending",
                         createdAt: new Date().toISOString()
                     });
+
+                    // Log Manager Request if selected
+                    if (isManagerRequest) {
+                        await addDoc(collection(db, "requests"), {
+                            uid: currentUser.uid,
+                            email: currentUser.email,
+                            requestType: "manager_role",
+                            status: "pending",
+                            createdAt: new Date().toISOString()
+                        });
+                    }
+
+                    // Save User Document
+                    await setDoc(doc(db, "users", currentUser.uid), {
+                        role: 'employee',
+                        requestedRole: selectedRole,
+                        managerStatus: isManagerRequest ? 'pending' : 'approved',
+                        templateRequested: true,
+                        shiftsConfigured: true,
+                        email: currentUser.email,
+                        updatedAt: new Date().toISOString()
+                    }, { merge: true });
                 }
 
-                templateRequested = true;
-                const btn = document.getElementById('btnRequestTemplate');
-                btn.disabled = true;
-                btn.innerText = "Pending Review";
-                document.getElementById('templateSubtext').innerText = "Request sent to Staff/Admin! Pending approval.";
+                showToast("Request submitted! Redirecting to Dashboard...", "success");
 
-                showToast("Request submitted! You can now finish setup.", "warning");
+                // Auto-Redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 1000);
+
             } catch (err) {
-                showToast("Error: " + err.message, "error");
+                showToast("Error sending request: " + err.message, "error");
+                btn.disabled = false;
+                btn.innerText = "Request Access";
             }
         };
 
@@ -1100,7 +1145,6 @@
                 bonusDays: [...selectedBonusDays]
             });
 
-            // Reset inputs
             document.getElementById('inputName').value = '';
             document.getElementById('inputRate').value = '';
             document.getElementById('inputOtRate').value = '';
@@ -1147,23 +1191,45 @@
             }
         });
 
+        /* COMPLETE SETUP METHOD FOR MANUAL CUSTOM SHIFT CREATION */
         window.finalizeSetup = async () => {
             if (customShifts.length === 0 && !templateRequested) {
                 showToast("Please add a shift preset or request Template access.", "error");
                 return;
             }
 
+            const btn = document.getElementById('btnCompleteSetup');
+            btn.disabled = true;
+            btn.innerText = "Saving Setup...";
+
             const selectedCycle = document.getElementById('payCycleSelect').value;
+            const isManagerRequest = selectedRole === 'manager';
 
             try {
+                // Save locally first
                 localStorage.setItem('shiftgrid_shifts', JSON.stringify(customShifts));
                 localStorage.setItem('shiftgrid_payCycle', selectedCycle);
                 localStorage.setItem('shiftgrid_templateRequested', templateRequested ? 'true' : 'false');
                 localStorage.setItem('shiftgrid_shiftsConfigured', 'true');
+                localStorage.setItem('shiftgrid_role', 'employee');
+                localStorage.setItem('shiftgrid_requestedRole', selectedRole);
+                localStorage.setItem('shiftgrid_managerStatus', isManagerRequest ? 'pending' : 'approved');
 
                 if (currentUser) {
+                    if (isManagerRequest) {
+                        await addDoc(collection(db, "requests"), {
+                            uid: currentUser.uid,
+                            email: currentUser.email,
+                            requestType: "manager_role",
+                            status: "pending",
+                            createdAt: new Date().toISOString()
+                        });
+                    }
+
                     await setDoc(doc(db, "users", currentUser.uid), {
-                        role: selectedRole,
+                        role: 'employee',
+                        requestedRole: selectedRole,
+                        managerStatus: isManagerRequest ? 'pending' : 'approved',
                         shifts: customShifts,
                         payCycle: selectedCycle,
                         templateRequested: templateRequested,
@@ -1173,13 +1239,13 @@
                     }, { merge: true });
                 }
 
-                showToast("Setup complete! Redirecting...", "success");
+                showToast(isManagerRequest ? "Setup complete! Manager role & requests pending approval." : "Setup complete! Redirecting...", "success");
 
-                if (window.location.protocol !== 'file:') {
-                    setTimeout(() => { window.location.href = "dashboard.html"; }, 1000);
-                }
+                setTimeout(() => { window.location.href = "dashboard.html"; }, 1000);
             } catch (err) {
                 showToast("Error saving setup: " + err.message, "error");
+                btn.disabled = false;
+                btn.innerText = "Complete Setup";
             }
         };
 
