@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShiftGrid — Setup & Shift Configuration</title>
-    <!-- Google Fonts: Plus Jakarta Sans -->
+    <title>ShiftGrid — Setup</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-base: #0a0f0d;
-            --surface: #121a16;
-            --surface-border: #1e2c24;
-            --primary-blue: #2563eb;
-            --primary-blue-hover: #1d4ed8;
-            --text-main: #ffffff;
-            --text-muted: #8b9d93;
-            --error-color: #ef4444;
-            --success-color: #22c55e;
-            --danger-hover: #dc2626;
+            --bg-base: #0b0f17;
+            --surface: #111827;
+            --surface-hover: #1f2937;
+            --surface-card: #161e2e;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(59, 130, 246, 0.3);
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --primary-glow: rgba(59, 130, 246, 0.35);
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --text-dim: #6b7280;
+            --error: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
         }
 
         * {
@@ -28,365 +31,865 @@
             margin: 0;
             padding: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 100%, rgba(17, 24, 39, 0.8) 0%, transparent 50%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 12px;
+            overflow-x: hidden;
         }
 
         .setup-card {
             width: 100%;
-            max-width: 520px;
+            max-width: 440px;
             background: var(--surface);
-            border: 1px solid var(--surface-border);
-            border-radius: 24px;
-            padding: 32px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(59, 130, 246, 0.05);
+            backdrop-filter: blur(12px);
+            overflow: hidden;
+        }
+
+        /* Brand Header */
+        .brand-header {
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        .logo-container {
+            justify-content: center;
+            gap: 8px;
             margin-bottom: 20px;
-            text-align: center;
         }
 
-        .logo-img {
-            width: 80px;
-            height: 80px;
+        .brand-logo-img {
+            height: 48px;
+            width: auto;
             object-fit: contain;
-            border-radius: 16px;
+            filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.3));
         }
 
-        .welcome-header {
+        .header-text {
             text-align: center;
-            margin-bottom: 24px;
-            width: 100%;
+            margin-bottom: 20px;
         }
 
-        .welcome-header h1 {
-            font-size: 22px;
+        .header-text h1 {
+            font-size: 18px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
         }
 
-        .welcome-header p {
-            font-size: 13px;
+        .header-text p {
+            font-size: 12px;
             color: var(--text-muted);
             line-height: 1.4;
         }
 
         .step-container {
-            width: 100%;
             display: none;
+            width: 100%;
         }
 
         .step-container.active {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            width: 100%;
+            gap: 16px;
         }
 
+        /* Role Options */
         .role-options {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            width: 100%;
-            margin-bottom: 24px;
+            gap: 10px;
         }
 
-        .role-option-btn {
-            background: var(--bg-base);
-            border: 1px solid var(--surface-border);
-            border-radius: 14px;
-            padding: 14px 16px;
-            color: var(--text-main);
-            font-size: 15px;
-            font-weight: 600;
-            text-align: left;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+        .role-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .role-option-btn span {
-            font-size: 13px;
-            font-weight: 400;
+        .role-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: var(--surface-hover);
+        }
+
+        .role-card.selected {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+        }
+
+        .role-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .role-card-desc {
+            font-size: 11px;
             color: var(--text-muted);
         }
 
-        .role-option-btn.selected {
-            border-color: var(--primary-blue);
-            background: rgba(37, 99, 235, 0.08);
+        /* Section Containers */
+        .section-box {
+            background: var(--surface-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            width: 100%;
         }
 
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Template Request Banner */
         .template-banner {
-            width: 100%;
-            background: rgba(37, 99, 235, 0.1);
-            border: 1px solid rgba(37, 99, 235, 0.3);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(30, 58, 138, 0.12));
+            border: 1px solid var(--border-accent);
             border-radius: 12px;
-            padding: 12px 16px;
+            padding: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            gap: 10px;
         }
 
-        .template-banner-text {
-            font-size: 13px;
+        .template-info {
+            font-size: 12px;
+            line-height: 1.35;
+        }
+
+        .template-title {
+            font-weight: 600;
             color: var(--text-main);
         }
 
-        .btn-text-action {
-            background: none;
-            border: none;
-            color: var(--primary-blue);
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-        }
-        .btn-text-action:hover {
-            text-decoration: underline;
-        }
-
-        .shift-form-grid {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            background: var(--bg-base);
-            border: 1px solid var(--surface-border);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 20px;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            width: 100%;
-        }
-
-        .input-group label {
-            font-size: 12px;
-            font-weight: 600;
+        .template-sub {
+            font-size: 10px;
             color: var(--text-muted);
         }
 
-        .input-group input {
-            background: var(--surface);
-            border: 1px solid var(--surface-border);
-            border-radius: 10px;
-            padding: 10px 12px;
-            color: var(--text-main);
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s;
+        .btn-action-sm {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px var(--primary-glow);
+            flex-shrink: 0;
         }
 
-        .input-group input:focus {
-            border-color: var(--primary-blue);
+        .btn-action-sm:hover { background: var(--primary-hover); }
+        .btn-action-sm:disabled {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            box-shadow: none;
+            cursor: default;
         }
 
-        .btn-secondary {
+        /* Form Controls & Grids */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 10px;
+            min-width: 0;
+        }
+
+        .form-group label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--text-dim);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .form-group input, .form-group select {
             width: 100%;
-            background: transparent;
+            background: var(--bg-base);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 10px;
             color: var(--text-main);
-            border: 1px dashed var(--surface-border);
-            border-radius: 12px;
-            padding: 12px;
-            font-size: 14px;
+            font-size: 12px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .rates-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            width: 100%;
+        }
+
+        .clock-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            width: 100%;
+        }
+
+        /* Modern Day-Based Multiplier Section */
+        .day-bonus-wrapper {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 4px;
+            margin-bottom: 10px;
+        }
+
+        .day-bonus-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .day-pills {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            width: 100%;
+        }
+
+        .day-pill {
+            background: var(--bg-base);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 6px 0;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .day-pill:hover {
+            border-color: var(--primary);
+            color: var(--text-main);
+        }
+
+        .day-pill.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 2px 6px var(--primary-glow);
+        }
+
+        /* Time Trigger Buttons */
+        .time-trigger-btn {
+            background: var(--bg-base);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 10px;
+            color: var(--text-main);
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .time-trigger-btn:hover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .time-trigger-btn span.icon {
+            color: var(--primary);
+            font-size: 12px;
+        }
+
+        .btn-ghost {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            padding: 10px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
             margin-top: 4px;
         }
-        .btn-secondary:hover {
-            border-color: var(--primary-blue);
-            background: rgba(37, 99, 235, 0.05);
+
+        .btn-ghost:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(59, 130, 246, 0.05);
         }
 
-        .created-shifts-container {
-            width: 100%;
-            max-height: 200px;
-            overflow-y: auto;
+        .shift-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            margin-bottom: 20px;
+            margin-top: 12px;
+            max-height: 160px;
+            overflow-y: auto;
         }
 
-        .shift-item-card {
+        .shift-item {
             background: var(--bg-base);
-            border: 1px solid var(--surface-border);
-            border-radius: 12px;
-            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .shift-item-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            font-size: 13px;
-        }
-
-        .shift-item-info .s-name {
-            font-weight: 700;
-        }
-
-        .shift-item-info .s-time {
-            color: var(--text-muted);
             font-size: 11px;
         }
 
-        .shift-item-info .s-rates {
-            color: var(--primary-blue);
-            font-weight: 600;
-            font-size: 11px;
-        }
+        .shift-name { font-weight: 600; color: var(--text-main); font-size: 12px; }
+        .shift-meta { color: var(--text-muted); font-size: 10px; margin-top: 2px; }
+        .shift-badges { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+        .badge { font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+        .badge-ot { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.3); }
+        .badge-bonus { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); }
 
-        .btn-delete-shift {
+        .shift-rate { color: var(--primary); font-weight: 700; font-size: 12px; text-align: right; }
+
+        .btn-del {
             background: none;
             border: none;
-            color: var(--error-color);
+            color: var(--error);
+            font-size: 12px;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 4px 8px;
-        }
-        .btn-delete-shift:hover {
-            color: var(--danger-hover);
-        }
-
-        .btn-primary {
-            width: 100%;
-            background: var(--primary-blue);
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
             transition: background 0.2s;
         }
 
-        .btn-primary:hover {
-            background: var(--primary-blue-hover);
+        .btn-del:hover { background: rgba(239, 68, 68, 0.1); }
+
+        /* Main Submit Button */
+        .btn-main {
+            width: 100%;
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 13px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px var(--primary-glow);
         }
 
-        .status-message {
+        .btn-main:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Status Toast */
+        .toast {
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+            margin-bottom: 12px;
+        }
+
+        .toast.error { background: rgba(239, 68, 68, 0.12); color: var(--error); border: 1px solid rgba(239, 68, 68, 0.3); display: block; }
+        .toast.success { background: rgba(16, 185, 129, 0.12); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); display: block; }
+        .toast.warning { background: rgba(245, 158, 11, 0.12); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.3); display: block; }
+
+
+        /* ========================================================= */
+        /* UPGRADED ADVANCED TIME PICKER MODAL STYLES                */
+        /* ========================================================= */
+        @keyframes tpPopIn {
+            from { opacity: 0; transform: scale(0.92) translateY(12px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .tp-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(5, 8, 15, 0.82);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            transition: opacity 0.2s ease;
+        }
+
+        .tp-modal-overlay.active { display: flex; }
+
+        .tp-card {
             width: 100%;
-            padding: 10px;
+            max-width: 330px;
+            background: linear-gradient(160deg, #111827 0%, #0d1320 100%);
+            border: 1px solid var(--border-accent);
+            border-radius: 22px;
+            padding: 20px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(59, 130, 246, 0.12);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            animation: tpPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .tp-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tp-header {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+        }
+
+        .tp-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.15s;
+        }
+
+        .tp-close-btn:hover { color: var(--text-main); }
+
+        /* Quick Preset Time Pills */
+        .tp-presets-row {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 2px;
+            scrollbar-width: none;
+        }
+
+        .tp-presets-row::-webkit-scrollbar { display: none; }
+
+        .tp-preset-chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tp-preset-chip:hover {
+            border-color: var(--primary);
+            color: #ffffff;
+            background: rgba(59, 130, 246, 0.12);
+        }
+
+        /* Big Digital Readout */
+        .tp-digital-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(8, 12, 20, 0.7);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 14px;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        .tp-digit-box {
+            font-size: 32px;
+            font-weight: 800;
+            padding: 2px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-muted);
+            line-height: 1.1;
+        }
+
+        .tp-digit-box.active {
+            color: var(--primary);
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid var(--border-accent);
+            text-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        .tp-digit-colon {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-dim);
+            animation: pulseColon 1.5s infinite;
+        }
+
+        @keyframes pulseColon {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .tp-ampm-badge {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--primary);
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid var(--border-accent);
+            padding: 6px 10px;
+            border-radius: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Segmented Mode Switcher (Hours / Minutes) */
+        .tp-segmented-tabs {
+            display: flex;
+            background: var(--bg-base);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 3px;
+            gap: 4px;
+        }
+
+        .tp-tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 6px 0;
+            border-radius: 7px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .tp-tab-btn.active {
+            background: var(--surface-card);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-accent);
+        }
+
+        /* Number Grid */
+        .tp-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            min-height: 140px;
+        }
+
+        .tp-num-btn {
+            background: var(--surface-card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px 0;
             border-radius: 8px;
             font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
             text-align: center;
-            margin-bottom: 16px;
-            display: none;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .status-message.error {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--error-color);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            display: block;
+
+        .tp-num-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(59, 130, 246, 0.08);
+            transform: translateY(-1px);
         }
-        .status-message.success {
-            background: rgba(34, 197, 94, 0.1);
-            color: var(--success-color);
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            display: block;
+
+        .tp-num-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 3px 10px var(--primary-glow);
+        }
+
+        /* AM / PM Toggle Grid */
+        .tp-ampm-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .tp-ampm-btn {
+            background: var(--bg-base);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 8px 0;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .tp-ampm-btn.active {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .tp-confirm-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+
+        .tp-confirm-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
         }
     </style>
 </head>
 <body>
 
     <div class="setup-card">
-        <div class="logo-container">
-            <img src="SiftGrid logo.png" alt="ShiftGrid Logo" class="logo-img">
+        <!-- Official Logo Header -->
+        <div class="brand-header">
+            <img src="SiftGrid logo.png" alt="ShiftGrid Logo" class="brand-logo-img">
         </div>
 
-        <div id="statusAlert" class="status-message"></div>
+        <div id="statusToast" class="toast"></div>
 
-        <!-- PAGE 1: Role Selection -->
-        <div id="pageRoleSelection" class="step-container active">
-            <div class="welcome-header">
-                <h1>Account Setup</h1>
-                <p>Select your intended role to initialize your profile.</p>
+        <!-- STEP 1: Role Selection -->
+        <div id="pageRole" class="step-container active">
+            <div class="header-text">
+                <h1>Workspace Setup</h1>
+                <p>Select your operational role to configure your account.</p>
             </div>
 
             <div class="role-options">
-                <div class="role-option-btn selected" id="optEmployee" onclick="selectRole('employee')">
-                    Employee / Staff <span>Standard workspace access to track shifts and salaries.</span>
+                <div class="role-card selected" id="optEmployee" onclick="selectRole('employee')">
+                    <div class="role-card-title">Employee / Staff</div>
+                    <div class="role-card-desc">Standard access to log shifts, track OT & earnings.</div>
                 </div>
-                <div class="role-option-btn" id="optManager" onclick="selectRole('manager')">
-                    Manager <span>Operational oversight (Requests Admin approval).</span>
+                <div class="role-card" id="optManager" onclick="selectRole('manager')">
+                    <div class="role-card-title">Manager</div>
+                    <div class="role-card-desc">Workspace oversight, team control & shift approvals.</div>
                 </div>
             </div>
 
-            <button type="button" class="btn-primary" onclick="proceedToShiftCreation()">Next: Shift Setup</button>
+            <button type="button" class="btn-main" onclick="goToShiftStep()">Continue to Shifts</button>
         </div>
 
-        <!-- PAGE 2: Shift Creation -->
-        <div id="pageShiftCreation" class="step-container">
-            <div class="welcome-header">
-                <h1>Configure Shifts</h1>
-                <p>Build your shifts manually, or load the SS preset template as a shortcut.</p>
+        <!-- STEP 2: Custom Shifts, OT Rates & Bonuses -->
+        <div id="pageShifts" class="step-container">
+            <div class="header-text">
+                <h1>Shifts, OT & Bonus Setup</h1>
+                <p>Set custom shift hours, default OT rates, and bonuses.</p>
             </div>
 
-            <!-- SS Template Preset Shortcut -->
+            <!-- Official Template Request Banner -->
             <div class="template-banner">
-                <span class="template-banner-text">Want a quick shortcut? Load the <b>SS</b> preset template.</span>
-                <button type="button" class="btn-text-action" onclick="loadSSTemplate()">Load SS Template</button>
+                <div class="template-info">
+                    <div class="template-title">Official Shift Template</div>
+                    <div class="template-sub" id="templateSubtext">Requires Staff/Admin authorization.</div>
+                </div>
+                <button type="button" class="btn-action-sm" id="btnRequestTemplate" onclick="requestTemplateAccess()">Request Access</button>
             </div>
 
-            <!-- Manual Shift Input Form -->
-            <div class="shift-form-grid">
-                <div class="input-group">
-                    <label>Shift Name</label>
-                    <input type="text" id="inputName" placeholder="e.g. Day Shift (D)">
+            <!-- Custom Shifts Block -->
+            <div class="section-box">
+                <div class="section-label">⏱️ Add Custom Shift Preset</div>
+                
+                <div class="form-group">
+                    <label>Shift Preset Name</label>
+                    <input type="text" id="inputName" placeholder="e.g. Day Shift / Night Shift / Weekend">
                 </div>
-                <div class="input-group">
-                    <label>Shift Time Range</label>
-                    <input type="text" id="inputTime" placeholder="e.g. 7:00 AM – 6:00 PM">
+                
+                <!-- Clock Selectors -->
+                <div class="clock-grid">
+                    <div class="form-group">
+                        <label>Start Clock</label>
+                        <button type="button" class="time-trigger-btn" onclick="openTimePicker('start')">
+                            <span id="startClockDisplay">08:00 AM</span>
+                            <span class="icon">🕒</span>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label>End Clock</label>
+                        <button type="button" class="time-trigger-btn" onclick="openTimePicker('end')">
+                            <span id="endClockDisplay">05:00 PM</span>
+                            <span class="icon">🕒</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label>Shift Rate (LKR)</label>
-                    <input type="number" id="inputRate" placeholder="e.g. 2000" onkeydown="if(event.key==='Enter') addCustomShift()">
+
+                <!-- Rate Controls (2-Column Row) -->
+                <div class="rates-grid">
+                    <div class="form-group">
+                        <label>Base (LKR)</label>
+                        <input type="number" id="inputRate" placeholder="2000">
+                    </div>
+                    <div class="form-group">
+                        <label>OT/Hr (LKR)</label>
+                        <input type="number" id="inputOtRate" placeholder="300">
+                    </div>
                 </div>
-                <button type="button" class="btn-secondary" onclick="addCustomShift()">+ Add Custom Shift</button>
+
+                <!-- Day-Specific Multiplier / Weekend Bonus -->
+                <div class="day-bonus-wrapper">
+                    <div class="day-bonus-header">
+                        <span style="font-size: 10px; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Day-Based Bonus / Multiplier</span>
+                    </div>
+                    <div class="rates-grid" style="grid-template-columns: 2fr 1fr; margin-bottom: 8px;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label>Bonus Days</label>
+                            <span style="font-size: 9px; color: var(--text-muted);">Select days to apply extra %</span>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label>Extra %</label>
+                            <input type="number" id="inputDayBonusPercent" placeholder="50%">
+                        </div>
+                    </div>
+                    <div class="day-pills">
+                        <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Sun')">Sun</button>
+                        <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Mon')">Mon</button>
+                        <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Tue')">Tue</button>
+                        <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Wed')">Wed</button>
+                        <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Thu')">Thu</button>
+                        <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Fri')">Fri</button>
+                        <button type="button" class="day-pill active" onclick="toggleDayPill(this, 'Sat')">Sat</button>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-ghost" onclick="addCustomShift()">+ Add Shift Preset</button>
+
+                <div class="shift-list" id="shiftListContainer">
+                    <div style="text-align:center; color: var(--text-dim); font-size:11px; padding: 10px;" id="emptyShiftsMsg">
+                        No shift presets added yet.
+                    </div>
+                </div>
             </div>
 
-            <!-- Added Shifts List -->
-            <div class="created-shifts-container" id="createdShiftsList">
-                <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 10px;" id="emptyShiftsText">
-                    No shifts added yet. Create one above or load the SS template.
+            <!-- Pay Cycle Section -->
+            <div class="section-box">
+                <div class="section-label">📅 Pay Cycle Mode</div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <select id="payCycleSelect">
+                        <option value="monthly">Single Monthly Cycle (1st to 30th/31st)</option>
+                        <option value="dual">Dual Cycle (1st to 15th & 16th to 30th/31st)</option>
+                    </select>
                 </div>
             </div>
 
-            <button type="button" class="btn-primary" onclick="finalizeSetup()">Complete Setup</button>
+            <button type="button" class="btn-main" onclick="finalizeSetup()">Complete Setup</button>
         </div>
     </div>
 
-    <!-- Firebase SDK Imports -->
+    <!-- ========================================================= -->
+    <!-- UPGRADED ADVANCED TIME PICKER MODAL CONTAINER             -->
+    <!-- ========================================================= -->
+    <div class="tp-modal-overlay" id="tpModal">
+        <div class="tp-card">
+            <!-- Top Bar -->
+            <div class="tp-top-bar">
+                <div class="tp-header" id="tpTargetLabel">Select Time</div>
+                <button type="button" class="tp-close-btn" onclick="closeTimePicker()">✕</button>
+            </div>
+
+            <!-- Quick Preset Time Pills -->
+            <div class="tp-presets-row">
+                <button type="button" class="tp-preset-chip" onclick="applyPresetTime('08', '00', 'AM')">08:00 AM</button>
+                <button type="button" class="tp-preset-chip" onclick="applyPresetTime('09', '00', 'AM')">09:00 AM</button>
+                <button type="button" class="tp-preset-chip" onclick="applyPresetTime('05', '00', 'PM')">05:00 PM</button>
+                <button type="button" class="tp-preset-chip" onclick="applyPresetTime('08', '00', 'PM')">08:00 PM</button>
+                <button type="button" class="tp-preset-chip" onclick="applyPresetTime('11', '00', 'PM')">11:00 PM</button>
+            </div>
+
+            <!-- Interactive Digital Display -->
+            <div class="tp-digital-display">
+                <div class="tp-digit-box active" id="dispHour" onclick="setPickerTab('hours')">08</div>
+                <div class="tp-digit-colon">:</div>
+                <div class="tp-digit-box" id="dispMin" onclick="setPickerTab('minutes')">00</div>
+                <div class="tp-ampm-badge" id="dispAmPm">AM</div>
+            </div>
+
+            <!-- Mode Switcher (Hours / Minutes) -->
+            <div class="tp-segmented-tabs">
+                <button type="button" class="tp-tab-btn active" id="tabHoursBtn" onclick="setPickerTab('hours')">Hours</button>
+                <button type="button" class="tp-tab-btn" id="tabMinutesBtn" onclick="setPickerTab('minutes')">Minutes</button>
+            </div>
+
+            <!-- Numbers Grid Container -->
+            <div class="tp-grid" id="tpNumbersGrid"></div>
+
+            <!-- AM / PM Selector -->
+            <div class="tp-ampm-grid">
+                <button type="button" class="tp-ampm-btn active" id="btnAM" onclick="setAmPm('AM')">AM (Morning)</button>
+                <button type="button" class="tp-ampm-btn" id="btnPM" onclick="setAmPm('PM')">PM (Evening)</button>
+            </div>
+
+            <!-- Confirm Action -->
+            <button type="button" class="tp-confirm-btn" onclick="savePickerTime()">Set Time</button>
+        </div>
+    </div>
+
+    <!-- Firebase Logic & JS handlers -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyA93AnibNs8iaNwYuy1tJglGXXqeY6p2oo",
@@ -394,8 +897,7 @@
           projectId: "shift-salary-tracker",
           storageBucket: "shift-salary-tracker.firebasestorage.app",
           messagingSenderId: "719444723616",
-          appId: "1:719444723616:web:56b421b3d8d49f6b8946c5",
-          measurementId: "G-V8V657F1S0"
+          appId: "1:719444723616:web:56b421b3d8d49f6b8946c5"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -404,181 +906,288 @@
 
         let currentUser = null;
         let selectedRole = 'employee';
-        let userShifts = [];
-        let payCyclesConfig = null;
-        let usedTemplateGroup = 'Custom';
+        let customShifts = [];
+        let templateRequested = false;
+        let selectedBonusDays = ['Sat']; // Default Saturday selected
 
-        // Official SS Template Shift Rates
-        const ssTemplateShifts = [
-            { id: "shift_d", name: "Day Shift (D)", time: "7:00 AM – 6:00 PM", rate: 2000, normal: 2000, saturday: 3000 },
-            { id: "shift_e", name: "Evening Shift (E)", time: "6:00 PM – 11:30 PM", rate: 1800, normal: 1800, saturday: 2700 },
-            { id: "shift_m", name: "Mega Shift (M)", time: "6:00 PM – 3:00 AM", rate: 2700, normal: 2700, saturday: 4050 },
-            { id: "shift_de", name: "Double Shift (D + E)", time: "7:00 AM – 11:30 PM", rate: 3800, normal: 3800, saturday: 5700 },
-            { id: "shift_dm", name: "Full Day Double (D + M)", time: "7:00 AM – 3:00 AM next day", rate: 4700, normal: 4700, saturday: 7050 }
-        ];
+        // Clock State Values
+        let selectedStartClock = "08:00 AM";
+        let selectedEndClock = "05:00 PM";
+        let pickerTarget = "start"; 
 
-        // SS Template Specific Pay Cycles
-        const ssPayCycles = [
-            { id: "cycle_1", name: "Mid-Month Cycle", startDay: 1, endDay: 15, payoutDay: 25, payoutMonth: "current" },
-            { id: "cycle_2", name: "End-Month Cycle", startDay: 16, endDay: 31, payoutDay: 10, payoutMonth: "next" }
-        ];
+        let tempHour = "08";
+        let tempMin = "00";
+        let tempAmPm = "AM";
+        let activeTab = "hours"; // 'hours' or 'minutes'
 
-        window.selectRole = function(role) {
+        window.selectRole = (role) => {
             selectedRole = role;
-            const optEmp = document.getElementById('optEmployee');
-            const optMgr = document.getElementById('optManager');
+            document.getElementById('optEmployee').classList.toggle('selected', role === 'employee');
+            document.getElementById('optManager').classList.toggle('selected', role === 'manager');
+        };
 
-            if (role === 'employee') {
-                optEmp.classList.add('selected');
-                optMgr.classList.remove('selected');
+        window.goToShiftStep = () => {
+            document.getElementById('pageRole').classList.remove('active');
+            document.getElementById('pageShifts').classList.add('active');
+        };
+
+        /* Day Pills Selection */
+        window.toggleDayPill = (btn, day) => {
+            if (selectedBonusDays.includes(day)) {
+                selectedBonusDays = selectedBonusDays.filter(d => d !== day);
+                btn.classList.remove('active');
             } else {
-                optMgr.classList.add('selected');
-                optEmp.classList.remove('selected');
+                selectedBonusDays.push(day);
+                btn.classList.add('active');
             }
         };
 
-        window.proceedToShiftCreation = function() {
-            document.getElementById('pageRoleSelection').classList.remove('active');
-            document.getElementById('pageShiftCreation').classList.add('active');
+        /* Advanced Time Picker Modal Logic */
+        window.openTimePicker = (target) => {
+            pickerTarget = target;
+            document.getElementById('tpTargetLabel').innerText = target === 'start' ? "Select Start Time" : "Select End Time";
+            
+            const currentVal = target === 'start' ? selectedStartClock : selectedEndClock;
+            const parts = currentVal.split(' ');
+            const timeParts = parts[0].split(':');
+            
+            tempHour = timeParts[0];
+            tempMin = timeParts[1];
+            tempAmPm = parts[1];
+            activeTab = "hours";
+
+            updateReadout();
+            renderPickerGrid();
+            document.getElementById('tpModal').classList.add('active');
         };
 
-        window.loadSSTemplate = function() {
-            userShifts = [...ssTemplateShifts];
-            payCyclesConfig = [...ssPayCycles];
-            usedTemplateGroup = 'SS';
-            renderShiftsList();
-            showAlert("SS Template & Pay Cycles loaded successfully!", "success");
+        window.closeTimePicker = () => {
+            document.getElementById('tpModal').classList.remove('active');
         };
 
-        window.addCustomShift = function() {
-            const name = document.getElementById('inputName').value.trim();
-            const time = document.getElementById('inputTime').value.trim();
-            const rate = parseFloat(document.getElementById('inputRate').value);
+        function updateReadout() {
+            document.getElementById('dispHour').innerText = tempHour;
+            document.getElementById('dispMin').innerText = tempMin;
+            document.getElementById('dispAmPm').innerText = tempAmPm;
 
-            if (!name || !time || isNaN(rate)) {
-                showAlert("Please fill out all shift details correctly.", "error");
-                return;
-            }
+            document.getElementById('dispHour').classList.toggle('active', activeTab === 'hours');
+            document.getElementById('dispMin').classList.toggle('active', activeTab === 'minutes');
+            
+            document.getElementById('tabHoursBtn').classList.toggle('active', activeTab === 'hours');
+            document.getElementById('tabMinutesBtn').classList.toggle('active', activeTab === 'minutes');
 
-            showAlert("", "error");
-            userShifts.push({ name, time, rate });
-            usedTemplateGroup = 'Custom';
-
-            document.getElementById('inputName').value = '';
-            document.getElementById('inputTime').value = '';
-            document.getElementById('inputRate').value = '';
-            document.getElementById('inputName').focus();
-
-            renderShiftsList();
-        };
-
-        window.removeShift = function(index) {
-            userShifts.splice(index, 1);
-            renderShiftsList();
-        };
-
-        function renderShiftsList() {
-            const container = document.getElementById('createdShiftsList');
-            if (userShifts.length === 0) {
-                container.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 10px;" id="emptyShiftsText">No shifts added yet. Create one above or load the SS template.</div>`;
-                return;
-            }
-
-            container.innerHTML = '';
-            userShifts.forEach((s, idx) => {
-                const displayRate = s.rate !== undefined ? s.rate : s.normal;
-                container.innerHTML += `
-                    <div class="shift-item-card">
-                        <div class="shift-item-info">
-                            <span class="s-name">${s.name}</span>
-                            <span class="s-time">${s.time}</span>
-                            <span class="s-rates">Rate: ${displayRate} LKR ${s.saturday ? `(Sat: ${s.saturday} LKR)` : ''}</span>
-                        </div>
-                        <button type="button" class="btn-delete-shift" onclick="removeShift(${idx})">Remove</button>
-                    </div>
-                `;
-            });
+            document.getElementById('btnAM').classList.toggle('active', tempAmPm === 'AM');
+            document.getElementById('btnPM').classList.toggle('active', tempAmPm === 'PM');
         }
 
-        // Authentication & Router Check
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                const userDocRef = doc(db, "users", user.uid);
-                const userDoc = await getDoc(userDocRef);
-                
-                // If shifts are already configured, redirect directly to dashboard
-                if (userDoc.exists() && userDoc.data().shiftsConfigured) {
-                    window.location.href = "dashboard.html";
+        window.setPickerTab = (tab) => {
+            activeTab = tab;
+            updateReadout();
+            renderPickerGrid();
+        };
+
+        window.setAmPm = (ampm) => {
+            tempAmPm = ampm;
+            updateReadout();
+        };
+
+        window.applyPresetTime = (h, m, ampm) => {
+            tempHour = h;
+            tempMin = m;
+            tempAmPm = ampm;
+            updateReadout();
+            renderPickerGrid();
+        };
+
+        function renderPickerGrid() {
+            const grid = document.getElementById('tpNumbersGrid');
+            grid.innerHTML = '';
+
+            if (activeTab === 'hours') {
+                // Hours Grid (1 to 12)
+                for (let i = 1; i <= 12; i++) {
+                    const val = i < 10 ? `0${i}` : `${i}`;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = `tp-num-btn ${tempHour === val ? 'active' : ''}`;
+                    btn.innerText = val;
+                    btn.onclick = () => {
+                        tempHour = val;
+                        // Auto-advance to minutes view smoothly
+                        activeTab = 'minutes';
+                        updateReadout();
+                        renderPickerGrid();
+                    };
+                    grid.appendChild(btn);
                 }
             } else {
-                // If not logged in, redirect to index
-                window.location.href = "index.html";
+                // Minutes Grid (00 to 55 by 5s)
+                for (let i = 0; i < 60; i += 5) {
+                    const val = i < 10 ? `0${i}` : `${i}`;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = `tp-num-btn ${tempMin === val ? 'active' : ''}`;
+                    btn.innerText = val;
+                    btn.onclick = () => {
+                        tempMin = val;
+                        updateReadout();
+                        renderPickerGrid();
+                    };
+                    grid.appendChild(btn);
+                }
             }
-        });
+        }
 
-        window.finalizeSetup = async function() {
-            if (!currentUser) return;
-            if (userShifts.length === 0) {
-                showAlert("Please add at least one shift before finalizing setup.", "error");
-                return;
+        window.savePickerTime = () => {
+            const formatted = `${tempHour}:${tempMin} ${tempAmPm}`;
+            if (pickerTarget === 'start') {
+                selectedStartClock = formatted;
+                document.getElementById('startClockDisplay').innerText = formatted;
+            } else {
+                selectedEndClock = formatted;
+                document.getElementById('endClockDisplay').innerText = formatted;
             }
+            closeTimePicker();
+        };
+
+        window.requestTemplateAccess = async () => {
+            if (templateRequested) return;
 
             try {
-                const isManagerReq = (selectedRole === 'manager');
-
-                // LocalStorage persistence
-                localStorage.setItem('shiftgrid_shifts', JSON.stringify(userShifts));
-                if (payCyclesConfig) {
-                    localStorage.setItem('shiftgrid_payCycles', JSON.stringify(payCyclesConfig));
-                }
-                localStorage.setItem('shiftgrid_role', 'employee');
-                localStorage.setItem('shiftgrid_templateGroup', usedTemplateGroup);
-                localStorage.setItem('shiftgrid_shiftsConfigured', 'true');
-
-                const userDocRef = doc(db, "users", currentUser.uid);
-
-                const profilePayload = { 
-                    role: 'employee', 
-                    pendingManagerRequest: isManagerReq,
-                    shifts: userShifts,
-                    templateGroup: usedTemplateGroup,
-                    shiftsConfigured: true,
-                    email: currentUser.email,
-                    updatedAt: new Date().toISOString()
-                };
-
-                if (payCyclesConfig) {
-                    profilePayload.payCycles = payCyclesConfig;
-                }
-
-                await setDoc(userDocRef, profilePayload, { merge: true });
-
-                if (isManagerReq) {
+                if (currentUser) {
                     await addDoc(collection(db, "requests"), {
                         uid: currentUser.uid,
                         email: currentUser.email,
-                        requestedRole: 'manager',
-                        status: 'pending',
+                        requestType: "template_access",
+                        status: "pending",
                         createdAt: new Date().toISOString()
                     });
                 }
 
-                showAlert("Setup complete! Redirecting to dashboard...", "success");
-                setTimeout(() => { window.location.href = "dashboard.html"; }, 1000);
-            } catch (error) {
-                showAlert("Error saving configuration: " + error.message, "error");
+                templateRequested = true;
+                const btn = document.getElementById('btnRequestTemplate');
+                btn.disabled = true;
+                btn.innerText = "Pending Review";
+                document.getElementById('templateSubtext').innerText = "Request sent to Staff/Admin! Pending approval.";
+
+                showToast("Request submitted! You can now finish setup.", "warning");
+            } catch (err) {
+                showToast("Error: " + err.message, "error");
             }
         };
 
-        function showAlert(message, type) {
-            const alertBox = document.getElementById('statusAlert');
-            if (!message) {
-                alertBox.style.display = 'none';
+        window.addCustomShift = () => {
+            const name = document.getElementById('inputName').value.trim();
+            const rate = parseFloat(document.getElementById('inputRate').value);
+            const otRate = parseFloat(document.getElementById('inputOtRate').value) || 0;
+            const dayBonusPercent = parseFloat(document.getElementById('inputDayBonusPercent').value) || 0;
+
+            if (!name || isNaN(rate)) {
+                showToast("Please enter a shift preset name and base rate.", "error");
                 return;
             }
-            alertBox.className = `status-message ${type}`;
-            alertBox.innerText = message;
+
+            const timeDisplay = `${selectedStartClock} – ${selectedEndClock}`;
+
+            customShifts.push({ 
+                name, 
+                startTime: selectedStartClock, 
+                endTime: selectedEndClock, 
+                timeDisplay, 
+                rate, 
+                otRate, 
+                dayBonusPercent,
+                bonusDays: [...selectedBonusDays]
+            });
+
+            // Reset inputs
+            document.getElementById('inputName').value = '';
+            document.getElementById('inputRate').value = '';
+            document.getElementById('inputOtRate').value = '';
+            document.getElementById('inputDayBonusPercent').value = '';
+            renderShifts();
+            showToast("", "");
+        };
+
+        window.removeShift = (idx) => {
+            customShifts.splice(idx, 1);
+            renderShifts();
+        };
+
+        function renderShifts() {
+            const container = document.getElementById('shiftListContainer');
+            if (customShifts.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color: var(--text-dim); font-size:11px; padding: 10px;" id="emptyShiftsMsg">No shift presets added yet.</div>`;
+                return;
+            }
+
+            container.innerHTML = customShifts.map((s, i) => `
+                <div class="shift-item">
+                    <div>
+                        <div class="shift-name">${s.name}</div>
+                        <div class="shift-meta">⏰ ${s.timeDisplay}</div>
+                        <div class="shift-badges">
+                            ${s.otRate > 0 ? `<span class="badge badge-ot">OT: +${s.otRate} LKR/hr</span>` : ''}
+                            ${s.dayBonusPercent > 0 && s.bonusDays.length > 0 ? `<span class="badge badge-bonus">+${s.dayBonusPercent}% on ${s.bonusDays.join(', ')}</span>` : ''}
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="shift-rate">${s.rate.toLocaleString()} LKR</span>
+                        <button class="btn-del" onclick="removeShift(${i})">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+            } else if (window.location.protocol === 'file:') {
+                showToast("Preview mode active.", "success");
+            }
+        });
+
+        window.finalizeSetup = async () => {
+            if (customShifts.length === 0 && !templateRequested) {
+                showToast("Please add a shift preset or request Template access.", "error");
+                return;
+            }
+
+            const selectedCycle = document.getElementById('payCycleSelect').value;
+
+            try {
+                localStorage.setItem('shiftgrid_shifts', JSON.stringify(customShifts));
+                localStorage.setItem('shiftgrid_payCycle', selectedCycle);
+                localStorage.setItem('shiftgrid_templateRequested', templateRequested ? 'true' : 'false');
+                localStorage.setItem('shiftgrid_shiftsConfigured', 'true');
+
+                if (currentUser) {
+                    await setDoc(doc(db, "users", currentUser.uid), {
+                        role: selectedRole,
+                        shifts: customShifts,
+                        payCycle: selectedCycle,
+                        templateRequested: templateRequested,
+                        shiftsConfigured: true,
+                        email: currentUser.email,
+                        updatedAt: new Date().toISOString()
+                    }, { merge: true });
+                }
+
+                showToast("Setup complete! Redirecting...", "success");
+
+                if (window.location.protocol !== 'file:') {
+                    setTimeout(() => { window.location.href = "dashboard.html"; }, 1000);
+                }
+            } catch (err) {
+                showToast("Error saving setup: " + err.message, "error");
+            }
+        };
+
+        function showToast(msg, type) {
+            const box = document.getElementById('statusToast');
+            if (!msg) { box.style.display = 'none'; return; }
+            box.className = `toast ${type}`;
+            box.innerText = msg;
         }
     </script>
 </body>
