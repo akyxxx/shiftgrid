@@ -27,6 +27,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -57,7 +58,7 @@
             background: var(--surface);
             border: 1px solid var(--surface-border);
             border-radius: 24px;
-            padding: 32px;
+            padding: 32px 24px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             display: none;
             flex-direction: column;
@@ -77,15 +78,27 @@
             background: var(--surface);
             border: 1px solid var(--surface-border);
             border-radius: 20px;
-            padding: 20px 24px;
+            padding: 18px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0; /* Allows header text truncation on mobile */
         }
 
         .user-info h2 {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; /* Keeps long email addresses clean */
         }
 
         .user-info p {
@@ -102,6 +115,13 @@
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.2);
         }
 
         .logo-container {
@@ -367,22 +387,30 @@
             const dashboardView = document.getElementById('dashboardView');
 
             if (user) {
-                // User is signed in, check if setup is completed
-                const userDocRef = doc(db, "users", user.uid);
-                const userDoc = await getDoc(userDocRef);
+                try {
+                    // User is signed in, check if setup is completed
+                    const userDocRef = doc(db, "users", user.uid);
+                    const userDoc = await getDoc(userDocRef);
 
-                if (!userDoc.exists() || !userDoc.data().shiftsConfigured) {
-                    // Not configured yet, redirect to setup
-                    window.location.href = "setup.html";
-                } else {
-                    // Fully configured user -> Show Dashboard
+                    if (!userDoc.exists() || !userDoc.data().shiftsConfigured) {
+                        // Not configured yet, redirect to setup
+                        window.location.href = "setup.html";
+                    } else {
+                        // Fully configured user -> Show Dashboard
+                        loadingScreen.style.display = 'none';
+                        authView.style.display = 'none';
+                        dashboardView.style.display = 'flex';
+
+                        document.getElementById('dashUserEmail').innerText = user.email || 'User';
+                        const data = userDoc.data();
+                        document.getElementById('dashUserRole').innerText = `Role: ${data.role || 'employee'} ${data.pendingManagerRequest ? '(Manager Pending)' : ''}`;
+                    }
+                } catch (e) {
+                    console.error("Firestore read error:", e);
                     loadingScreen.style.display = 'none';
                     authView.style.display = 'none';
                     dashboardView.style.display = 'flex';
-
                     document.getElementById('dashUserEmail').innerText = user.email || 'User';
-                    const data = userDoc.data();
-                    document.getElementById('dashUserRole').innerText = `Role: ${data.role || 'employee'} ${data.pendingManagerRequest ? '(Manager Pending)' : ''}`;
                 }
             } else {
                 // Not signed in -> Show Login View
