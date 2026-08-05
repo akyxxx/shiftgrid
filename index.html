@@ -236,12 +236,12 @@
 </head>
 <body>
 
-    <!-- Step 1: Loading Screen -->
+    <!-- Loading Indicator -->
     <div id="loadingScreen" class="loading-screen">
         <p>Connecting to ShiftGrid...</p>
     </div>
 
-    <!-- Step 1: Auth View (Shows when logged out) -->
+    <!-- Auth View (Shows when logged out) -->
     <div id="authView" class="auth-card">
         <div class="logo-container">
             <img src="SiftGrid logo.png" alt="ShiftGrid Logo" class="logo-img">
@@ -288,6 +288,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyA93AnibNs8iaNwYuy1tJglGXXqeY6p2oo",
@@ -301,18 +302,32 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // Sequential Navigation: Logged in -> Go to setup.html
-        onAuthStateChanged(auth, (user) => {
+        // Loop-Free Router Logic
+        onAuthStateChanged(auth, async (user) => {
             const loadingScreen = document.getElementById('loadingScreen');
             const authView = document.getElementById('authView');
 
             if (user) {
-                // Next Step in Flow: Redirect to setup.html
-                window.location.href = "setup.html";
+                try {
+                    const userDocRef = doc(db, "users", user.uid);
+                    const userDoc = await getDoc(userDocRef);
+
+                    // Check if shift setup is already completed
+                    if (userDoc.exists() && userDoc.data().shiftsConfigured) {
+                        window.location.href = "dashboard.html";
+                    } else {
+                        window.location.href = "setup.html";
+                    }
+                } catch (e) {
+                    console.error("Firestore read error:", e);
+                    // Fallback to dashboard if offline/error
+                    window.location.href = "dashboard.html";
+                }
             } else {
-                // Not logged in: Render Auth Form
+                // Not logged in: Show Auth Form
                 loadingScreen.style.display = 'none';
                 authView.style.display = 'flex';
             }
@@ -325,7 +340,6 @@
 
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                window.location.href = "setup.html";
             } catch (error) {
                 showAlert(error.message, "error");
             }
@@ -334,7 +348,6 @@
         window.handleGoogleLogin = async function() {
             try {
                 await signInWithPopup(auth, googleProvider);
-                window.location.href = "setup.html";
             } catch (error) {
                 showAlert(error.message, "error");
             }
