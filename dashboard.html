@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShiftGrid — Attendance & Pay Tracker</title>
@@ -670,163 +670,163 @@
 
         .btn-reset { border-color: #451a1a; color: var(--danger-red); background: transparent; }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <!-- Brand Header Showcase -->
     <div class="brand-showcase">
-        <div class="brand-logo-container">
-            <div class="logo-icon-box">
-                <img src="SiftGrid logo.png" alt="ShiftGrid Logo" onerror="this.style.display='none'">
-            </div>
-            <div class="brand-text">
-                <span class="brand-name">ShiftGrid</span>
-                <span class="brand-tagline">ATTENDANCE & PAY SYSTEM</span>
-            </div>
+      <div class="brand-logo-container">
+        <div class="logo-icon-box">
+          <img src="SiftGrid logo.png" alt="ShiftGrid Logo" onerror="this.style.display='none'">
         </div>
-        <div class="header-status-pill">
-            <span class="pulse-dot"></span>
-            <span id="syncStatusText">Synced</span>
+        <div class="brand-text">
+          <span class="brand-name">ShiftGrid</span>
+          <span class="brand-tagline">ATTENDANCE & PAY SYSTEM</span>
         </div>
+      </div>
+      <div class="header-status-pill">
+        <span class="pulse-dot"></span>
+        <span id="syncStatusText">Synced</span>
+      </div>
     </div>
 
     <!-- User Profile Header Banner -->
     <div class="profile-card">
-        <div class="profile-info">
-            <div id="profileAvatarDisplay" class="avatar-img">--</div>
-            <div class="user-details">
-                <span id="profileNameDisplay" class="user-name">Loading Account...</span>
-                <div class="user-meta">
-                    <span id="profileRoleBadge" class="role-badge">EMPLOYEE</span>
-                    <span id="profileEmailDisplay" class="user-email">loading...</span>
-                </div>
-            </div>
+      <div class="profile-info">
+        <div id="profileAvatarDisplay" class="avatar-img">--</div>
+        <div class="user-details">
+          <span id="profileNameDisplay" class="user-name">Loading Account...</span>
+          <div class="user-meta">
+            <span id="profileRoleBadge" class="role-badge">EMPLOYEE</span>
+            <span id="profileEmailDisplay" class="user-email">loading...</span>
+          </div>
         </div>
-        <button class="settings-btn" onclick="openSettingsModal()">⚙️</button>
+      </div>
+      <button class="settings-btn" onclick="openSettingsModal()">⚙️</button>
     </div>
 
     <!-- Pay Cycle Highlight Card -->
     <div class="pay-cycle-card">
-        <div class="pay-card-header">
-            <span id="cycleLabel" class="cycle-title">PAY CYCLE</span>
-            <span id="payDateBadge" class="pay-badge">Payday Pending</span>
+      <div class="pay-card-header">
+        <span id="cycleLabel" class="cycle-title">PAY CYCLE</span>
+        <span id="payDateBadge" class="pay-badge">Payday Pending</span>
+      </div>
+      <div class="pay-card-body">
+        <div id="cycleEarnings" class="earnings-amount">0 <span class="currency">LKR</span></div>
+      </div>
+      <div class="pay-card-divider"></div>
+      <div class="pay-card-footer">
+        <div class="meta-item">
+          <span class="meta-label">Shifts Tracked</span>
+          <span id="shiftsCount" class="meta-value">0 Shifts</span>
         </div>
-        
-        <div class="pay-card-body">
-            <div id="cycleEarnings" class="earnings-amount">0 <span class="currency">LKR</span></div>
+        <div class="meta-item">
+          <span class="meta-label">Active Cycle Period</span>
+          <span id="cyclePeriodText" class="meta-value">--/--</span>
         </div>
-
-        <div class="pay-card-divider"></div>
-
-        <div class="pay-card-footer">
-            <div class="meta-item">
-                <span class="meta-label">Shifts Tracked</span>
-                <span id="shiftsCount" class="meta-value">0 Shifts</span>
-            </div>
-            <div class="meta-item">
-                <span class="meta-label">Active Cycle Period</span>
-                <span id="cyclePeriodText" class="meta-value">--/--</span>
-            </div>
-        </div>
+      </div>
     </div>
 
     <!-- Dynamic Shift Logging Box -->
     <div class="section-box">
-        <div class="section-header">
-            <h3 class="section-title">Log Shift</h3>
-            <button class="date-picker-btn" onclick="openCalendarModal()">
-                📅 <span id="shiftDateDisplay">08/05/2026</span>
-            </button>
-        </div>
-
-        <div class="shift-list" id="availableShiftsContainer"></div>
+      <div class="section-header">
+        <h3 class="section-title">Log Shift</h3>
+        <button class="date-picker-btn" onclick="openCalendarModal()">
+          📅 <span id="shiftDateDisplay">--/--/----</span>
+        </button>
+      </div>
+      <div class="shift-list" id="availableShiftsContainer"></div>
     </div>
 
     <!-- Attendance & Salary History Section -->
     <div class="section-box">
-        <div class="section-header">
-            <h3 class="section-title" id="historySectionTitle">August 2026 Records</h3>
-            <div class="history-controls">
-                <select class="history-select" id="historyMonthSelect" onchange="updateHistoryView()">
-                    <option value="0">Jan</option><option value="1">Feb</option><option value="2">Mar</option>
-                    <option value="3">Apr</option><option value="4">May</option><option value="5">Jun</option>
-                    <option value="6">Jul</option><option value="7" selected>Aug</option><option value="8">Sep</option>
-                    <option value="9">Oct</option><option value="10">Nov</option><option value="11">Dec</option>
-                </select>
-                <select class="history-select" id="historyYearSelect" onchange="updateHistoryView()">
-                    <option value="2024">2024</option><option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option>
-                </select>
-            </div>
+      <div class="section-header">
+        <h3 class="section-title" id="historySectionTitle">Records</h3>
+        <div class="history-controls">
+          <select class="history-select" id="historyMonthSelect" onchange="updateHistoryView()">
+            <option value="0">Jan</option>
+            <option value="1">Feb</option>
+            <option value="2">Mar</option>
+            <option value="3">Apr</option>
+            <option value="4">May</option>
+            <option value="5">Jun</option>
+            <option value="6">Jul</option>
+            <option value="7">Aug</option>
+            <option value="8">Sep</option>
+            <option value="9">Oct</option>
+            <option value="10">Nov</option>
+            <option value="11">Dec</option>
+          </select>
+          <select class="history-select" id="historyYearSelect" onchange="updateHistoryView()">
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+          </select>
         </div>
-
-        <div class="history-list" id="recordsContainer"></div>
+      </div>
+      <div class="history-list" id="recordsContainer"></div>
     </div>
 
     <!-- Calendar Modal -->
     <div class="cal-modal-overlay" id="calendarModal">
-        <div class="cal-card">
-            <div class="cal-header">
-                <button class="cal-nav-btn" onclick="changeCalMonth(-1)">◄</button>
-                <span class="cal-title" id="calMonthYearTitle">August 2026</span>
-                <button class="cal-nav-btn" onclick="changeCalMonth(1)">►</button>
-            </div>
-            <div class="cal-weekdays">
-                <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
-            </div>
-            <div class="cal-days-grid" id="calDaysGrid"></div>
-            <button class="btn-primary-block" style="margin-bottom:0;" onclick="closeCalendarModal()">Done / Select</button>
+      <div class="cal-card">
+        <div class="cal-header">
+          <button class="cal-nav-btn" onclick="changeCalMonth(-1)">◄</button>
+          <span class="cal-title" id="calMonthYearTitle">Calendar</span>
+          <button class="cal-nav-btn" onclick="changeCalMonth(1)">►</button>
         </div>
+        <div class="cal-weekdays">
+          <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+        </div>
+        <div class="cal-days-grid" id="calDaysGrid"></div>
+        <button class="btn-primary-block" style="margin-bottom:0;" onclick="closeCalendarModal()">Done / Select</button>
+      </div>
     </div>
 
     <!-- Settings Modal -->
     <div class="modal-overlay" id="settingsModal">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3>⚙️ Profile & Workspace Settings</h3>
-                <button class="btn-close-modal" onclick="closeSettingsModal()">✕</button>
-            </div>
-
-            <div class="form-group">
-                <label>Profile Picture</label>
-                <div class="photo-upload-row">
-                    <div id="modalAvatarPreview" class="photo-preview">--</div>
-                    <div class="photo-actions">
-                        <button class="btn-photo-action" onclick="document.getElementById('avatarFileInput').click()">📷 Upload Custom Image</button>
-                        <button class="btn-photo-action" onclick="removePhoto()">Remove Photo</button>
-                        <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Display Name</label>
-                <input type="text" id="inputDisplayName" class="form-input" value="">
-            </div>
-
-            <button class="btn-primary-block" onclick="saveProfileChanges()">Save Profile Changes</button>
-
-            <div class="account-info-row">
-                <span style="color: var(--text-muted)">Account Email</span>
-                <span class="val-email" id="modalAccountEmail">--</span>
-            </div>
-            <div class="account-info-row" style="margin-bottom: 12px;">
-                <span style="color: var(--text-muted)">Account Status</span>
-                <span class="val-status" id="modalAccountStatus">Active Member</span>
-            </div>
-
-            <a class="btn-modal-link" href="setup.html">⚙️ Reconfigure Shift Presets & Pay Cycle</a>
-            <button class="btn-modal-link" onclick="downloadCSVReport()">📥 Download Attendance Report (.CSV)</button>
-            <button class="btn-modal-link btn-reset" onclick="resetSavedData()">Reset Saved Shift Data</button>
-            <button class="btn-modal-link btn-reset" style="margin-top:16px;" onclick="handleSignOut()">🚪 Sign Out</button>
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>⚙️ Profile & Workspace Settings</h3>
+          <button class="btn-close-modal" onclick="closeSettingsModal()">✕</button>
         </div>
+        <div class="form-group">
+          <label>Profile Picture</label>
+          <div class="photo-upload-row">
+            <div id="modalAvatarPreview" class="photo-preview">--</div>
+            <div class="photo-actions">
+              <button class="btn-photo-action" onclick="document.getElementById('avatarFileInput').click()">📷 Upload Custom Image</button>
+              <button class="btn-photo-action" onclick="removePhoto()">Remove Photo</button>
+              <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Display Name</label>
+          <input type="text" id="inputDisplayName" class="form-input" value="">
+        </div>
+        <button class="btn-primary-block" onclick="saveProfileChanges()">Save Profile Changes</button>
+        <div class="account-info-row">
+          <span style="color: var(--text-muted)">Account Email</span>
+          <span class="val-email" id="modalAccountEmail">--</span>
+        </div>
+        <div class="account-info-row" style="margin-bottom: 12px;">
+          <span style="color: var(--text-muted)">Account Status</span>
+          <span class="val-status" id="modalAccountStatus">Active Member</span>
+        </div>
+        <a class="btn-modal-link" href="setup.html">⚙️ Reconfigure Shift Presets & Pay Cycle</a>
+        <button class="btn-modal-link" onclick="downloadCSVReport()">📥 Download Attendance Report (.CSV)</button>
+        <button class="btn-modal-link btn-reset" onclick="resetSavedData()">Reset Saved Shift Data</button>
+        <button class="btn-modal-link btn-reset" style="margin-top:16px;" onclick="handleSignOut()">🚪 Sign Out</button>
+      </div>
     </div>
 
-    <!-- Firebase SDK & App Scripts -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <!-- Firebase Compat SDKs (Compatible with mobile HTML Editor file:// protocol) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
+    <script>
         const firebaseConfig = {
           apiKey: "AIzaSyA93AnibNs8iaNwYuy1tJglGXXqeY6p2oo",
           authDomain: "shift-salary-tracker.firebaseapp.com",
@@ -837,9 +837,9 @@
           measurementId: "G-V8V657F1S0"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
         let currentUser = null;
 
@@ -851,8 +851,20 @@
             { id: "shift_dm", name: "Full Day Double (D + M)", time: "7:00 AM – 3:00 AM next day", rate: 4700 }
         ];
 
+        function getPayCycleFromStorage() {
+            const raw = localStorage.getItem('shiftgrid_paycycle') || localStorage.getItem('shiftgrid_payCycle');
+            if (!raw) return { type: 'mid-month', payDay: 25 };
+            try {
+                const parsed = JSON.parse(raw);
+                if (typeof parsed === 'string') return { type: parsed, payDay: 25 };
+                return parsed;
+            } catch(e) {
+                return { type: raw, payDay: 25 };
+            }
+        }
+
         window.configuredShifts = JSON.parse(localStorage.getItem('shiftgrid_shifts')) || defaultSSShifts;
-        window.userPayCycleConfig = JSON.parse(localStorage.getItem('shiftgrid_paycycle')) || { type: 'mid-month', payDay: 25 };
+        window.userPayCycleConfig = getPayCycleFromStorage();
         window.managerRoleRequested = localStorage.getItem('shiftgrid_managerRequested') === 'true';
         window.templateRequested = localStorage.getItem('shiftgrid_templateRequested') === 'true';
 
@@ -895,24 +907,23 @@
             }
         }
 
-        // Live Firestore sync using onSnapshot (Instantly unlocks dashboard when Admin Approves!)
-        onAuthStateChanged(auth, (user) => {
+        auth.onAuthStateChanged((user) => {
             if (user) {
                 currentUser = user;
                 updateAccountUI(user.displayName, user.email, user.photoURL, "EMPLOYEE");
 
                 try {
-                    const userDocRef = doc(db, "users", user.uid);
-                    onSnapshot(userDocRef, (userDoc) => {
-                        if (userDoc.exists()) {
+                    db.collection("users").doc(user.uid).onSnapshot((userDoc) => {
+                        if (userDoc.exists) {
                             const data = userDoc.data();
                             if (data.shifts && data.shifts.length > 0) {
                                 window.configuredShifts = data.shifts;
                                 localStorage.setItem('shiftgrid_shifts', JSON.stringify(data.shifts));
                             }
-                            if (data.payCycleConfig) {
-                                window.userPayCycleConfig = data.payCycleConfig;
-                                localStorage.setItem('shiftgrid_paycycle', JSON.stringify(data.payCycleConfig));
+                            if (data.payCycleConfig || data.payCycle) {
+                                const pcVal = data.payCycleConfig || data.payCycle;
+                                window.userPayCycleConfig = typeof pcVal === 'string' ? { type: pcVal, payDay: 25 } : pcVal;
+                                localStorage.setItem('shiftgrid_paycycle', JSON.stringify(window.userPayCycleConfig));
                             }
                             if (data.managerRoleRequested !== undefined) {
                                 window.managerRoleRequested = data.managerRoleRequested;
@@ -924,7 +935,6 @@
                             }
                             updateAccountUI(data.displayName || user.displayName, user.email, data.photoURL || user.photoURL, data.role || "EMPLOYEE");
 
-                            // Re-render UI live when approval changes
                             window.renderAvailableShifts();
                             window.updateHistoryView();
                         }
@@ -943,7 +953,7 @@
         });
 
         window.handleSignOut = function() {
-            signOut(auth).then(() => {
+            auth.signOut().then(() => {
                 localStorage.removeItem('shiftgrid_records');
                 window.location.href = "index.html";
             });
@@ -952,18 +962,16 @@
         window.saveProfileToCloud = async function(updatedName) {
             if (currentUser) {
                 try {
-                    await setDoc(doc(db, "users", currentUser.uid), { displayName: updatedName }, { merge: true });
+                    await db.collection("users").doc(currentUser.uid).set({ displayName: updatedName }, { merge: true });
                 } catch(e) {
                     console.log("Cloud save warning:", e);
                 }
             }
         };
-    </script>
 
-    <script>
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         
-        let selectedLogDate = new Date(2026, 7, 5);
+        let selectedLogDate = new Date();
         let calViewDate = new Date(selectedLogDate.getTime());
         let shiftRecords = JSON.parse(localStorage.getItem('shiftgrid_records')) || [];
 
@@ -1077,26 +1085,35 @@
 
         function calculateDynamicPayCycle(targetDate) {
             const config = window.userPayCycleConfig || { type: 'mid-month', payDay: 25 };
+            let rawType = (typeof config === 'string' ? config : (config.type || 'mid-month')).toLowerCase().replace('_', '-');
+            const payDay = (typeof config === 'object' && config.payDay) ? config.payDay : 25;
+
             const year = targetDate.getFullYear();
             const month = targetDate.getMonth();
             const day = targetDate.getDate();
 
-            let label = "MONTHLY CYCLE";
-            let periodText = "01 - " + new Date(year, month + 1, 0).getDate();
-            let payDayText = `Paid on ${config.payDay || 25}th`;
+            const monthStr = String(month + 1).padStart(2, '0');
+            const lastDay = new Date(year, month + 1, 0).getDate();
 
-            if (config.type === 'mid-month' || config.type === 'bi-weekly') {
+            let label = "MONTHLY CYCLE";
+            let periodText = `01/${monthStr} – ${lastDay}/${monthStr}`;
+            let payDayText = `Paid on ${payDay}th`;
+
+            if (rawType === 'month-end' || rawType === 'month_end') {
+                label = "MONTH-END CYCLE";
+                periodText = `16/${monthStr} – ${lastDay}/${monthStr}`;
+                payDayText = `Paid on 10th (Next Mo.)`;
+            } else if (rawType === 'mid-month' || rawType === 'bi-weekly' || rawType === 'dual') {
                 if (day <= 15) {
                     label = "MID-MONTH CYCLE (PART 1)";
-                    periodText = `01/${String(month + 1).padStart(2, '0')} – 15/${String(month + 1).padStart(2, '0')}`;
-                    payDayText = `Paid on ${config.payDay || 25}th`;
+                    periodText = `01/${monthStr} – 15/${monthStr}`;
+                    payDayText = `Paid on ${payDay}th`;
                 } else {
                     label = "END-MONTH CYCLE (PART 2)";
-                    const lastDay = new Date(year, month + 1, 0).getDate();
-                    periodText = `16/${String(month + 1).padStart(2, '0')} – ${lastDay}/${String(month + 1).padStart(2, '0')}`;
+                    periodText = `16/${monthStr} – ${lastDay}/${monthStr}`;
                     payDayText = `Paid on 10th (Next Mo.)`;
                 }
-            } else if (config.type === 'weekly') {
+            } else if (rawType === 'weekly') {
                 label = "WEEKLY CYCLE";
                 periodText = "Current Week";
                 payDayText = "Every Friday";
@@ -1238,10 +1255,16 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            const now = new Date();
+            const monthSelect = document.getElementById('historyMonthSelect');
+            const yearSelect = document.getElementById('historyYearSelect');
+            if (monthSelect) monthSelect.value = now.getMonth();
+            if (yearSelect) yearSelect.value = now.getFullYear();
+
             updateShiftDateDisplay();
             renderAvailableShifts();
             updateHistoryView();
         });
     </script>
-</body>
+  </body>
 </html>
