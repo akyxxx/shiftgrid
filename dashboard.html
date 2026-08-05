@@ -36,7 +36,6 @@
             padding-bottom: 50px;
         }
 
-        /* --- Brand Logo Header Showcase --- */
         .brand-showcase {
             background: linear-gradient(135deg, #0e1726 0%, #080d16 100%);
             border: 1px solid #1a293d;
@@ -85,7 +84,6 @@
             font-size: 16px;
             font-weight: 800;
             letter-spacing: 0.5px;
-            color: #ffffff;
             background: linear-gradient(90deg, #ffffff, #93c5fd);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -126,7 +124,6 @@
             100% { transform: scale(0.95); opacity: 0.8; }
         }
 
-        /* Profile Banner Card */
         .profile-card {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -183,11 +180,9 @@
         }
 
         .role-badge {
-            background-color: #1e3a8a;
-            color: #93c5fd;
             font-size: 10px;
             font-weight: 700;
-            padding: 2px 8px;
+            padding: 3px 8px;
             border-radius: 6px;
             text-transform: uppercase;
         }
@@ -215,12 +210,6 @@
             font-size: 16px;
         }
 
-        .settings-btn:hover {
-            background: var(--primary-blue);
-            color: #ffffff;
-        }
-
-        /* Pay Cycle Card */
         .pay-cycle-card {
             background: linear-gradient(145deg, #132247 0%, #0d1522 100%);
             border: 1px solid #1d3b7a;
@@ -255,10 +244,6 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .pay-card-body {
-            margin-bottom: 16px;
-        }
-
         .earnings-amount {
             font-size: 34px;
             font-weight: 800;
@@ -276,7 +261,7 @@
         .pay-card-divider {
             height: 1px;
             background: rgba(255, 255, 255, 0.08);
-            margin-bottom: 14px;
+            margin: 14px 0;
         }
 
         .pay-card-footer {
@@ -301,7 +286,6 @@
             color: #ffffff;
         }
 
-        /* Section Outer Box Container */
         .section-box {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -333,9 +317,6 @@
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .history-controls {
@@ -354,13 +335,13 @@
             outline: none;
         }
 
-        .shift-list {
+        .shift-list, .history-list {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
 
-        .shift-item {
+        .shift-item, .history-item {
             background-color: var(--card-inner);
             border: 1px solid var(--card-border);
             border-radius: 16px;
@@ -390,27 +371,6 @@
             font-weight: 700;
             font-size: 13px;
             cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-log:hover {
-            background-color: var(--primary-blue-hover);
-        }
-
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .history-item {
-            background-color: var(--card-inner);
-            border: 1px solid var(--card-border);
-            border-radius: 14px;
-            padding: 14px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .history-title {
@@ -442,18 +402,9 @@
             color: var(--danger-red);
             cursor: pointer;
             font-size: 16px;
-            font-weight: bold;
         }
 
-        .empty-history {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 13px;
-            padding: 20px 0;
-        }
-
-        /* Calendar Modal */
-        .cal-modal-overlay {
+        .cal-modal-overlay, .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.8);
@@ -465,98 +416,7 @@
             padding: 16px;
         }
 
-        .cal-card {
-            background-color: #0b121b;
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 360px;
-            padding: 18px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.9);
-        }
-
-        .cal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-        }
-
-        .cal-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .cal-nav-btn {
-            background: #141f2e;
-            border: 1px solid var(--card-border);
-            color: var(--text-main);
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .cal-weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .cal-days-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
-            margin-bottom: 16px;
-        }
-
-        .cal-day {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            font-size: 13px;
-            color: var(--text-main);
-            background: #121c29;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
-
-        .cal-day:hover {
-            border-color: var(--primary-blue);
-        }
-
-        .cal-day.selected {
-            background: var(--primary-blue);
-            color: #ffffff;
-            font-weight: 700;
-        }
-
-        .cal-day.empty {
-            background: transparent;
-            cursor: default;
-        }
-
-        /* Settings Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(4px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 16px;
-        }
-
-        .modal-card {
+        .cal-card, .modal-card {
             background-color: #0b121b;
             border: 1px solid var(--card-border);
             border-radius: 24px;
@@ -568,11 +428,11 @@
             overflow-y: auto;
         }
 
-        .modal-header {
+        .cal-header, .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .btn-close-modal {
@@ -582,7 +442,6 @@
             width: 32px; height: 32px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 16px;
         }
 
         .form-group { margin-bottom: 16px; }
@@ -599,40 +458,6 @@
             outline: none;
         }
 
-        .photo-upload-row {
-            background: #141f2e;
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 14px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .photo-preview {
-            width: 56px; height: 56px;
-            border-radius: 50%;
-            background: var(--primary-blue);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 18px; color: #ffffff;
-            object-fit: cover; flex-shrink: 0;
-            overflow: hidden;
-        }
-
-        .photo-actions { display: flex; flex-direction: column; gap: 8px; width: 100%; }
-
-        .btn-photo-action {
-            background: #1c2b3d;
-            border: 1px solid var(--card-border);
-            color: #ffffff;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            cursor: pointer;
-            text-align: center;
-        }
-
         .btn-primary-block {
             width: 100%;
             background-color: var(--primary-blue);
@@ -645,10 +470,6 @@
             cursor: pointer;
             margin-bottom: 16px;
         }
-
-        .account-info-row { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; }
-        .account-info-row .val-email { color: #ffffff; font-weight: 500; }
-        .account-info-row .val-status { color: var(--badge-green); font-weight: 700; }
 
         .btn-modal-link {
             width: 100%;
@@ -673,7 +494,6 @@
 </head>
 <body>
 
-    <!-- Brand Header Showcase -->
     <div class="brand-showcase">
         <div class="brand-logo-container">
             <div class="logo-icon-box">
@@ -690,7 +510,6 @@
         </div>
     </div>
 
-    <!-- User Profile Header Banner -->
     <div class="profile-card">
         <div class="profile-info">
             <div id="profileAvatarDisplay" class="avatar-img">--</div>
@@ -705,7 +524,6 @@
         <button class="settings-btn" onclick="openSettingsModal()">⚙️</button>
     </div>
 
-    <!-- Pay Cycle Highlight Card -->
     <div class="pay-cycle-card">
         <div class="pay-card-header">
             <span id="cycleLabel" class="cycle-title">PAY CYCLE</span>
@@ -730,7 +548,6 @@
         </div>
     </div>
 
-    <!-- Dynamic Shift Logging Box -->
     <div class="section-box">
         <div class="section-header">
             <h3 class="section-title">Log Shift</h3>
@@ -738,11 +555,9 @@
                 📅 <span id="shiftDateDisplay">08/05/2026</span>
             </button>
         </div>
-
         <div class="shift-list" id="availableShiftsContainer"></div>
     </div>
 
-    <!-- Attendance & Salary History Section -->
     <div class="section-box">
         <div class="section-header">
             <h3 class="section-title" id="historySectionTitle">August 2026 Records</h3>
@@ -758,75 +573,32 @@
                 </select>
             </div>
         </div>
-
         <div class="history-list" id="recordsContainer"></div>
     </div>
 
-    <!-- Calendar Modal -->
-    <div class="cal-modal-overlay" id="calendarModal">
-        <div class="cal-card">
-            <div class="cal-header">
-                <button class="cal-nav-btn" onclick="changeCalMonth(-1)">◄</button>
-                <span class="cal-title" id="calMonthYearTitle">August 2026</span>
-                <button class="cal-nav-btn" onclick="changeCalMonth(1)">►</button>
-            </div>
-            <div class="cal-weekdays">
-                <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
-            </div>
-            <div class="cal-days-grid" id="calDaysGrid"></div>
-            <button class="btn-primary-block" style="margin-bottom:0;" onclick="closeCalendarModal()">Done / Select</button>
-        </div>
-    </div>
-
-    <!-- Settings Modal -->
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-card">
             <div class="modal-header">
-                <h3>⚙️ Profile & Workspace Settings</h3>
+                <h3>⚙️ Settings & Options</h3>
                 <button class="btn-close-modal" onclick="closeSettingsModal()">✕</button>
             </div>
-
-            <div class="form-group">
-                <label>Profile Picture</label>
-                <div class="photo-upload-row">
-                    <div id="modalAvatarPreview" class="photo-preview">--</div>
-                    <div class="photo-actions">
-                        <button class="btn-photo-action" onclick="document.getElementById('avatarFileInput').click()">📷 Upload Custom Image</button>
-                        <button class="btn-photo-action" onclick="removePhoto()">Remove Photo</button>
-                        <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
-                    </div>
-                </div>
-            </div>
-
             <div class="form-group">
                 <label>Display Name</label>
-                <input type="text" id="inputDisplayName" class="form-input" value="">
+                <input type="text" id="inputDisplayName" class="form-input">
             </div>
+            <button class="btn-primary-block" onclick="saveProfileChanges()">Save Display Name</button>
 
-            <button class="btn-primary-block" onclick="saveProfileChanges()">Save Profile Changes</button>
-
-            <div class="account-info-row">
-                <span style="color: var(--text-muted)">Account Email</span>
-                <span class="val-email" id="modalAccountEmail">--</span>
-            </div>
-            <div class="account-info-row" style="margin-bottom: 12px;">
-                <span style="color: var(--text-muted)">Account Status</span>
-                <span class="val-status" id="modalAccountStatus">Active Member</span>
-            </div>
-
-            <!-- Dynamic Admin Access Button (Displays only when role === 'MANAGER') -->
+            <!-- Admin Link: Dynamically turns visible when role === 'MANAGER' -->
             <a id="adminPanelLink" class="btn-modal-link" href="admin.html" style="display:none; background: #2e1065; border: 1px solid #7e22ce; color: #f3e8ff;">
                 👑 Open Manager Admin Panel
             </a>
 
-            <a class="btn-modal-link" href="setup.html">⚙️ Reconfigure Shift Presets & Pay Cycle</a>
-            <button class="btn-modal-link" onclick="downloadCSVReport()">📥 Download Attendance Report (.CSV)</button>
-            <button class="btn-modal-link btn-reset" onclick="resetSavedData()">Reset Saved Shift Data</button>
-            <button class="btn-modal-link btn-reset" style="margin-top:16px;" onclick="handleSignOut()">🚪 Sign Out</button>
+            <a class="btn-modal-link" href="setup.html">⚙️ Shift Presets & Request Manager Role</a>
+            <button class="btn-modal-link" onclick="downloadCSVReport()">📥 Export CSV Report</button>
+            <button class="btn-modal-link btn-reset" onclick="handleSignOut()">🚪 Sign Out</button>
         </div>
     </div>
 
-    <!-- Firebase SDK & App Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -838,8 +610,7 @@
           projectId: "shift-salary-tracker",
           storageBucket: "shift-salary-tracker.firebasestorage.app",
           messagingSenderId: "719444723616",
-          appId: "1:719444723616:web:56b421b3d8d49f6b8946c5",
-          measurementId: "G-V8V657F1S0"
+          appId: "1:719444723616:web:56b421b3d8d49f6b8946c5"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -848,7 +619,7 @@
 
         let currentUser = null;
 
-        const defaultSSShifts = [
+        const defaultShifts = [
             { id: "shift_d", name: "Day Shift (D)", time: "7:00 AM – 6:00 PM", rate: 2000 },
             { id: "shift_e", name: "Evening Shift (E)", time: "6:00 PM – 11:30 PM", rate: 1800 },
             { id: "shift_m", name: "Mega Shift (M)", time: "6:00 PM – 3:00 AM", rate: 2700 },
@@ -856,145 +627,99 @@
             { id: "shift_dm", name: "Full Day Double (D + M)", time: "7:00 AM – 3:00 AM next day", rate: 4700 }
         ];
 
-        window.configuredShifts = JSON.parse(localStorage.getItem('shiftgrid_shifts')) || defaultSSShifts;
+        window.configuredShifts = JSON.parse(localStorage.getItem('shiftgrid_shifts')) || defaultShifts;
         window.userPayCycleConfig = JSON.parse(localStorage.getItem('shiftgrid_paycycle')) || { type: 'mid-month', payDay: 25 };
-        window.managerRoleRequested = localStorage.getItem('shiftgrid_managerRequested') === 'true';
-        window.templateRequested = localStorage.getItem('shiftgrid_templateRequested') === 'true';
 
-        function getInitials(name) {
-            if (!name) return "U";
-            const parts = name.trim().split(" ");
-            if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-            return parts[0][0].toUpperCase();
-        }
-
-        // FIXED MANAGER ROLE UI DISPATCH
-        function updateAccountUI(name, email, photoUrl, role) {
+        function updateAccountUI(name, email, role, managerRequested) {
             const displayName = name || (email ? email.split('@')[0] : 'User');
             document.getElementById('profileNameDisplay').innerText = displayName;
             document.getElementById('inputDisplayName').value = displayName;
             document.getElementById('profileEmailDisplay').innerText = email || '';
-            document.getElementById('modalAccountEmail').innerText = email || '';
 
             const badgeEl = document.getElementById('profileRoleBadge');
             const adminLinkEl = document.getElementById('adminPanelLink');
 
-            // Explicit Priority: APPROVED MANAGER > PENDING MANAGER > STANDARD ROLE
+            // Explicit Priority logic
             if (role === "MANAGER") {
                 badgeEl.innerText = "MANAGER";
                 badgeEl.style.backgroundColor = "#6b21a8";
                 badgeEl.style.color = "#f3e8ff";
-                if (adminLinkEl) adminLinkEl.style.display = "flex";
-            } else if (window.managerRoleRequested === true || window.managerRoleRequested === 'true') {
+                adminLinkEl.style.display = "flex";
+            } else if (managerRequested) {
                 badgeEl.innerText = "PENDING MANAGER";
                 badgeEl.style.backgroundColor = "#854d0e";
                 badgeEl.style.color = "#fef08a";
-                if (adminLinkEl) adminLinkEl.style.display = "none";
+                adminLinkEl.style.display = "none";
             } else {
                 badgeEl.innerText = role || "EMPLOYEE";
                 badgeEl.style.backgroundColor = "#1e3a8a";
                 badgeEl.style.color = "#93c5fd";
-                if (adminLinkEl) adminLinkEl.style.display = "none";
+                adminLinkEl.style.display = "none";
             }
 
-            const avatarContainer = document.getElementById('profileAvatarDisplay');
-            const modalAvatarContainer = document.getElementById('modalAvatarPreview');
-
-            if (photoUrl) {
-                const imgHtml = `<img src="${photoUrl}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
-                avatarContainer.innerHTML = imgHtml;
-                modalAvatarContainer.innerHTML = imgHtml;
-            } else {
-                const initials = getInitials(displayName);
-                avatarContainer.innerText = initials;
-                modalAvatarContainer.innerText = initials;
-            }
+            const initials = displayName.substring(0,2).toUpperCase();
+            document.getElementById('profileAvatarDisplay').innerText = initials;
         }
 
-        // Live Firestore Sync with Proper Role Parsing
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
-                updateAccountUI(user.displayName, user.email, user.photoURL, "EMPLOYEE");
 
-                try {
-                    const userDocRef = doc(db, "users", user.uid);
-                    onSnapshot(userDocRef, (userDoc) => {
-                        if (userDoc.exists()) {
-                            const data = userDoc.data();
-                            
-                            if (data.shifts && data.shifts.length > 0) {
-                                window.configuredShifts = data.shifts;
-                                localStorage.setItem('shiftgrid_shifts', JSON.stringify(data.shifts));
-                            }
-                            if (data.payCycleConfig) {
-                                window.userPayCycleConfig = data.payCycleConfig;
-                                localStorage.setItem('shiftgrid_paycycle', JSON.stringify(data.payCycleConfig));
-                            }
-                            if (data.managerRoleRequested !== undefined) {
-                                const isReq = data.managerRoleRequested === true || data.managerRoleRequested === 'true';
-                                window.managerRoleRequested = isReq;
-                                localStorage.setItem('shiftgrid_managerRequested', isReq);
-                            }
-                            if (data.templateRequested !== undefined) {
-                                window.templateRequested = data.templateRequested;
-                                localStorage.setItem('shiftgrid_templateRequested', data.templateRequested);
-                            }
+                // Sync profile data to user doc to prevent "Unknown User" in Admin Panel
+                setDoc(doc(db, "users", user.uid), {
+                    displayName: user.displayName || user.email.split('@')[0],
+                    email: user.email
+                }, { merge: true });
 
-                            const effectiveRole = data.role || "EMPLOYEE";
-                            updateAccountUI(data.displayName || user.displayName, user.email, data.photoURL || user.photoURL, effectiveRole);
+                const userDocRef = doc(db, "users", user.uid);
+                onSnapshot(userDocRef, (userDoc) => {
+                    if (userDoc.exists()) {
+                        const data = userDoc.data();
+                        
+                        if (data.shifts && data.shifts.length > 0) window.configuredShifts = data.shifts;
+                        if (data.payCycleConfig) window.userPayCycleConfig = data.payCycleConfig;
 
-                            // Re-render UI live when approval state updates
-                            window.renderAvailableShifts();
-                            window.updateHistoryView();
+                        const role = data.role || "EMPLOYEE";
+                        const managerRequested = data.managerRoleRequested === true;
+
+                        // Auto-unlock templates if role is elevated to MANAGER
+                        if (role === "MANAGER") {
+                            window.templateRequested = false;
+                        } else {
+                            window.templateRequested = data.templateRequested === true;
                         }
-                    }, (err) => {
-                        console.log("Firestore live sync error:", err);
-                    });
-                } catch (e) {
-                    console.log("Firestore snapshot setup error:", e);
-                }
 
-                window.renderAvailableShifts();
-                window.updateHistoryView();
+                        updateAccountUI(data.displayName || user.displayName, user.email, role, managerRequested);
+                        window.renderAvailableShifts();
+                        window.updateHistoryView();
+                    }
+                });
             } else {
                 window.location.href = "index.html";
             }
         });
 
         window.handleSignOut = function() {
-            signOut(auth).then(() => {
-                localStorage.removeItem('shiftgrid_records');
-                window.location.href = "index.html";
-            });
+            signOut(auth).then(() => { window.location.href = "index.html"; });
         };
 
-        window.saveProfileToCloud = async function(updatedName) {
-            if (currentUser) {
-                try {
-                    await setDoc(doc(db, "users", currentUser.uid), { displayName: updatedName }, { merge: true });
-                } catch(e) {
-                    console.log("Cloud save warning:", e);
-                }
+        window.saveProfileChanges = async function() {
+            const newName = document.getElementById('inputDisplayName').value;
+            if (newName && currentUser) {
+                await setDoc(doc(db, "users", currentUser.uid), { displayName: newName }, { merge: true });
+                closeSettingsModal();
             }
         };
     </script>
 
     <script>
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        
         let selectedLogDate = new Date(2026, 7, 5);
-        let calViewDate = new Date(selectedLogDate.getTime());
         let shiftRecords = JSON.parse(localStorage.getItem('shiftgrid_records')) || [];
-
-        function saveRecordsToStorage() {
-            localStorage.setItem('shiftgrid_records', JSON.stringify(shiftRecords));
-        }
 
         function renderAvailableShifts() {
             const container = document.getElementById('availableShiftsContainer');
             if (!container) return;
-
             container.innerHTML = '';
 
             if (window.templateRequested) {
@@ -1007,27 +732,13 @@
                 return;
             }
 
-            const shiftsToRender = window.configuredShifts || [];
-            
-            if (shiftsToRender.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 12px;">
-                        No shift configuration found. <a href="setup.html" style="color: var(--primary-blue);">Click here to set up shifts</a>.
-                    </div>
-                `;
-                return;
-            }
-
-            shiftsToRender.forEach(s => {
-                const currentRate = s.rate !== undefined ? s.rate : (s.normal || 0);
-                const rateLabel = `LKR ${currentRate.toLocaleString()}`;
-                const timeText = s.time ? s.time : 'Custom Hours';
-
+            (window.configuredShifts || []).forEach(s => {
+                const currentRate = s.rate !== undefined ? s.rate : 0;
                 container.innerHTML += `
                     <div class="shift-item">
                         <div class="shift-info">
                             <h4>${s.name}</h4>
-                            <p>${timeText} • ${rateLabel}</p>
+                            <p>${s.time || ''} • LKR ${currentRate.toLocaleString()}</p>
                         </div>
                         <button class="btn-log" onclick="logShift('${s.name}', ${currentRate})">+ Log</button>
                     </div>
@@ -1035,118 +746,27 @@
             });
         }
 
-        function openCalendarModal() {
-            calViewDate = new Date(selectedLogDate.getTime());
-            renderCalendar();
-            document.getElementById('calendarModal').style.display = 'flex';
-        }
-
-        function closeCalendarModal() {
-            document.getElementById('calendarModal').style.display = 'none';
-        }
-
-        function changeCalMonth(delta) {
-            calViewDate.setMonth(calViewDate.getMonth() + delta);
-            renderCalendar();
-        }
-
-        function renderCalendar() {
-            const year = calViewDate.getFullYear();
-            const month = calViewDate.getMonth();
-            document.getElementById('calMonthYearTitle').innerText = `${monthNames[month]} ${year}`;
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const grid = document.getElementById('calDaysGrid');
-            grid.innerHTML = '';
-
-            for (let i = 0; i < firstDay; i++) {
-                const emptyTile = document.createElement('div');
-                emptyTile.className = 'cal-day empty';
-                grid.appendChild(emptyTile);
-            }
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayTile = document.createElement('div');
-                dayTile.className = 'cal-day';
-                dayTile.innerText = day;
-
-                const isSelected = selectedLogDate.getFullYear() === year &&
-                                   selectedLogDate.getMonth() === month &&
-                                   selectedLogDate.getDate() === day;
-
-                if (isSelected) dayTile.classList.add('selected');
-
-                dayTile.onclick = () => {
-                    selectedLogDate = new Date(year, month, day);
-                    updateShiftDateDisplay();
-                    renderCalendar();
-                    renderAvailableShifts();
-                };
-
-                grid.appendChild(dayTile);
-            }
-        }
-
-        function updateShiftDateDisplay() {
-            const m = String(selectedLogDate.getMonth() + 1).padStart(2, '0');
-            const d = String(selectedLogDate.getDate()).padStart(2, '0');
-            const y = selectedLogDate.getFullYear();
-            document.getElementById('shiftDateDisplay').innerText = `${m}/${d}/${y}`;
-        }
-
-        function calculateDynamicPayCycle(targetDate) {
-            const config = window.userPayCycleConfig || { type: 'mid-month', payDay: 25 };
-            const year = targetDate.getFullYear();
-            const month = targetDate.getMonth();
-            const day = targetDate.getDate();
-
-            let label = "MONTHLY CYCLE";
-            let periodText = "01 - " + new Date(year, month + 1, 0).getDate();
-            let payDayText = `Paid on ${config.payDay || 25}th`;
-
-            if (config.type === 'mid-month' || config.type === 'bi-weekly') {
-                if (day <= 15) {
-                    label = "MID-MONTH CYCLE (PART 1)";
-                    periodText = `01/${String(month + 1).padStart(2, '0')} – 15/${String(month + 1).padStart(2, '0')}`;
-                    payDayText = `Paid on ${config.payDay || 25}th`;
-                } else {
-                    label = "END-MONTH CYCLE (PART 2)";
-                    const lastDay = new Date(year, month + 1, 0).getDate();
-                    periodText = `16/${String(month + 1).padStart(2, '0')} – ${lastDay}/${String(month + 1).padStart(2, '0')}`;
-                    payDayText = `Paid on 10th (Next Mo.)`;
-                }
-            } else if (config.type === 'weekly') {
-                label = "WEEKLY CYCLE";
-                periodText = "Current Week";
-                payDayText = "Every Friday";
-            }
-
-            return { label, periodText, payDayText };
-        }
-
         function updateHistoryView() {
             const selMonth = parseInt(document.getElementById('historyMonthSelect').value);
             const selYear = parseInt(document.getElementById('historyYearSelect').value);
-
             document.getElementById('historySectionTitle').innerText = `${monthNames[selMonth]} ${selYear} Records`;
 
-            const filteredShifts = shiftRecords.filter(rec => {
+            const filtered = shiftRecords.filter(rec => {
                 const recDate = new Date(rec.date);
                 return recDate.getFullYear() === selYear && recDate.getMonth() === selMonth;
             });
 
             const container = document.getElementById('recordsContainer');
             container.innerHTML = '';
-            let totalEarnings = 0;
+            let total = 0;
 
-            if (filteredShifts.length === 0) {
-                container.innerHTML = `<div class="empty-history">No shift attendance logged for ${monthNames[selMonth]} ${selYear}.</div>`;
+            if (filtered.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:13px; padding:20px;">No shift attendance logged for this month.</div>`;
             } else {
-                filteredShifts.forEach(rec => {
-                    totalEarnings += rec.amount;
+                filtered.forEach(rec => {
+                    total += rec.amount;
                     container.insertAdjacentHTML('afterbegin', `
-                        <div class="history-item" id="${rec.id}">
+                        <div class="history-item">
                             <div>
                                 <div class="history-title">${rec.title}</div>
                                 <div class="history-date">${rec.date}</div>
@@ -1160,105 +780,29 @@
                 });
             }
 
-            const now = new Date();
-            const isCurrentMonth = (selYear === now.getFullYear() && selMonth === now.getMonth());
-            const refDate = isCurrentMonth ? now : new Date(selYear, selMonth, 1);
-            const cycle = calculateDynamicPayCycle(refDate);
-
-            let periodText = cycle.periodText;
-            let labelText = cycle.label;
-
-            if (!isCurrentMonth) {
-                labelText = "MONTHLY CYCLE";
-                const lastDay = new Date(selYear, selMonth + 1, 0).getDate();
-                periodText = `01/${String(selMonth + 1).padStart(2, '0')} – ${lastDay}/${String(selMonth + 1).padStart(2, '0')}`;
-            }
-
-            document.getElementById('cycleLabel').innerText = labelText;
-            document.getElementById('payDateBadge').innerText = cycle.payDayText;
-            document.getElementById('cyclePeriodText').innerText = periodText;
-            document.getElementById('cycleEarnings').innerHTML = `${totalEarnings.toLocaleString()} <span class="currency">LKR</span>`;
-            document.getElementById('shiftsCount').innerText = `${filteredShifts.length} Shifts`;
+            document.getElementById('cycleEarnings').innerHTML = `${total.toLocaleString()} <span class="currency">LKR</span>`;
+            document.getElementById('shiftsCount').innerText = `${filtered.length} Shifts`;
         }
 
         function logShift(title, amount) {
             const y = selectedLogDate.getFullYear();
             const m = String(selectedLogDate.getMonth() + 1).padStart(2, '0');
             const d = String(selectedLogDate.getDate()).padStart(2, '0');
-            
-            shiftRecords.push({
-                id: 'rec-' + Date.now(),
-                title: title,
-                amount: amount,
-                date: `${y}-${m}-${d}`
-            });
-            saveRecordsToStorage();
-
-            document.getElementById('historyMonthSelect').value = selectedLogDate.getMonth();
-            document.getElementById('historyYearSelect').value = selectedLogDate.getFullYear();
+            shiftRecords.push({ id: 'rec-' + Date.now(), title, amount, date: `${y}-${m}-${d}` });
+            localStorage.setItem('shiftgrid_records', JSON.stringify(shiftRecords));
             updateHistoryView();
         }
 
         function deleteRecord(id) {
-            shiftRecords = shiftRecords.filter(rec => rec.id !== id);
-            saveRecordsToStorage();
+            shiftRecords = shiftRecords.filter(r => r.id !== id);
+            localStorage.setItem('shiftgrid_records', JSON.stringify(shiftRecords));
             updateHistoryView();
         }
 
         function openSettingsModal() { document.getElementById('settingsModal').style.display = 'flex'; }
         function closeSettingsModal() { document.getElementById('settingsModal').style.display = 'none'; }
 
-        function handleImageUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    const imgHtml = `<img src="${evt.target.result}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
-                    document.getElementById('modalAvatarPreview').innerHTML = imgHtml;
-                    document.getElementById('profileAvatarDisplay').innerHTML = imgHtml;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function removePhoto() {
-            const name = document.getElementById('profileNameDisplay').innerText;
-            const initials = name ? name[0].toUpperCase() : 'U';
-            document.getElementById('modalAvatarPreview').innerText = initials;
-            document.getElementById('profileAvatarDisplay').innerText = initials;
-        }
-
-        function saveProfileChanges() {
-            const newName = document.getElementById('inputDisplayName').value;
-            if (newName.trim()) {
-                document.getElementById('profileNameDisplay').innerText = newName;
-                if (window.saveProfileToCloud) window.saveProfileToCloud(newName);
-            }
-            closeSettingsModal();
-        }
-
-        function downloadCSVReport() {
-            let csv = "Date,Shift Title,Earnings (LKR)\n";
-            shiftRecords.forEach(r => { csv += `${r.date},${r.title},${r.amount}\n`; });
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.setAttribute('href', url);
-            a.setAttribute('download', 'ShiftGrid_Attendance_Report.csv');
-            a.click();
-        }
-
-        function resetSavedData() {
-            if (confirm("Are you sure you want to reset all logged shift records?")) {
-                shiftRecords = [];
-                saveRecordsToStorage();
-                updateHistoryView();
-                closeSettingsModal();
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            updateShiftDateDisplay();
             renderAvailableShifts();
             updateHistoryView();
         });
