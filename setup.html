@@ -408,6 +408,7 @@
         let payCyclesConfig = null;
         let usedTemplateGroup = 'Custom';
 
+        // Official SS Template Shift Rates
         const ssTemplateShifts = [
             { id: "shift_d", name: "Day Shift (D)", time: "7:00 AM – 6:00 PM", rate: 2000, normal: 2000, saturday: 3000 },
             { id: "shift_e", name: "Evening Shift (E)", time: "6:00 PM – 11:30 PM", rate: 1800, normal: 1800, saturday: 2700 },
@@ -416,6 +417,7 @@
             { id: "shift_dm", name: "Full Day Double (D + M)", time: "7:00 AM – 3:00 AM next day", rate: 4700, normal: 4700, saturday: 7050 }
         ];
 
+        // SS Template Specific Pay Cycles
         const ssPayCycles = [
             { id: "cycle_1", name: "Mid-Month Cycle", startDay: 1, endDay: 15, payoutDay: 25, payoutMonth: "current" },
             { id: "cycle_2", name: "End-Month Cycle", startDay: 16, endDay: 31, payoutDay: 10, payoutMonth: "next" }
@@ -433,12 +435,12 @@
                 optMgr.classList.add('selected');
                 optEmp.classList.remove('selected');
             }
-        }
+        };
 
         window.proceedToShiftCreation = function() {
             document.getElementById('pageRoleSelection').classList.remove('active');
             document.getElementById('pageShiftCreation').classList.add('active');
-        }
+        };
 
         window.loadSSTemplate = function() {
             userShifts = [...ssTemplateShifts];
@@ -446,7 +448,7 @@
             usedTemplateGroup = 'SS';
             renderShiftsList();
             showAlert("SS Template & Pay Cycles loaded successfully!", "success");
-        }
+        };
 
         window.addCustomShift = function() {
             const name = document.getElementById('inputName').value.trim();
@@ -468,12 +470,12 @@
             document.getElementById('inputName').focus();
 
             renderShiftsList();
-        }
+        };
 
         window.removeShift = function(index) {
             userShifts.splice(index, 1);
             renderShiftsList();
-        }
+        };
 
         function renderShiftsList() {
             const container = document.getElementById('createdShiftsList');
@@ -498,17 +500,19 @@
             });
         }
 
+        // Authentication & Router Check
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
                 const userDocRef = doc(db, "users", user.uid);
                 const userDoc = await getDoc(userDocRef);
                 
-                // If configuration is already done, direct to dashboard
-                if (userDoc.exists() && userDoc.data().role && userDoc.data().shiftsConfigured) {
+                // If shifts are already configured, redirect directly to dashboard
+                if (userDoc.exists() && userDoc.data().shiftsConfigured) {
                     window.location.href = "dashboard.html";
                 }
             } else {
+                // If not logged in, redirect to index
                 window.location.href = "index.html";
             }
         });
@@ -523,6 +527,7 @@
             try {
                 const isManagerReq = (selectedRole === 'manager');
 
+                // LocalStorage persistence
                 localStorage.setItem('shiftgrid_shifts', JSON.stringify(userShifts));
                 if (payCyclesConfig) {
                     localStorage.setItem('shiftgrid_payCycles', JSON.stringify(payCyclesConfig));
@@ -560,11 +565,11 @@
                 }
 
                 showAlert("Setup complete! Redirecting to dashboard...", "success");
-                setTimeout(() => { window.location.href = "dashboard.html"; }, 1200);
+                setTimeout(() => { window.location.href = "dashboard.html"; }, 1000);
             } catch (error) {
                 showAlert("Error saving configuration: " + error.message, "error");
             }
-        }
+        };
 
         function showAlert(message, type) {
             const alertBox = document.getElementById('statusAlert');
