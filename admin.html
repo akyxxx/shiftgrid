@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShiftGrid — Admin Management Panel</title>
+    <style>
+        :root {
+            --bg-dark: #06090e;
+            --card-bg: #0e1622;
+            --card-border: #1a2636;
+            --primary-blue: #2563eb;
+            --text-main: #ffffff;
+            --text-muted: #8b9bb4;
+            --accent-green: #22c55e;
+            --danger-red: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            background: linear-gradient(90deg, #ffffff, #93c5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .request-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .request-card {
+            background: #141f2e;
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .user-info h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .user-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-approve {
+            background-color: var(--accent-green);
+            color: #ffffff;
+        }
+
+        .btn-approve:hover {
+            opacity: 0.9;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            padding: 20px 0;
+        }
+
+        .back-link {
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <h1>ShiftGrid Admin Panel</h1>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Secure Management Area</p>
+        </div>
+        <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+    </div>
+
+    <!-- Pending Manager Requests -->
+    <div class="section-box">
+        <h3 class="section-title">👑 Pending Manager Role Requests</h3>
+        <div id="managerRequestsContainer" class="request-list">
+            <div class="empty-state">Authenticating...</div>
+        </div>
+    </div>
+
+    <!-- Pending Shift Template Approvals -->
+    <div class="section-box">
+        <h3 class="section-title">📋 Pending Shift Template Approvals</h3>
+        <div id="templateRequestsContainer" class="request-list">
+            <div class="empty-state">Authenticating...</div>
+        </div>
+    </div>
+
+    <!-- Firebase Script Logic with Admin Email Lock -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA93AnibNs8iaNwYuy1tJglGXXqeY6p2oo",
+          authDomain: "shift-salary-tracker.firebaseapp.com",
+          projectId: "shift-salary-tracker",
+          storageBucket: "shift-salary-tracker.firebasestorage.app",
+          messagingSenderId: "719444723616",
+          appId: "1:719444723616:web:56b421b3d8d49f6b8946c5",
+          measurementId: "G-V8V657F1S0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Authorized Admin Email
+        const ADMIN_EMAIL = "tharaka1998.me@gmail.com";
+
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === ADMIN_EMAIL) {
+                // Access granted
+                fetchPendingRequests();
+            } else {
+                // Access denied UI override
+                document.body.innerHTML = `
+                    <div style="background: #06090e; color: #ffffff; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: sans-serif;">
+                        <div style="background: #0e1622; border: 1px solid #1a2636; padding: 30px; border-radius: 20px; text-align: center; max-width: 400px;">
+                            <h2 style="color: #ef4444; margin-bottom: 10px;">Access Denied</h2>
+                            <p style="color: #8b9bb4; font-size: 14px; margin-bottom: 20px;">You must be logged in as the verified administrator to access this page.</p>
+                            <a href="dashboard.html" style="color: #60a5fa; text-decoration: none; font-weight: 600; font-size: 14px;">Return to Dashboard</a>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+        async function fetchPendingRequests() {
+            const managerContainer = document.getElementById('managerRequestsContainer');
+            const templateContainer = document.getElementById('templateRequestsContainer');
+
+            managerContainer.innerHTML = '<div class="empty-state">Checking Firestore...</div>';
+            templateContainer.innerHTML = '<div class="empty-state">Checking Firestore...</div>';
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "users"));
+                let managerHtml = '';
+                let templateHtml = '';
+
+                let managerCount = 0;
+                let templateCount = 0;
+
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const userId = docSnap.id;
+                    const name = data.displayName || data.email || 'Unnamed User';
+                    const email = data.email || 'No email provided';
+
+                    if (data.managerRoleRequested) {
+                        managerCount++;
+                        managerHtml += `
+                            <div class="request-card">
+                                <div class="user-info">
+                                    <h4>${name}</h4>
+                                    <p>${email}</p>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn btn-approve" onclick="approveManager('${userId}')">Approve Manager</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    if (data.templateRequested) {
+                        templateCount++;
+                        templateHtml += `
+                            <div class="request-card">
+                                <div class="user-info">
+                                    <h4>${name}</h4>
+                                    <p>${email} — Custom shift template submitted</p>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn btn-approve" onclick="approveTemplate('${userId}')">Approve Template</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                managerContainer.innerHTML = managerCount > 0 ? managerHtml : '<div class="empty-state">No pending manager requests.</div>';
+                templateContainer.innerHTML = templateCount > 0 ? templateHtml : '<div class="empty-state">No pending shift templates.</div>';
+
+            } catch (e) {
+                console.error("Error fetching requests:", e);
+                managerContainer.innerHTML = '<div class="empty-state" style="color:var(--danger-red);">Failed to load requests. Check console.</div>';
+                templateContainer.innerHTML = '<div class="empty-state" style="color:var(--danger-red);">Failed to load requests. Check console.</div>';
+            }
+        }
+
+        window.approveManager = async function(userId) {
+            try {
+                await updateDoc(doc(db, "users", userId), {
+                    managerRoleRequested: false,
+                    role: "MANAGER"
+                });
+                alert("Manager role approved successfully!");
+                fetchPendingRequests();
+            } catch (e) {
+                alert("Error approving manager: " + e.message);
+            }
+        }
+
+        window.approveTemplate = async function(userId) {
+            try {
+                await updateDoc(doc(db, "users", userId), {
+                    templateRequested: false
+                });
+                alert("Shift template approved successfully!");
+                fetchPendingRequests();
+            } catch (e) {
+                alert("Error approving template: " + e.message);
+            }
+        }
+    </script>
+</body>
+</html>
