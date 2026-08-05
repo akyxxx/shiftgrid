@@ -677,7 +677,7 @@
     <div class="brand-showcase">
         <div class="brand-logo-container">
             <div class="logo-icon-box">
-                <img src="SiftGrid logo.png" alt="SiftGrid Logo">
+                <img src="SiftGrid logo.png" alt="ShiftGrid Logo" onerror="this.style.display='none'">
             </div>
             <div class="brand-text">
                 <span class="brand-name">ShiftGrid</span>
@@ -825,7 +825,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyA93AnibNs8iaNwYuy1tJglGXXqeY6p2oo",
@@ -864,11 +864,11 @@
         }
 
         function updateAccountUI(name, email, photoUrl, role) {
-            const displayName = name || email.split('@')[0];
+            const displayName = name || (email ? email.split('@')[0] : 'User');
             document.getElementById('profileNameDisplay').innerText = displayName;
             document.getElementById('inputDisplayName').value = displayName;
-            document.getElementById('profileEmailDisplay').innerText = email;
-            document.getElementById('modalAccountEmail').innerText = email;
+            document.getElementById('profileEmailDisplay').innerText = email || '';
+            document.getElementById('modalAccountEmail').innerText = email || '';
 
             const badgeEl = document.getElementById('profileRoleBadge');
             if (window.managerRoleRequested) {
@@ -877,6 +877,8 @@
                 badgeEl.style.color = "#fef08a";
             } else if (role) {
                 badgeEl.innerText = role;
+                badgeEl.style.backgroundColor = "#1e3a8a";
+                badgeEl.style.color = "#93c5fd";
             }
 
             const avatarContainer = document.getElementById('profileAvatarDisplay');
@@ -893,37 +895,44 @@
             }
         }
 
-        onAuthStateChanged(auth, async (user) => {
+        // Live Firestore sync using onSnapshot (Instantly unlocks dashboard when Admin Approves!)
+        onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
                 updateAccountUI(user.displayName, user.email, user.photoURL, "EMPLOYEE");
 
                 try {
                     const userDocRef = doc(db, "users", user.uid);
-                    const userDoc = await getDoc(userDocRef);
+                    onSnapshot(userDocRef, (userDoc) => {
+                        if (userDoc.exists()) {
+                            const data = userDoc.data();
+                            if (data.shifts && data.shifts.length > 0) {
+                                window.configuredShifts = data.shifts;
+                                localStorage.setItem('shiftgrid_shifts', JSON.stringify(data.shifts));
+                            }
+                            if (data.payCycleConfig) {
+                                window.userPayCycleConfig = data.payCycleConfig;
+                                localStorage.setItem('shiftgrid_paycycle', JSON.stringify(data.payCycleConfig));
+                            }
+                            if (data.managerRoleRequested !== undefined) {
+                                window.managerRoleRequested = data.managerRoleRequested;
+                                localStorage.setItem('shiftgrid_managerRequested', data.managerRoleRequested);
+                            }
+                            if (data.templateRequested !== undefined) {
+                                window.templateRequested = data.templateRequested;
+                                localStorage.setItem('shiftgrid_templateRequested', data.templateRequested);
+                            }
+                            updateAccountUI(data.displayName || user.displayName, user.email, data.photoURL || user.photoURL, data.role || "EMPLOYEE");
 
-                    if (userDoc.exists()) {
-                        const data = userDoc.data();
-                        if (data.shifts && data.shifts.length > 0) {
-                            window.configuredShifts = data.shifts;
-                            localStorage.setItem('shiftgrid_shifts', JSON.stringify(data.shifts));
+                            // Re-render UI live when approval changes
+                            window.renderAvailableShifts();
+                            window.updateHistoryView();
                         }
-                        if (data.payCycleConfig) {
-                            window.userPayCycleConfig = data.payCycleConfig;
-                            localStorage.setItem('shiftgrid_paycycle', JSON.stringify(data.payCycleConfig));
-                        }
-                        if (data.managerRoleRequested !== undefined) {
-                            window.managerRoleRequested = data.managerRoleRequested;
-                            localStorage.setItem('shiftgrid_managerRequested', data.managerRoleRequested);
-                        }
-                        if (data.templateRequested !== undefined) {
-                            window.templateRequested = data.templateRequested;
-                            localStorage.setItem('shiftgrid_templateRequested', data.templateRequested);
-                        }
-                        updateAccountUI(data.displayName || user.displayName, user.email, data.photoURL || user.photoURL, data.role || "EMPLOYEE");
-                    }
+                    }, (err) => {
+                        console.log("Firestore live sync error:", err);
+                    });
                 } catch (e) {
-                    console.log("Firestore account sync:", e);
+                    console.log("Firestore snapshot setup error:", e);
                 }
 
                 window.renderAvailableShifts();
