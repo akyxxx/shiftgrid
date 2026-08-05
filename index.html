@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShiftGrid — Dashboard</title>
+    <title>ShiftGrid — Portal</title>
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,65 +63,6 @@
             display: none;
             flex-direction: column;
             align-items: center;
-        }
-
-        /* Dashboard Container View */
-        .dashboard-container {
-            width: 100%;
-            max-width: 600px;
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .dashboard-header {
-            background: var(--surface);
-            border: 1px solid var(--surface-border);
-            border-radius: 20px;
-            padding: 18px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            min-width: 0; /* Allows header text truncation on mobile */
-        }
-
-        .user-info h2 {
-            font-size: 16px;
-            font-weight: 700;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis; /* Keeps long email addresses clean */
-        }
-
-        .user-info p {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .btn-logout {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--error-color);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            border-radius: 10px;
-            padding: 8px 14px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            flex-shrink: 0;
-            transition: background 0.2s;
-        }
-
-        .btn-logout:hover {
-            background: rgba(239, 68, 68, 0.2);
         }
 
         .logo-container {
@@ -295,12 +236,12 @@
 </head>
 <body>
 
-    <!-- Loading Indicator -->
+    <!-- Step 1: Loading Screen -->
     <div id="loadingScreen" class="loading-screen">
-        <p>Loading ShiftGrid...</p>
+        <p>Connecting to ShiftGrid...</p>
     </div>
 
-    <!-- VIEW 1: Auth Screen -->
+    <!-- Step 1: Auth View (Shows when logged out) -->
     <div id="authView" class="auth-card">
         <div class="logo-container">
             <img src="SiftGrid logo.png" alt="ShiftGrid Logo" class="logo-img">
@@ -343,27 +284,10 @@
         </div>
     </div>
 
-    <!-- VIEW 2: Main Dashboard -->
-    <div id="dashboardView" class="dashboard-container">
-        <div class="dashboard-header">
-            <div class="user-info">
-                <h2 id="dashUserEmail">Welcome</h2>
-                <p id="dashUserRole">Role: Employee</p>
-            </div>
-            <button type="button" class="btn-logout" onclick="handleLogout()">Sign Out</button>
-        </div>
-
-        <div style="background: var(--surface); border: 1px solid var(--surface-border); border-radius: 20px; padding: 24px; text-align: center;">
-            <h3 style="font-size: 16px; margin-bottom: 8px;">Dashboard Active</h3>
-            <p style="font-size: 13px; color: var(--text-muted);">Your shifts are configured and ready to track!</p>
-        </div>
-    </div>
-
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyA93AnibNs8iaNwYuy1tJglGXXqeY6p2oo",
@@ -377,45 +301,19 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // Listen for Auth State Changes on Page Load
-        onAuthStateChanged(auth, async (user) => {
+        // Sequential Navigation: Logged in -> Go to setup.html
+        onAuthStateChanged(auth, (user) => {
             const loadingScreen = document.getElementById('loadingScreen');
             const authView = document.getElementById('authView');
-            const dashboardView = document.getElementById('dashboardView');
 
             if (user) {
-                try {
-                    // User is signed in, check if setup is completed
-                    const userDocRef = doc(db, "users", user.uid);
-                    const userDoc = await getDoc(userDocRef);
-
-                    if (!userDoc.exists() || !userDoc.data().shiftsConfigured) {
-                        // Not configured yet, redirect to setup
-                        window.location.href = "setup.html";
-                    } else {
-                        // Fully configured user -> Show Dashboard
-                        loadingScreen.style.display = 'none';
-                        authView.style.display = 'none';
-                        dashboardView.style.display = 'flex';
-
-                        document.getElementById('dashUserEmail').innerText = user.email || 'User';
-                        const data = userDoc.data();
-                        document.getElementById('dashUserRole').innerText = `Role: ${data.role || 'employee'} ${data.pendingManagerRequest ? '(Manager Pending)' : ''}`;
-                    }
-                } catch (e) {
-                    console.error("Firestore read error:", e);
-                    loadingScreen.style.display = 'none';
-                    authView.style.display = 'none';
-                    dashboardView.style.display = 'flex';
-                    document.getElementById('dashUserEmail').innerText = user.email || 'User';
-                }
+                // Next Step in Flow: Redirect to setup.html
+                window.location.href = "setup.html";
             } else {
-                // Not signed in -> Show Login View
+                // Not logged in: Render Auth Form
                 loadingScreen.style.display = 'none';
-                dashboardView.style.display = 'none';
                 authView.style.display = 'flex';
             }
         });
@@ -427,6 +325,7 @@
 
             try {
                 await signInWithEmailAndPassword(auth, email, password);
+                window.location.href = "setup.html";
             } catch (error) {
                 showAlert(error.message, "error");
             }
@@ -434,18 +333,8 @@
 
         window.handleGoogleLogin = async function() {
             try {
-                const result = await signInWithPopup(auth, googleProvider);
-                const user = result.user;
-                
-                const userDocRef = doc(db, "users", user.uid);
-                const userDoc = await getDoc(userDocRef);
-                if (!userDoc.exists()) {
-                    await setDoc(userDocRef, {
-                        email: user.email,
-                        createdAt: new Date().toISOString(),
-                        shiftsConfigured: false
-                    }, { merge: true });
-                }
+                await signInWithPopup(auth, googleProvider);
+                window.location.href = "setup.html";
             } catch (error) {
                 showAlert(error.message, "error");
             }
@@ -464,10 +353,6 @@
             } catch (error) {
                 showAlert(error.message, "error");
             }
-        };
-
-        window.handleLogout = async function() {
-            await signOut(auth);
         };
 
         function showAlert(message, type) {
