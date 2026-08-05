@@ -3,129 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShiftGrid — Admin Management Panel</title>
+    <title>Admin & Staff Portal - Shift & Salary Tracker</title>
     <style>
         :root {
-            --bg-dark: #06090e;
-            --card-bg: #0e1622;
-            --card-inner: #141f2e;
-            --card-border: #1a2636;
-            --primary-blue: #2563eb;
-            --primary-blue-hover: #1d4ed8;
-            --text-main: #ffffff;
-            --text-muted: #8b9bb4;
-            --badge-green: #00e676;
-            --badge-amber: #f59e0b;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-blue: #3b82f6;
+            --success-green: #10b981;
             --danger-red: #ef4444;
+            --warning-orange: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-color);
             color: var(--text-main);
             padding: 16px;
-            max-width: 800px;
-            margin: 0 auto;
-            padding-bottom: 50px;
+            min-height: 100vh;
         }
 
-        /* Brand Header Showcase */
-        .brand-showcase {
-            background: linear-gradient(135deg, #0e1726 0%, #080d16 100%);
-            border: 1px solid #1a293d;
-            border-radius: 20px;
-            padding: 14px 18px;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Lock Screen */
+        .auth-overlay {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .auth-card h2 {
+            margin-bottom: 8px;
+            font-size: 1.4rem;
+        }
+
+        .auth-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        /* Header Bar */
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .brand-logo-container {
+        .header h1 {
+            font-size: 1.4rem;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .user-badge {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .logo-icon-box {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 12px rgba(37, 99, 235, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            padding: 4px;
+        .role-tag {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
         }
 
-        .logo-icon-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 8px;
-        }
-
-        .brand-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand-name {
-            font-size: 16px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            background: linear-gradient(90deg, #ffffff, #93c5fd);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .brand-tagline {
-            font-size: 10px;
+        .btn-logout {
+            background: transparent;
+            border: 1px solid var(--border-color);
             color: var(--text-muted);
-            font-weight: 600;
-            letter-spacing: 1px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
         }
 
-        .header-status-pill {
-            background: rgba(0, 230, 118, 0.1);
-            border: 1px solid rgba(0, 230, 118, 0.25);
-            color: var(--badge-green);
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        .btn-logout:hover {
+            border-color: var(--danger-red);
+            color: var(--danger-red);
         }
 
-        .pulse-dot {
-            width: 7px;
-            height: 7px;
-            background-color: var(--badge-green);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--badge-green);
-            animation: pulse 1.8s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.8; }
-        }
-
-        /* Metrics Bar */
+        /* Metrics */
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -134,75 +127,62 @@
         }
 
         .metric-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
+            background: var(--card-bg);
             padding: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
             text-align: center;
         }
 
-        .metric-value {
-            font-size: 22px;
-            font-weight: 800;
-            margin-bottom: 2px;
+        .metric-card .val {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-top: 4px;
         }
 
-        .metric-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        /* Filter Controls */
-        .controls-bar {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 12px;
-            margin-bottom: 16px;
+        /* Controls */
+        .controls {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            margin-bottom: 20px;
         }
 
         .search-input {
             width: 100%;
-            background: var(--card-inner);
-            border: 1px solid var(--card-border);
-            color: #ffffff;
             padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            outline: none;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 0.9rem;
         }
 
-        .tabs-container {
+        .tabs {
             display: flex;
-            gap: 6px;
+            gap: 8px;
+            overflow-x: auto;
         }
 
         .tab-btn {
-            flex: 1;
-            background: var(--card-inner);
-            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             color: var(--text-muted);
-            padding: 8px 10px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 6px;
             cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
+            font-weight: 500;
+            font-size: 0.85rem;
+            white-space: nowrap;
         }
 
         .tab-btn.active {
-            background: var(--primary-blue);
-            color: #ffffff;
-            border-color: var(--primary-blue);
+            background: var(--accent-blue);
+            color: #fff;
+            border-color: var(--accent-blue);
         }
 
-        /* Request Cards List */
+        /* Cards */
         .requests-list {
             display: flex;
             flex-direction: column;
@@ -210,50 +190,46 @@
         }
 
         .request-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 18px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            margin-bottom: 12px;
         }
 
         .user-info h3 {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 2px;
+            font-size: 1rem;
+            word-break: break-all;
         }
 
         .user-info p {
-            font-size: 12px;
+            font-size: 0.75rem;
             color: var(--text-muted);
+            margin-top: 2px;
         }
 
         .status-badge {
-            font-size: 10px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
             text-transform: uppercase;
         }
 
-        .status-pending { background: rgba(245, 158, 11, 0.15); color: var(--badge-amber); border: 1px solid rgba(245, 158, 11, 0.3); }
-        .status-approved { background: rgba(0, 230, 118, 0.15); color: var(--badge-green); border: 1px solid rgba(0, 230, 118, 0.3); }
-        .status-rejected { background: rgba(239, 68, 68, 0.15); color: var(--danger-red); border: 1px solid rgba(239, 68, 68, 0.3); }
+        .status-pending { background: rgba(245, 158, 11, 0.2); color: var(--warning-orange); }
+        .status-approved { background: rgba(16, 185, 129, 0.2); color: var(--success-green); }
+        .status-rejected { background: rgba(239, 68, 68, 0.2); color: var(--danger-red); }
 
         .config-details {
-            background-color: var(--card-inner);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 12px;
-            font-size: 12px;
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
             display: flex;
             flex-direction: column;
             gap: 6px;
@@ -262,133 +238,119 @@
         .config-row {
             display: flex;
             justify-content: space-between;
-            color: var(--text-muted);
-        }
-
-        .config-row strong {
-            color: #ffffff;
         }
 
         .shifts-summary {
-            margin-top: 4px;
-            padding-top: 6px;
-            border-top: 1px solid var(--card-border);
+            margin-top: 6px;
         }
 
         .shift-tag {
             display: inline-block;
-            background: #1c2b3d;
-            border: 1px solid var(--card-border);
-            color: #93c5fd;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            margin: 2px;
+            background: #334155;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 4px;
+            margin-top: 4px;
         }
 
         .card-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 4px;
+            gap: 8px;
+            margin-top: 14px;
         }
 
         .btn-action {
             flex: 1;
-            padding: 10px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 13px;
+            padding: 8px;
             border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
             cursor: pointer;
-            transition: opacity 0.2s;
         }
 
-        .btn-approve {
-            background-color: var(--primary-blue);
-            color: #ffffff;
-        }
+        .btn-approve { background: var(--success-green); color: #fff; }
+        .btn-reject { background: var(--danger-red); color: #fff; }
 
-        .btn-approve:hover {
-            background-color: var(--primary-blue-hover);
-        }
-
-        .btn-reject {
-            background-color: #1a1e29;
-            color: var(--danger-red);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .btn-reject:hover {
-            background-color: rgba(239, 68, 68, 0.1);
+        .restricted-notice {
+            margin-top: 12px;
+            padding: 8px;
+            background: rgba(148, 163, 184, 0.1);
+            border: 1px dashed var(--border-color);
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
 
         .empty-state {
             text-align: center;
-            padding: 40px 16px;
+            padding: 40px 20px;
             color: var(--text-muted);
-            font-size: 13px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 18px;
         }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <div class="brand-showcase">
-        <div class="brand-logo-container">
-            <div class="logo-icon-box">
-                <img src="SiftGrid logo.png" alt="ShiftGrid Logo" onerror="this.style.display='none'">
+    <!-- Access Lock Screen -->
+    <div id="lockScreen" class="auth-overlay">
+        <div class="auth-card">
+            <h2 id="lockTitle">🔒 Restricted Access</h2>
+            <p id="lockMessage">Checking credentials and administrator privileges...</p>
+        </div>
+    </div>
+
+    <!-- Main Admin Panel -->
+    <div id="adminPanel" class="container hidden">
+        <div class="header">
+            <div>
+                <h1>Admin Portal</h1>
+                <p>Manage staff requests & user permissions</p>
             </div>
-            <div class="brand-text">
-                <span class="brand-name">ShiftGrid Admin</span>
-                <span class="brand-tagline">APPROVAL & ACCESS MANAGEMENT</span>
+            <div class="user-badge">
+                <span id="userRoleBadge" class="role-tag">STAFF</span>
+                <button class="btn-logout" onclick="handleLogout()">Sign Out</button>
             </div>
         </div>
-        <div class="header-status-pill">
-            <span class="pulse-dot"></span>
-            <span id="liveStatus">Live Sync</span>
-        </div>
-    </div>
 
-    <!-- Metrics Bar -->
-    <div class="metrics-grid">
-        <div class="metric-card">
-            <div class="metric-value" id="valPending" style="color: var(--badge-amber);">0</div>
-            <div class="metric-label">Pending</div>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div style="color: var(--warning-orange); font-size: 0.8rem;">Pending</div>
+                <div class="val" id="valPending">0</div>
+            </div>
+            <div class="metric-card">
+                <div style="color: var(--success-green); font-size: 0.8rem;">Approved</div>
+                <div class="val" id="valApproved">0</div>
+            </div>
+            <div class="metric-card">
+                <div style="color: var(--accent-blue); font-size: 0.8rem;">Total</div>
+                <div class="val" id="valTotal">0</div>
+            </div>
         </div>
-        <div class="metric-card">
-            <div class="metric-value" id="valApproved" style="color: var(--badge-green);">0</div>
-            <div class="metric-label">Approved</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-value" id="valTotal">0</div>
-            <div class="metric-label">Total Tickets</div>
-        </div>
-    </div>
 
-    <!-- Controls -->
-    <div class="controls-bar">
-        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search employee name or email..." oninput="renderRequests()">
-        <div class="tabs-container">
-            <button class="tab-btn active" onclick="setTab('pending', this)">Pending</button>
-            <button class="tab-btn" onclick="setTab('approved', this)">Approved</button>
-            <button class="tab-btn" onclick="setTab('rejected', this)">Rejected</button>
-            <button class="tab-btn" onclick="setTab('all', this)">All</button>
+        <div class="controls">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by email or UID...">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="setTab('pending', this)">Pending</button>
+                <button class="tab-btn" onclick="setTab('approved', this)">Approved</button>
+                <button class="tab-btn" onclick="setTab('rejected', this)">Rejected</button>
+                <button class="tab-btn" onclick="setTab('all', this)">All Requests</button>
+            </div>
         </div>
-    </div>
 
-    <!-- Requests Container -->
-    <div class="requests-list" id="requestsContainer">
-        <div class="empty-state">Loading approval requests...</div>
+        <div id="requestsContainer" class="requests-list">
+            <div class="empty-state">Loading user requests...</div>
+        </div>
     </div>
 
     <!-- Firebase SDK Modules -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, doc, onSnapshot, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, doc, getDoc, onSnapshot, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyA93AnibNs8iaNwYuy1tJglGXXqeY6p2oo",
@@ -404,25 +366,102 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // Super Admin Whitelist
+        const ALLOWED_EMAILS = [
+            "tharaka1998.me@gmail.com"
+        ];
+
         let allRequests = [];
         let currentTab = 'pending';
+        let unsubscribeRequests = null;
+        let isSuperAdminOrAdmin = false; // Tracks if logged-in user is Admin vs Manager
 
-        // Listen for real-time changes in the 'requests' collection
-        onSnapshot(collection(db, "requests"), (snapshot) => {
-            allRequests = [];
-            snapshot.forEach((docSnap) => {
-                allRequests.push({ id: docSnap.id, ...docSnap.data() });
-            });
-            updateMetrics();
-            renderRequests();
-        }, (error) => {
-            console.error("Firestore error:", error);
-            document.getElementById('requestsContainer').innerHTML = `<div class="empty-state" style="color: var(--danger-red);">Error loading requests. Ensure admin permissions are configured.</div>`;
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        // Authenticate & Verify Permissions
+        onAuthStateChanged(auth, async (user) => {
+            const lockScreen = document.getElementById('lockScreen');
+            const adminPanel = document.getElementById('adminPanel');
+            const lockTitle = document.getElementById('lockTitle');
+            const lockMessage = document.getElementById('lockMessage');
+
+            if (!user) {
+                if (unsubscribeRequests) unsubscribeRequests();
+                adminPanel.classList.add('hidden');
+                lockScreen.classList.remove('hidden');
+                lockTitle.innerText = "🔒 Authentication Required";
+                lockMessage.innerText = "Please log in to your account to access the admin portal.";
+                return;
+            }
+
+            try {
+                const userEmail = (user.email || '').toLowerCase().trim();
+                const isWhitelisted = ALLOWED_EMAILS.map(e => e.toLowerCase().trim()).includes(userEmail);
+
+                let userRole = 'USER';
+                const userDocRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userDocRef);
+
+                if (userSnap.exists()) {
+                    userRole = (userSnap.data().role || '').toUpperCase();
+                }
+
+                // Check Admin privileges vs Manager privileges
+                isSuperAdminOrAdmin = isWhitelisted || userRole === 'ADMIN';
+                const isManager = userRole === 'MANAGER';
+
+                if (isSuperAdminOrAdmin || isManager) {
+                    // Access Granted
+                    lockScreen.classList.add('hidden');
+                    adminPanel.classList.remove('hidden');
+                    
+                    const badgeText = isSuperAdminOrAdmin ? (isWhitelisted ? 'SUPER ADMIN' : 'ADMIN') : 'MANAGER';
+                    document.getElementById('userRoleBadge').innerText = badgeText;
+
+                    initRealtimeRequests();
+                } else {
+                    // Access Denied
+                    if (unsubscribeRequests) unsubscribeRequests();
+                    adminPanel.classList.add('hidden');
+                    lockScreen.classList.remove('hidden');
+                    lockTitle.innerText = "🚫 Access Restricted";
+                    lockMessage.innerText = `Account logged in as (${user.email}), but does not have Manager or Admin permissions.`;
+                }
+            } catch (err) {
+                console.error("Authorization check error:", err);
+                adminPanel.classList.add('hidden');
+                lockScreen.classList.remove('hidden');
+                lockTitle.innerText = "⚠️ Permission Error";
+                lockMessage.innerText = "Error verifying user access permissions.";
+            }
         });
+
+        function initRealtimeRequests() {
+            if (unsubscribeRequests) unsubscribeRequests();
+
+            unsubscribeRequests = onSnapshot(collection(db, "requests"), (snapshot) => {
+                allRequests = [];
+                snapshot.forEach((docSnap) => {
+                    allRequests.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                updateMetrics();
+                renderRequests();
+            }, (error) => {
+                console.error("Firestore error loading requests:", error);
+                const container = document.getElementById('requestsContainer');
+                if (container) {
+                    container.innerHTML = `<div class="empty-state" style="color: var(--danger-red);">Error loading requests. Check Firestore security rules.</div>`;
+                }
+            });
+        }
 
         function updateMetrics() {
             const pending = allRequests.filter(r => (r.status || 'pending') === 'pending').length;
             const approved = allRequests.filter(r => r.status === 'approved').length;
+            
             document.getElementById('valPending').innerText = pending;
             document.getElementById('valApproved').innerText = approved;
             document.getElementById('valTotal').innerText = allRequests.length;
@@ -431,138 +470,126 @@
         window.setTab = function(tabName, element) {
             currentTab = tabName;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            element.classList.add('active');
+            if (element) element.classList.add('active');
             renderRequests();
         };
 
         window.renderRequests = function() {
+            const searchTerm = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
             const container = document.getElementById('requestsContainer');
-            const search = (document.getElementById('searchInput').value || '').toLowerCase();
-
-            let filtered = allRequests.filter(r => {
-                const statusMatches = (currentTab === 'all') || (r.status || 'pending') === currentTab;
-                const nameMatches = (r.userName || '').toLowerCase().includes(search) || (r.userEmail || '').toLowerCase().includes(search);
-                return statusMatches && nameMatches;
+            if (!container) return;
+            
+            let filtered = allRequests.filter(req => {
+                const matchesTab = currentTab === 'all' || (req.status || 'pending') === currentTab;
+                const matchesSearch = !searchTerm || 
+                    (req.email && req.email.toLowerCase().includes(searchTerm)) ||
+                    (req.uid && req.uid.toLowerCase().includes(searchTerm));
+                return matchesTab && matchesSearch;
             });
 
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="empty-state">No ${currentTab} requests found matching your search.</div>`;
+                container.innerHTML = `<div class="empty-state">No ${currentTab !== 'all' ? currentTab : ''} requests found.</div>`;
                 return;
             }
 
-            container.innerHTML = '';
-            filtered.forEach(req => {
+            container.innerHTML = filtered.map(req => {
                 const status = req.status || 'pending';
-                const statusClass = status === 'approved' ? 'status-approved' : (status === 'rejected' ? 'status-rejected' : 'status-pending');
-                const userDisplayName = req.userName || req.userEmail || 'Unknown User';
-                const userId = req.userId || req.uid || req.id;
+                const statusClass = `status-${status}`;
+                const shifts = Array.isArray(req.shifts) ? req.shifts : [];
+                
+                const email = escapeHtml(req.email || 'Unknown User');
+                const uid = escapeHtml(req.uid || req.id);
+                const requestType = req.requestType || 'template_access';
+                const roleContext = escapeHtml(req.roleContext || req.requestedRole || 'Employee');
 
-                let shiftsHtml = '';
-                if (req.shifts && req.shifts.length > 0) {
-                    shiftsHtml = req.shifts.map(s => `<span class="shift-tag">${s.name} (LKR ${(s.rate || 0).toLocaleString()})</span>`).join('');
-                } else {
-                    shiftsHtml = '<span style="color: var(--text-muted);">Standard Default Templates</span>';
-                }
+                // Check if current user can manage this specific request type
+                const isManagerRequest = requestType === 'manager_role';
+                const canManageThisRequest = isSuperAdminOrAdmin || (!isManagerRequest && requestType === 'template_access');
 
-                const payCycleType = req.payCycleConfig ? req.payCycleConfig.type : 'Mid-Month Cycle';
-
-                container.innerHTML += `
-                    <div class="request-card">
+                return `
+                    <div class="request-card" id="req-${escapeHtml(req.id)}">
                         <div class="card-header">
                             <div class="user-info">
-                                <h3>${userDisplayName}</h3>
-                                <p>${req.userEmail || 'No Email Registered'}</p>
+                                <h3>${email}</h3>
+                                <p>UID: ${uid} • Type: ${escapeHtml(requestType)}</p>
                             </div>
-                            <span class="status-badge ${statusClass}">${status}</span>
+                            <span class="status-badge ${statusClass}">${escapeHtml(status)}</span>
                         </div>
-
                         <div class="config-details">
                             <div class="config-row">
-                                <span>Requested Role:</span>
-                                <strong>${req.requestedRole || 'EMPLOYEE'}</strong>
+                                <span>Requested Role / Context:</span>
+                                <strong>${roleContext}</strong>
                             </div>
-                            <div class="config-row">
-                                <span>Pay Cycle Model:</span>
-                                <strong>${payCycleType}</strong>
-                            </div>
-                            <div class="shifts-summary">
-                                <div style="margin-bottom: 4px; color: var(--text-muted);">Shift Presets Configured:</div>
-                                ${shiftsHtml}
-                            </div>
+                            ${shifts.length > 0 ? `
+                                <div class="shifts-summary">
+                                    <div style="color: var(--text-muted); font-size:0.75rem; margin-bottom:4px;">Configured Shift Presets:</div>
+                                    ${shifts.map(s => `<span class="shift-tag">${escapeHtml(s.name)} (${escapeHtml(s.rate)} LKR)</span>`).join('')}
+                                </div>
+                            ` : ''}
                         </div>
-
-                        ${status === 'pending' ? `
-                            <div class="card-actions">
-                                <button class="btn-action btn-approve" onclick="approveRequest('${req.id}', '${userId}')">✓ Approve & Unlock</button>
-                                <button class="btn-action btn-reject" onclick="rejectRequest('${req.id}', '${userId}')">✕ Reject</button>
-                            </div>
-                        ` : ''}
+                        ${status === 'pending' ? (
+                            canManageThisRequest ? `
+                                <div class="card-actions">
+                                    <button class="btn-action btn-approve" onclick="updateRequestStatus('${escapeHtml(req.id)}', '${escapeHtml(req.uid || '')}', 'approved', '${escapeHtml(requestType)}')">Approve</button>
+                                    <button class="btn-action btn-reject" onclick="updateRequestStatus('${escapeHtml(req.id)}', '${escapeHtml(req.uid || '')}', 'rejected', '${escapeHtml(requestType)}')">Reject</button>
+                                </div>
+                            ` : `
+                                <div class="restricted-notice">
+                                    🔒 Manager Role requests can only be approved by Admin
+                                </div>
+                            `
+                        ) : ''}
                     </div>
                 `;
-            });
+            }).join('');
         };
 
-        // APPROVAL LOGIC: Updates requests AND unlocks the user's dashboard document
-        window.approveRequest = async function(requestId, userId) {
-            const req = allRequests.find(r => r.id === requestId);
-            if (!req) return;
-
-            const targetUserId = userId || req.userId || req.uid;
-
+        window.updateRequestStatus = async function(requestId, userId, newStatus, requestType) {
             try {
-                // 1. Mark request ticket as approved in 'requests' collection
-                await updateDoc(doc(db, "requests", requestId), {
-                    status: "approved",
-                    approvedAt: new Date().toISOString()
-                });
+                if (!requestId) return;
 
-                // 2. Write approved configurations & set templateRequested: false in 'users' collection to unlock dashboard.html
-                if (targetUserId) {
-                    await setDoc(doc(db, "users", targetUserId), {
-                        templateRequested: false, // 🔓 UNLOCKS dashboard.html
-                        managerRoleRequested: false,
-                        shifts: req.shifts || [],
-                        payCycleConfig: req.payCycleConfig || { type: 'mid-month', payDay: 25 },
-                        role: req.requestedRole || "EMPLOYEE",
-                        updatedAt: new Date().toISOString()
-                    }, { merge: true });
+                // Security Check: Manager cannot approve manager_role requests
+                if (requestType === 'manager_role' && !isSuperAdminOrAdmin) {
+                    alert("Permission Denied: Managers cannot accept or reject Manager Role requests.");
+                    return;
                 }
 
-                alert(`Approved request for ${req.userName || 'User'}. Dashboard access is now unlocked!`);
-            } catch (error) {
-                console.error("Error approving request:", error);
-                alert("Approval failed: " + error.message);
+                // Update ticket status
+                await updateDoc(doc(db, "requests", requestId), {
+                    status: newStatus,
+                    updatedAt: new Date().toISOString()
+                });
+
+                // Update user document permissions if approved
+                if (userId && userId !== 'undefined' && userId !== '') {
+                    const userUpdate = {};
+                    if (requestType === 'manager_role' && newStatus === 'approved') {
+                        userUpdate.role = 'MANAGER';
+                        userUpdate.managerStatus = 'approved';
+                        userUpdate.managerRoleRequested = false;
+                    } else if (requestType === 'template_access' && newStatus === 'approved') {
+                        userUpdate.templateRequested = false;
+                        userUpdate.templateApproved = true;
+                    }
+                    if (Object.keys(userUpdate).length > 0) {
+                        await setDoc(doc(db, "users", userId), userUpdate, { merge: true });
+                    }
+                }
+            } catch (err) {
+                console.error("Error updating request status:", err);
+                alert("Failed to update status: " + err.message);
             }
         };
 
-        // REJECT LOGIC
-        window.rejectRequest = async function(requestId, userId) {
-            const req = allRequests.find(r => r.id === requestId);
-            if (!req) return;
-
-            const targetUserId = userId || req.userId || req.uid;
-
-            if (!confirm(`Are you sure you want to reject the request for ${req.userName || 'User'}?`)) return;
-
+        window.handleLogout = async function() {
             try {
-                await updateDoc(doc(db, "requests", requestId), {
-                    status: "rejected",
-                    rejectedAt: new Date().toISOString()
-                });
-
-                if (targetUserId) {
-                    await setDoc(doc(db, "users", targetUserId), {
-                        templateRequested: false,
-                        managerRoleRequested: false
-                    }, { merge: true });
-                }
-
-                alert(`Request rejected for ${req.userName || 'User'}.`);
-            } catch (error) {
-                console.error("Error rejecting request:", error);
-                alert("Rejection failed: " + error.message);
+                await signOut(auth);
+            } catch (err) {
+                console.error("Logout error:", err);
             }
         };
+
+        document.getElementById('searchInput')?.addEventListener('input', renderRequests);
     </script>
 </body>
 </html>
