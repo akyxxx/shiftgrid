@@ -3,267 +3,564 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShiftGrid - Advanced Admin Panel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>ShiftGrid — Admin Management Panel</title>
+    <style>
+        :root {
+            --bg-dark: #06090e;
+            --card-bg: #0e1622;
+            --card-inner: #141f2e;
+            --card-border: #1a2636;
+            --primary-blue: #2563eb;
+            --primary-blue-hover: #1d4ed8;
+            --text-main: #ffffff;
+            --text-muted: #8b9bb4;
+            --badge-green: #00e676;
+            --badge-amber: #f59e0b;
+            --danger-red: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 50px;
+        }
+
+        /* Brand Header Showcase */
+        .brand-showcase {
+            background: linear-gradient(135deg, #0e1726 0%, #080d16 100%);
+            border: 1px solid #1a293d;
+            border-radius: 20px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .brand-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 12px rgba(37, 99, 235, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            padding: 4px;
+        }
+
+        .logo-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #ffffff, #93c5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-tagline {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .header-status-pill {
+            background: rgba(0, 230, 118, 0.1);
+            border: 1px solid rgba(0, 230, 118, 0.25);
+            color: var(--badge-green);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--badge-green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--badge-green);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        /* Metrics Bar */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Filter Controls */
+        .controls-bar {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            color: #ffffff;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .tabs-container {
+            display: flex;
+            gap: 6px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-blue);
+            color: #ffffff;
+            border-color: var(--primary-blue);
+        }
+
+        /* Request Cards List */
+        .requests-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .request-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .user-info h3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .user-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .status-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+
+        .status-pending { background: rgba(245, 158, 11, 0.15); color: var(--badge-amber); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .status-approved { background: rgba(0, 230, 118, 0.15); color: var(--badge-green); border: 1px solid rgba(0, 230, 118, 0.3); }
+        .status-rejected { background: rgba(239, 68, 68, 0.15); color: var(--danger-red); border: 1px solid rgba(239, 68, 68, 0.3); }
+
+        .config-details {
+            background-color: var(--card-inner);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .config-row {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+        }
+
+        .config-row strong {
+            color: #ffffff;
+        }
+
+        .shifts-summary {
+            margin-top: 4px;
+            padding-top: 6px;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .shift-tag {
+            display: inline-block;
+            background: #1c2b3d;
+            border: 1px solid var(--card-border);
+            color: #93c5fd;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            margin: 2px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-approve {
+            background-color: var(--primary-blue);
+            color: #ffffff;
+        }
+
+        .btn-approve:hover {
+            background-color: var(--primary-blue-hover);
+        }
+
+        .btn-reject {
+            background-color: #1a1e29;
+            color: var(--danger-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-reject:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 16px;
+            color: var(--text-muted);
+            font-size: 13px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+<body>
 
-    <!-- Navbar -->
-    <header class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex justify-between items-center shadow-md">
-        <div class="flex items-center space-x-3">
-            <h1 class="text-xl font-bold tracking-wide text-indigo-400">ShiftGrid Admin</h1>
-            <span class="text-xs bg-indigo-900 text-indigo-200 px-2.5 py-1 rounded-full font-medium">Secure Portal</span>
-        </div>
-        <div id="admin-info" class="hidden flex items-center space-x-4">
-            <span id="admin-email" class="text-sm text-gray-300"></span>
-            <button id="logout-btn" class="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1.5 rounded transition">Logout</button>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-6">
-        
-        <!-- Login Gate (Hidden if authorized) -->
-        <div id="auth-gate" class="max-w-md mx-auto mt-20 bg-gray-800 p-8 rounded-xl border border-gray-700 shadow-xl text-center">
-            <h2 class="text-2xl font-bold mb-3 text-white">Admin Authentication</h2>
-            <p class="text-sm text-gray-400 mb-6">Please log in with the authorized administrator credentials to proceed.</p>
-            <button id="google-login-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition flex items-center justify-center space-x-2">
-                <span>Sign in with Google</span>
-            </button>
-            <p id="auth-error" class="text-red-400 text-xs mt-4 hidden"></p>
-        </div>
-
-        <!-- Dashboard Content -->
-        <div id="dashboard" class="hidden space-y-8">
-            
-            <!-- Metrics / Summary Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow">
-                    <p class="text-sm text-gray-400">Pending Requests</p>
-                    <p id="stat-pending" class="text-3xl font-bold text-amber-400 mt-1">0</p>
-                </div>
-                <div class="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow">
-                    <p class="text-sm text-gray-400">Approved Total</p>
-                    <p id="stat-approved" class="text-3xl font-bold text-emerald-400 mt-1">0</p>
-                </div>
-                <div class="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow">
-                    <p class="text-sm text-gray-400">Rejected Total</p>
-                    <p id="stat-rejected" class="text-3xl font-bold text-rose-400 mt-1">0</p>
-                </div>
+    <!-- Header -->
+    <div class="brand-showcase">
+        <div class="brand-logo-container">
+            <div class="logo-icon-box">
+                <img src="SiftGrid logo.png" alt="ShiftGrid Logo" onerror="this.style.display='none'">
             </div>
-
-            <!-- Controls: Search & Tabs -->
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-gray-800 p-4 rounded-xl border border-gray-700">
-                <!-- Status Tabs -->
-                <div class="flex space-x-2 bg-gray-900 p-1 rounded-lg border border-gray-700 w-full md:w-auto">
-                    <button onclick="setFilter('pending')" id="tab-pending" class="px-4 py-1.5 text-xs font-semibold rounded-md bg-indigo-600 text-white transition">Pending</button>
-                    <button onclick="setFilter('approved')" id="tab-approved" class="px-4 py-1.5 text-xs font-semibold rounded-md text-gray-400 hover:text-white transition">Approved</button>
-                    <button onclick="setFilter('rejected')" id="tab-rejected" class="px-4 py-1.5 text-xs font-semibold rounded-md text-gray-400 hover:text-white transition">Rejected</button>
-                    <button onclick="setFilter('all')" id="tab-all" class="px-4 py-1.5 text-xs font-semibold rounded-md text-gray-400 hover:text-white transition">All</button>
-                </div>
-                <!-- Search Bar -->
-                <div class="w-full md:w-72">
-                    <input type="text" id="search-input" placeholder="Search by email or type..." class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-gray-200 focus:outline-none focus:border-indigo-500">
-                </div>
+            <div class="brand-text">
+                <span class="brand-name">ShiftGrid Admin</span>
+                <span class="brand-tagline">APPROVAL & ACCESS MANAGEMENT</span>
             </div>
-
-            <!-- Requests Table Container -->
-            <div class="bg-gray-800 border border-gray-700 rounded-xl shadow-lg overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
-                    <h3 class="font-semibold text-lg text-white">Management Requests</h3>
-                    <span id="request-count" class="text-xs text-gray-400">Showing 0 entries</span>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-gray-900/50 text-gray-400 text-xs uppercase tracking-wider border-b border-gray-700">
-                                <th class="py-3 px-6">User Email</th>
-                                <th class="py-3 px-6">Request Type</th>
-                                <th class="py-3 px-6">Details</th>
-                                <th class="py-3 px-6">Status</th>
-                                <th class="py-3 px-6 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="requests-table-body" class="divide-y divide-gray-700 text-sm">
-                            <!-- Populated Dynamically via JS -->
-                        </tbody>
-                    </table>
-                </div>
-                <div id="no-requests" class="hidden py-12 text-center text-gray-500 text-sm">
-                    No requests found matching the current filter.
-                </div>
-            </div>
-
         </div>
-    </main>
+        <div class="header-status-pill">
+            <span class="pulse-dot"></span>
+            <span id="liveStatus">Live Sync</span>
+        </div>
+    </div>
 
-    <!-- Firebase SDK Imports & Logic -->
+    <!-- Metrics Bar -->
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-value" id="valPending" style="color: var(--badge-amber);">0</div>
+            <div class="metric-label">Pending</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value" id="valApproved" style="color: var(--badge-green);">0</div>
+            <div class="metric-label">Approved</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value" id="valTotal">0</div>
+            <div class="metric-label">Total Tickets</div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-bar">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search employee name or email..." oninput="renderRequests()">
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="setTab('pending', this)">Pending</button>
+            <button class="tab-btn" onclick="setTab('approved', this)">Approved</button>
+            <button class="tab-btn" onclick="setTab('rejected', this)">Rejected</button>
+            <button class="tab-btn" onclick="setTab('all', this)">All</button>
+        </div>
+    </div>
+
+    <!-- Requests Container -->
+    <div class="requests-list" id="requestsContainer">
+        <div class="empty-state">Loading approval requests...</div>
+    </div>
+
+    <!-- Firebase SDK Modules -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, doc, onSnapshot, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Integrated shift-salary-tracker Firebase Credentials
         const firebaseConfig = {
-            apiKey: "AIzaSyA93AnibNs8iaNwYuy1tJglGXXqeY6p2oo",
-            authDomain: "shift-salary-tracker.firebaseapp.com",
-            projectId: "shift-salary-tracker",
-            storageBucket: "shift-salary-tracker.firebasestorage.app",
-            messagingSenderId: "719444723616",
-            appId: "1:719444723616:web:56b421b3d8d49f6b8946c5",
-            measurementId: "G-V8V657F1S0"
+          apiKey: "AIzaSyA93AnibNs8iaNwYuy1tJglGXXqeY6p2oo",
+          authDomain: "shift-salary-tracker.firebaseapp.com",
+          projectId: "shift-salary-tracker",
+          storageBucket: "shift-salary-tracker.firebasestorage.app",
+          messagingSenderId: "719444723616",
+          appId: "1:719444723616:web:56b421b3d8d49f6b8946c5",
+          measurementId: "G-V8V657F1S0"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const ALLOWED_ADMIN = "tharaka1998.me@gmail.com";
 
         let allRequests = [];
-        let currentFilter = 'pending';
-        let searchQuery = '';
+        let currentTab = 'pending';
 
-        // DOM Elements
-        const authGate = document.getElementById('auth-gate');
-        const dashboard = document.getElementById('dashboard');
-        const adminInfo = document.getElementById('admin-info');
-        const adminEmailSpan = document.getElementById('admin-email');
-        const authError = document.getElementById('auth-error');
-        const requestsTableBody = document.getElementById('requests-table-body');
-        const noRequests = document.getElementById('no-requests');
-        const searchInput = document.getElementById('search-input');
-
-        // Auth State Listener
-        onAuthStateChanged(auth, async (user) => {
-            if (user && user.email === ALLOWED_ADMIN) {
-                authGate.classList.add('hidden');
-                dashboard.classList.remove('hidden');
-                adminInfo.classList.remove('hidden');
-                adminEmailSpan.textContent = user.email;
-                loadRequests();
-            } else if (user) {
-                await signOut(auth);
-                authError.textContent = "Access denied: Unauthorized account.";
-                authError.classList.remove('hidden');
-            } else {
-                dashboard.classList.add('hidden');
-                adminInfo.classList.add('hidden');
-                authGate.classList.remove('hidden');
-            }
+        // Listen for real-time changes in the 'requests' collection
+        onSnapshot(collection(db, "requests"), (snapshot) => {
+            allRequests = [];
+            snapshot.forEach((docSnap) => {
+                allRequests.push({ id: docSnap.id, ...docSnap.data() });
+            });
+            updateMetrics();
+            renderRequests();
+        }, (error) => {
+            console.error("Firestore error:", error);
+            document.getElementById('requestsContainer').innerHTML = `<div class="empty-state" style="color: var(--danger-red);">Error loading requests. Ensure admin permissions are configured.</div>`;
         });
 
-        document.getElementById('google-login-btn').addEventListener('click', async () => {
-            try {
-                const provider = new GoogleAuthProvider();
-                await signInWithPopup(auth, provider);
-            } catch (error) {
-                authError.textContent = error.message;
-                authError.classList.remove('hidden');
-            }
-        });
-
-        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
-
-        // Load Requests from Firestore
-        window.loadRequests = async function() {
-            try {
-                const querySnapshot = await getDocs(collection(db, "requests"));
-                allRequests = [];
-                querySnapshot.forEach((docSnap) => {
-                    allRequests.push({ id: docSnap.id, ...docSnap.data() });
-                });
-                updateDashboardMetrics();
-                renderTable();
-            } catch (err) {
-                console.error("Error loading requests:", err);
-            }
-        };
-
-        function updateDashboardMetrics() {
-            const pendingCount = allRequests.filter(r => (!r.status || r.status === 'pending')).length;
-            const approvedCount = allRequests.filter(r => r.status === 'approved').length;
-            const rejectedCount = allRequests.filter(r => r.status === 'rejected').length;
-
-            document.getElementById('stat-pending').textContent = pendingCount;
-            document.getElementById('stat-approved').textContent = approvedCount;
-            document.getElementById('stat-rejected').textContent = rejectedCount;
+        function updateMetrics() {
+            const pending = allRequests.filter(r => (r.status || 'pending') === 'pending').length;
+            const approved = allRequests.filter(r => r.status === 'approved').length;
+            document.getElementById('valPending').innerText = pending;
+            document.getElementById('valApproved').innerText = approved;
+            document.getElementById('valTotal').innerText = allRequests.length;
         }
 
-        window.setFilter = function(filter) {
-            currentFilter = filter;
-            ['pending', 'approved', 'rejected', 'all'].forEach(f => {
-                const btn = document.getElementById(`tab-${f}`);
-                if (f === filter) {
-                    btn.className = "px-4 py-1.5 text-xs font-semibold rounded-md bg-indigo-600 text-white transition";
-                } else {
-                    btn.className = "px-4 py-1.5 text-xs font-semibold rounded-md text-gray-400 hover:text-white transition";
-                }
-            });
-            renderTable();
+        window.setTab = function(tabName, element) {
+            currentTab = tabName;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            renderRequests();
         };
 
-        searchInput.addEventListener('input', (e) => {
-            searchQuery = e.target.value.toLowerCase();
-            renderTable();
-        });
+        window.renderRequests = function() {
+            const container = document.getElementById('requestsContainer');
+            const search = (document.getElementById('searchInput').value || '').toLowerCase();
 
-        function renderTable() {
-            requestsTableBody.innerHTML = '';
-            
-            const filtered = allRequests.filter(r => {
-                const status = r.status || 'pending';
-                if (currentFilter !== 'all' && status !== currentFilter) return false;
-                
-                if (searchQuery) {
-                    const email = (r.userEmail || r.email || '').toLowerCase();
-                    const type = (r.type || r.requestType || '').toLowerCase();
-                    return email.includes(searchQuery) || type.includes(searchQuery);
-                }
-                return true;
+            let filtered = allRequests.filter(r => {
+                const statusMatches = (currentTab === 'all') || (r.status || 'pending') === currentTab;
+                const nameMatches = (r.userName || '').toLowerCase().includes(search) || (r.userEmail || '').toLowerCase().includes(search);
+                return statusMatches && nameMatches;
             });
-
-            document.getElementById('request-count').textContent = `Showing ${filtered.length} entries`;
 
             if (filtered.length === 0) {
-                noRequests.classList.remove('hidden');
+                container.innerHTML = `<div class="empty-state">No ${currentTab} requests found matching your search.</div>`;
                 return;
             }
-            noRequests.classList.add('hidden');
 
+            container.innerHTML = '';
             filtered.forEach(req => {
                 const status = req.status || 'pending';
-                let statusBadge = '';
-                if (status === 'approved') statusBadge = '<span class="px-2.5 py-1 text-xs bg-emerald-900/50 text-emerald-400 border border-emerald-700/50 rounded-full font-medium">Approved</span>';
-                else if (status === 'rejected') statusBadge = '<span class="px-2.5 py-1 text-xs bg-rose-900/50 text-rose-400 border border-rose-700/50 rounded-full font-medium">Rejected</span>';
-                else statusBadge = '<span class="px-2.5 py-1 text-xs bg-amber-900/50 text-amber-400 border border-amber-700/50 rounded-full font-medium">Pending</span>';
+                const statusClass = status === 'approved' ? 'status-approved' : (status === 'rejected' ? 'status-rejected' : 'status-pending');
+                const userDisplayName = req.userName || req.userEmail || 'Unknown User';
+                const userId = req.userId || req.uid || req.id;
 
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-750 transition";
-                tr.innerHTML = `
-                    <td class="py-3.5 px-6 font-medium text-white">${req.userEmail || req.email || 'N/A'}</td>
-                    <td class="py-3.5 px-6 text-gray-300">${req.type || req.requestType || 'Custom Shift / Role'}</td>
-                    <td class="py-3.5 px-6 text-gray-400 text-xs truncate max-w-xs">${JSON.stringify(req.data || req.details || {})}</td>
-                    <td class="py-3.5 px-6">${statusBadge}</td>
-                    <td class="py-3.5 px-6 text-right space-x-2">
-                        ${status !== 'approved' ? `<button onclick="updateStatus('${req.id}', 'approved')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded font-medium transition">Approve</button>` : ''}
-                        ${status !== 'rejected' ? `<button onclick="updateStatus('${req.id}', 'rejected')" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-3 py-1.5 rounded font-medium transition">Deny</button>` : ''}
-                    </td>
+                let shiftsHtml = '';
+                if (req.shifts && req.shifts.length > 0) {
+                    shiftsHtml = req.shifts.map(s => `<span class="shift-tag">${s.name} (LKR ${(s.rate || 0).toLocaleString()})</span>`).join('');
+                } else {
+                    shiftsHtml = '<span style="color: var(--text-muted);">Standard Default Templates</span>';
+                }
+
+                const payCycleType = req.payCycleConfig ? req.payCycleConfig.type : 'Mid-Month Cycle';
+
+                container.innerHTML += `
+                    <div class="request-card">
+                        <div class="card-header">
+                            <div class="user-info">
+                                <h3>${userDisplayName}</h3>
+                                <p>${req.userEmail || 'No Email Registered'}</p>
+                            </div>
+                            <span class="status-badge ${statusClass}">${status}</span>
+                        </div>
+
+                        <div class="config-details">
+                            <div class="config-row">
+                                <span>Requested Role:</span>
+                                <strong>${req.requestedRole || 'EMPLOYEE'}</strong>
+                            </div>
+                            <div class="config-row">
+                                <span>Pay Cycle Model:</span>
+                                <strong>${payCycleType}</strong>
+                            </div>
+                            <div class="shifts-summary">
+                                <div style="margin-bottom: 4px; color: var(--text-muted);">Shift Presets Configured:</div>
+                                ${shiftsHtml}
+                            </div>
+                        </div>
+
+                        ${status === 'pending' ? `
+                            <div class="card-actions">
+                                <button class="btn-action btn-approve" onclick="approveRequest('${req.id}', '${userId}')">✓ Approve & Unlock</button>
+                                <button class="btn-action btn-reject" onclick="rejectRequest('${req.id}', '${userId}')">✕ Reject</button>
+                            </div>
+                        ` : ''}
+                    </div>
                 `;
-                requestsTableBody.appendChild(tr);
             });
-        }
+        };
 
-        window.updateStatus = async function(id, newStatus) {
+        // APPROVAL LOGIC: Updates requests AND unlocks the user's dashboard document
+        window.approveRequest = async function(requestId, userId) {
+            const req = allRequests.find(r => r.id === requestId);
+            if (!req) return;
+
+            const targetUserId = userId || req.userId || req.uid;
+
             try {
-                const docRef = doc(db, "requests", id);
-                await updateDoc(docRef, { 
-                    status: newStatus,
-                    reviewedAt: serverTimestamp(),
-                    reviewedBy: auth.currentUser.email
+                // 1. Mark request ticket as approved in 'requests' collection
+                await updateDoc(doc(db, "requests", requestId), {
+                    status: "approved",
+                    approvedAt: new Date().toISOString()
                 });
-                loadRequests();
-            } catch (err) {
-                alert("Failed to update status: " + err.message);
+
+                // 2. Write approved configurations & set templateRequested: false in 'users' collection to unlock dashboard.html
+                if (targetUserId) {
+                    await setDoc(doc(db, "users", targetUserId), {
+                        templateRequested: false, // 🔓 UNLOCKS dashboard.html
+                        managerRoleRequested: false,
+                        shifts: req.shifts || [],
+                        payCycleConfig: req.payCycleConfig || { type: 'mid-month', payDay: 25 },
+                        role: req.requestedRole || "EMPLOYEE",
+                        updatedAt: new Date().toISOString()
+                    }, { merge: true });
+                }
+
+                alert(`Approved request for ${req.userName || 'User'}. Dashboard access is now unlocked!`);
+            } catch (error) {
+                console.error("Error approving request:", error);
+                alert("Approval failed: " + error.message);
+            }
+        };
+
+        // REJECT LOGIC
+        window.rejectRequest = async function(requestId, userId) {
+            const req = allRequests.find(r => r.id === requestId);
+            if (!req) return;
+
+            const targetUserId = userId || req.userId || req.uid;
+
+            if (!confirm(`Are you sure you want to reject the request for ${req.userName || 'User'}?`)) return;
+
+            try {
+                await updateDoc(doc(db, "requests", requestId), {
+                    status: "rejected",
+                    rejectedAt: new Date().toISOString()
+                });
+
+                if (targetUserId) {
+                    await setDoc(doc(db, "users", targetUserId), {
+                        templateRequested: false,
+                        managerRoleRequested: false
+                    }, { merge: true });
+                }
+
+                alert(`Request rejected for ${req.userName || 'User'}.`);
+            } catch (error) {
+                console.error("Error rejecting request:", error);
+                alert("Rejection failed: " + error.message);
             }
         };
     </script>
