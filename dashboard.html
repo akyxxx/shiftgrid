@@ -909,10 +909,10 @@
             <div class="profile-info">
                 <div id="profileAvatarDisplay" class="avatar-img">--</div>
                 <div class="user-details">
-                    <span id="profileNameDisplay" class="user-name">Local User</span>
+                    <span id="profileNameDisplay" class="user-name">Loading Account...</span>
                     <div class="user-meta">
                         <span id="profileRoleBadge" class="role-badge">EMPLOYEE</span>
-                        <span id="profileEmailDisplay" class="user-email">tharaka1998.me@gmail.com</span>
+                        <span id="profileEmailDisplay" class="user-email">loading...</span>
                     </div>
                 </div>
             </div>
@@ -1072,7 +1072,7 @@
 
             <div class="form-group">
                 <label>Display Name</label>
-                <input type="text" id="inputDisplayName" class="form-input" value="Tharaka Sandaruwan">
+                <input type="text" id="inputDisplayName" class="form-input" value="">
             </div>
 
             <button class="btn-primary-block" onclick="saveProfileChanges()">Save Profile Changes</button>
@@ -1081,7 +1081,7 @@
             <div style="margin-top: 20px; margin-bottom: 16px; padding-top: 16px; border-top: 1px solid var(--card-border); display: flex; flex-direction: column; gap: 12px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
                     <span style="color: var(--text-muted); font-weight: 600;">Account Email</span>
-                    <span id="settingsAccountEmail" style="color: #ffffff; font-weight: 700;">tharaka1998.me@gmail.com</span>
+                    <span id="settingsAccountEmail" style="color: #ffffff; font-weight: 700;">loading...</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
                     <span style="color: var(--text-muted); font-weight: 600;">Account Status</span>
@@ -1140,6 +1140,9 @@
 
         window.configuredShifts = JSON.parse(localStorage.getItem('shiftgrid_shifts')) || defaultSSShifts;
         window.userPayCycleConfig = JSON.parse(localStorage.getItem('shiftgrid_paycycle')) || { type: 'mid-month', payDay: 25 };
+        window.managerRoleRequested = localStorage.getItem('shiftgrid_managerRequested') === 'true';
+        window.templateRequested = localStorage.getItem('shiftgrid_templateRequested') === 'true';
+        window.isUserApproved = false; // Tracks admin approval state for inline lock display
 
         let selectedLogDate = new Date();
         let calViewDate = new Date(selectedLogDate.getTime());
@@ -1155,8 +1158,8 @@
         }
 
         function updateAccountUI(name, email, photoUrl, role) {
-            const displayName = name || localStorage.getItem('shiftgrid_displayname') || 'Tharaka Sandaruwan';
-            const userEmail = email || 'tharaka1998.me@gmail.com';
+            const displayName = name || localStorage.getItem('shiftgrid_displayname') || 'User';
+            const userEmail = email || '';
             
             const nameEl = document.getElementById('profileNameDisplay');
             if (nameEl) nameEl.innerText = displayName;
@@ -1171,7 +1174,17 @@
             if (settingsEmailEl) settingsEmailEl.innerText = userEmail;
 
             const badgeEl = document.getElementById('profileRoleBadge');
-            if (badgeEl) badgeEl.innerText = role || "EMPLOYEE";
+            if (badgeEl) {
+                if (window.managerRoleRequested) {
+                    badgeEl.innerText = "PENDING MANAGER";
+                    badgeEl.style.backgroundColor = "#854d0e";
+                    badgeEl.style.color = "#fef08a";
+                } else if (role) {
+                    badgeEl.innerText = role;
+                    badgeEl.style.backgroundColor = "rgba(37, 99, 235, 0.2)";
+                    badgeEl.style.color = "#93c5fd";
+                }
+            }
 
             const avatarContainer = document.getElementById('profileAvatarDisplay');
             const modalAvatarContainer = document.getElementById('modalAvatarPreview');
@@ -1267,7 +1280,6 @@
             document.getElementById('customAlertModal').classList.remove('active'); 
         }
 
-        // REDIRECT TO SETUP.HTML
         function openReconfigureModal() {
             window.location.href = 'setup.html';
         }
@@ -1276,6 +1288,22 @@
             const container = document.getElementById('availableShiftsContainer');
             if (!container) return;
             container.innerHTML = '';
+
+            // If not yet approved by admin, render the inline pending card box matching the screenshot
+            if (!window.isUserApproved) {
+                container.innerHTML = `
+                    <div style="background: rgba(13, 21, 34, 0.6); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; text-align: center;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; color: #60a5fa; font-size: 13px; font-weight: 700; margin-bottom: 4px;">
+                            <span>⏳</span>
+                            <span>Official Shift Template Pending Admin Approval</span>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-muted); font-weight: 500;">
+                            Shift options are hidden during the pending review period.
+                        </p>
+                    </div>
+                `;
+                return;
+            }
 
             const shiftsToRender = (window.configuredShifts && window.configuredShifts.length > 0) 
                 ? window.configuredShifts 
@@ -1671,8 +1699,21 @@
                     onSnapshot(userDocRef, (userDoc) => {
                         if (userDoc.exists()) {
                             const data = userDoc.data();
-                            if (data.shifts && Array.isArray(data.shifts)) window.configuredShifts = data.shifts;
-                            if (data.payCycleConfig) window.userPayCycleConfig = data.payCycleConfig;
+                            
+                            // Approval state check
+                            window.isUserApproved = data.approved === true || 
+                                                  data.approved === "true" || 
+                                                  data.status === "approved" || 
+                                                  data.isApproved === true;
+
+                            if (data.shifts && Array.isArray(data.shifts) && data.shifts.length > 0) {
+                                window.configuredShifts = data.shifts;
+                                localStorage.setItem('shiftgrid_shifts', JSON.stringify(data.shifts));
+                            }
+                            if (data.payCycleConfig) {
+                                window.userPayCycleConfig = data.payCycleConfig;
+                                localStorage.setItem('shiftgrid_paycycle', JSON.stringify(data.payCycleConfig));
+                            }
                             if (data.records && Array.isArray(data.records)) {
                                 window.shiftRecords = data.records;
                                 localStorage.setItem('shiftgrid_records', JSON.stringify(data.records));
@@ -1680,6 +1721,14 @@
                             if (data.leaves && Array.isArray(data.leaves)) {
                                 window.leaveRequests = data.leaves;
                                 localStorage.setItem('shiftgrid_leaves', JSON.stringify(data.leaves));
+                            }
+                            if (data.managerRoleRequested !== undefined) {
+                                window.managerRoleRequested = data.managerRoleRequested;
+                                localStorage.setItem('shiftgrid_managerRequested', data.managerRoleRequested);
+                            }
+                            if (data.templateRequested !== undefined) {
+                                window.templateRequested = data.templateRequested;
+                                localStorage.setItem('shiftgrid_templateRequested', data.templateRequested);
                             }
                             if (data.displayName) {
                                 localStorage.setItem('shiftgrid_displayname', data.displayName);
@@ -1691,24 +1740,30 @@
                             updateAccountUI(data.displayName || user.displayName, user.email, data.photoURL || user.photoURL, data.role || "EMPLOYEE");
                             if (window.renderAvailableShifts) window.renderAvailableShifts();
                             if (window.updateCurrentMonthHistoryView) window.updateCurrentMonthHistoryView();
+                        } else {
+                            window.isUserApproved = false;
+                            if (window.renderAvailableShifts) window.renderAvailableShifts();
                         }
+                    }, (err) => {
+                        console.log("Firestore live sync error:", err);
                     });
                 } catch (e) { console.log(e); }
 
                 if (window.renderAvailableShifts) window.renderAvailableShifts();
                 if (window.updateCurrentMonthHistoryView) window.updateCurrentMonthHistoryView();
             } else {
-                document.getElementById('syncStatusText').innerText = "Offline Mode";
+                window.location.href = "index.html";
             }
         });
 
-        // REDIRECT TO INDEX.HTML ON SIGN OUT
         window.handleSignOut = function() {
             signOut(auth).then(() => {
                 localStorage.removeItem('shiftgrid_records');
                 localStorage.removeItem('shiftgrid_leaves');
                 localStorage.removeItem('shiftgrid_avatar');
                 localStorage.removeItem('shiftgrid_displayname');
+                localStorage.removeItem('shiftgrid_managerRequested');
+                localStorage.removeItem('shiftgrid_templateRequested');
                 window.location.href = 'index.html';
             }).catch(() => {
                 localStorage.clear();
