@@ -1492,6 +1492,12 @@
         }
 
         function logShiftById(shiftIndex, amount) {
+            // Block execution if template is not yet approved
+            if (!window.isUserApproved) {
+                showCustomAlert("Shift logging is locked until your template request is approved by an administrator.", "Action Locked", "🔒");
+                return;
+            }
+
             const shiftsSource = (window.configuredShifts && window.configuredShifts.length > 0) ? window.configuredShifts : defaultSSShifts;
             const targetShift = shiftsSource[shiftIndex];
             if (!targetShift) return;
@@ -1711,7 +1717,7 @@
                         if (userDoc.exists()) {
                             const data = userDoc.data();
                             
-                            // Approval state check (Fixed to include templateApproved)
+                            // Robust check across possible database fields for approval status
                             window.isUserApproved = data.templateApproved === true || 
                                                   data.templateApproved === "true" || 
                                                   data.approved === true || 
