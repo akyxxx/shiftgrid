@@ -2,13 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ShiftGrid — Modern Workspace</title>
-        <!-- Google Font: Plus Jakarta Sans -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-              <style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShiftGrid — Modern Workspace</title>
+    <!-- Google Font: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
         :root {
             --bg-dark: #04070d;
             --card-bg: rgba(14, 22, 35, 0.7);
@@ -798,348 +798,348 @@
         .alert-modal-card p { margin-bottom: 20px; font-size: 12px; color: var(--text-muted); }
         .alert-modal-btn { width: 100%; padding: 12px; background: var(--primary-blue); color: #fff; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; }
     </style>
-            </head>
-            <body>
-              <!-- Header Showcase with Side Panel Trigger -->
-              <div class="brand-showcase">
-                <div class="header-left">
-                  <button class="hamburger-btn" onclick="openSidePanel()">
-                    <span>
-                    </span>
-                    <span>
-                    </span>
-                    <span>
-                    </span>
-                  </button>
-                  <div class="brand-logo-container">
-                    <div class="logo-icon-box">
-                      <img src="ShiftGrid logo.png" alt="ShiftGrid" onerror="this.style.display='none'; document.getElementById('fallbackLogoSvg').style.display='block';">
-                        <svg id="fallbackLogoSvg" style="display:none; width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2.5;" viewBox="0 0 24 24">
-                          <rect x="3" y="3" width="7" height="7" rx="1.5"/>
-                          <rect x="14" y="3" width="7" height="7" rx="1.5"/>
-                          <rect x="14" y="14" width="7" height="7" rx="1.5"/>
-                          <rect x="3" y="14" width="7" height="7" rx="1.5"/>
-                        </svg>
-                      </div>
-                      <div class="brand-text">
-                        <span class="brand-name">ShiftGrid</span>
-                        <span class="brand-tagline">WORKSPACE NAV</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="header-status-pill">
-                    <span class="pulse-dot">
-                    </span>
-                    <span id="syncStatusText">Synced</span>
-                  </div>
-                </div>
-                <!-- Side Panel Drawer -->
-                <div class="side-panel-overlay" id="sidePanelOverlay" onclick="closeSidePanel()">
-                </div>
-                <div class="side-panel" id="sidePanel">
-                  <div class="panel-header">
-                    <div class="brand-text">
-                      <span class="brand-name">ShiftGrid Menu</span>
-                      <span class="brand-tagline">WORKSPACE NAVIGATION</span>
-                    </div>
-                    <button class="panel-close-btn" onclick="closeSidePanel()">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 6L6 18M6 6l12 12"/>
-                      </svg>
-                    </button>
-                  </div>
-                  <div class="panel-nav-list">
-                    <div class="nav-item active" id="nav-item-dashboard" onclick="switchView('view-dashboard')">
-                      <div class="nav-icon-box">
-                        <svg viewBox="0 0 24 24">
-                          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                          <polyline points="9 22 9 12 15 12 15 22"/>
-                        </svg>
-                      </div>
-                      <div class="nav-details">
-                        <span class="nav-title">Main Dashboard</span>
-                        <span class="nav-subtitle">Current Month Shift Logs</span>
-                      </div>
-                      <div class="nav-edge-badge">H</div>
-                    </div>
-                    <div class="nav-item" id="nav-item-attendance" onclick="switchView('view-attendance')">
-                      <div class="nav-icon-box">
-                        <svg viewBox="0 0 24 24">
-                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                          <line x1="16" y1="2" x2="16" y2="6"/>
-                          <line x1="8" y1="2" x2="8" y2="6"/>
-                          <line x1="3" y1="10" x2="21" y2="10"/>
-                        </svg>
-                      </div>
-                      <div class="nav-details">
-                        <span class="nav-title">Attendance History</span>
-                        <span class="nav-subtitle">View Past Months' Attendance</span>
-                      </div>
-                      <div class="nav-edge-badge blue">A</div>
-                    </div>
-                    <div class="nav-item" id="nav-item-salary" onclick="switchView('view-salary')">
-                      <div class="nav-icon-box">
-                        <svg viewBox="0 0 24 24">
-                          <line x1="12" y1="1" x2="12" y2="23"/>
-                          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                        </svg>
-                      </div>
-                      <div class="nav-details">
-                        <span class="nav-title">Salary History</span>
-                        <span class="nav-subtitle">Historical Monthly Earnings</span>
-                      </div>
-                      <div class="nav-edge-badge green">$</div>
-                    </div>
-                    <div class="nav-item" id="nav-item-leave" onclick="switchView('view-leave')">
-                      <div class="nav-icon-box">
-                        <svg viewBox="0 0 24 24">
-                          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                        </svg>
-                      </div>
-                      <div class="nav-details">
-                        <span class="nav-title">Leave & OT Manager</span>
-                        <span class="nav-subtitle">Request & Track Overtime</span>
-                      </div>
-                      <div class="nav-edge-badge purple">+</div>
-                    </div>
-                    <div class="nav-item" id="nav-item-settings" onclick="switchView('view-settings')" style="margin-top: auto;">
-                      <div class="nav-icon-box">
-                        <svg viewBox="0 0 24 24">
-                          <circle cx="12" cy="12" r="3"/>
-                          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                        </svg>
-                      </div>
-                      <div class="nav-details">
-                        <span class="nav-title">Settings</span>
-                        <span class="nav-subtitle">Preferences & Profile Setup</span>
-                      </div>
-                      <div class="nav-edge-badge" style="background:#475569; box-shadow:none;">⚙</div>
-                    </div>
-                  </div>
-                </div>
-                <!-- ================= PAGE VIEW 1: MAIN DASHBOARD ================= -->
-                <div class="app-page-view active-view" id="view-dashboard">
-                  <div class="profile-card">
-                    <div class="profile-info">
-                      <div id="profileAvatarDisplay" class="avatar-img">--</div>
-                      <div class="user-details">
-                        <span id="profileNameDisplay" class="user-name">Loading Account...</span>
-                        <div class="user-meta">
-                          <span id="profileRoleBadge" class="role-badge">EMPLOYEE</span>
-                          <span id="profileEmailDisplay" class="user-email">loading...</span>
-                        </div>
-                      </div>
-                    </div>
-                    <button class="hamburger-btn" style="width:36px; height:36px; border-radius:12px;" onclick="switchView('view-settings')">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                      </svg>
-                    </button>
-                  </div>
-                  <div class="pay-cycle-card">
-                    <div class="pay-card-header">
-                      <span id="cycleLabel" class="cycle-title">PAY CYCLE</span>
-                      <span id="payDateBadge" class="pay-badge">Payday Pending</span>
-                    </div>
-                    <div class="pay-card-body">
-                      <div id="cycleEarnings" class="earnings-amount">0 <span class="currency">LKR</span>
-                    </div>
-                  </div>
-                  <div id="pendingPayoutBanner" class="pending-payout-banner" style="display: none;">
-                    <div>
-                      <div class="pending-title">Pending Payout (1st–15th)</div>
-                      <div id="pendingPayDate" class="pending-date">Payday: 25th</div>
-                    </div>
-                    <div id="pendingPayAmount" class="pending-amount">0 LKR</div>
-                  </div>
-                  <div class="pay-card-divider">
-                  </div>
-                  <div class="pay-card-footer">
-                    <div class="meta-item">
-                      <span class="meta-label">Shifts Tracked</span>
-                      <span id="shiftsCount" class="meta-value">0 Shifts</span>
-                    </div>
-                    <div class="meta-item">
-                      <span class="meta-label">Active Cycle Period</span>
-                      <span id="cyclePeriodText" class="meta-value">--/--</span>
-                    </div>
-                  </div>
-                </div>
-                <!-- Dynamic Shift Logging Box -->
-                <div class="section-box">
-                  <div class="section-header">
-                    <h3 class="section-title">Log Shift</h3>
-                    <button class="date-picker-btn" onclick="openCalendarModal()">
-                      📅 <span id="shiftDateDisplay">--/--/----</span>
-                    </button>
-                  </div>
-                  <div class="shift-list" id="availableShiftsContainer">
-                  </div>
-                </div>
-                <!-- Main Dashboard Records -->
-                <div class="section-box">
-                  <div class="section-header">
-                    <h3 class="section-title">Current Month Shift Logs</h3>
-                    <span class="month-lock-badge" id="currentMonthBadge">Loading...</span>
-                  </div>
-                  <div class="history-list" id="recordsContainer">
-                  </div>
-                </div>
-              </div>
-              <!-- ================= PAGE VIEW 2: ATTENDANCE HISTORY ================= -->
-              <div class="app-page-view" id="view-attendance">
-                <div class="page-header-nav">
-                  <button class="btn-back-dash" onclick="switchView('view-dashboard')">← Dashboard</button>
-                  <h2 class="page-header-title">Attendance History</h2>
-                </div>
-                <div class="section-box">
-                  <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-                    <select class="history-select" id="attMonthSelect" onchange="renderPageAttendanceView()" style="flex:1;">
-                      <option value="0">January</option>
-                      <option value="1">February</option>
-                      <option value="2">March</option>
-                      <option value="3">April</option>
-                      <option value="4">May</option>
-                      <option value="5">June</option>
-                      <option value="6">July</option>
-                      <option value="7">August</option>
-                      <option value="8">September</option>
-                      <option value="9">October</option>
-                      <option value="10">November</option>
-                      <option value="11">December</option>
-                    </select>
-                    <select class="history-select" id="attYearSelect" onchange="renderPageAttendanceView()" style="flex:1;">
-                      <option value="2024">2024</option>
-                      <option value="2025">2025</option>
-                      <option value="2026">2026</option>
-                      <option value="2027">2027</option>
-                    </select>
-                  </div>
-                  <div class="history-list" id="pageAttendanceRecords">
-                  </div>
-                </div>
-              </div>
-              <!-- ================= PAGE VIEW 3: SALARY HISTORY ================= -->
-              <div class="app-page-view" id="view-salary">
-                <div class="page-header-nav">
-                  <button class="btn-back-dash" onclick="switchView('view-dashboard')">← Dashboard</button>
-                  <h2 class="page-header-title">Salary Archives</h2>
-                </div>
-                <div class="section-box">
-                  <div class="history-list" id="pageSalaryArchiveList">
-                  </div>
-                </div>
-              </div>
-              <!-- ================= PAGE VIEW 4: LEAVE & OT MANAGER ================= -->
-              <div class="app-page-view" id="view-leave">
-                <div class="page-header-nav">
-                  <button class="btn-back-dash" onclick="switchView('view-dashboard')">← Dashboard</button>
-                  <h2 class="page-header-title">Leave & OT Manager</h2>
-                </div>
-                <div class="section-box">
-                  <h3 style="font-size: 15px; font-weight:800; margin-bottom: 12px;">Log Overtime or Request Leave</h3>
-                  <div class="form-group">
-                    <label>Request Type</label>
-                    <select id="leaveTypeInput" class="form-input">
-                      <option value="OT">Overtime Hours (OT)</option>
-                      <option value="Medical Leave">Medical Leave</option>
-                      <option value="Casual Leave">Casual Leave</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Amount / Hours</label>
-                    <input type="number" id="leaveAmountInput" class="form-input" placeholder="e.g. 2.5 (Hours or Days)" value="1">
-                    </div>
-                    <div class="form-group">
-                      <label>Notes / Reason</label>
-                      <input type="text" id="leaveNoteInput" class="form-input" placeholder="Brief explanation">
-                      </div>
-                      <button class="btn-primary-block" onclick="submitLeaveRequest()">Submit Request</button>
-                    </div>
-                    <div class="section-box">
-                      <h3 class="section-title" style="margin-bottom:12px;">Submitted Requests</h3>
-                      <div class="history-list" id="leaveRequestsLog">
-                        <div class="empty-history">No leave or overtime requests logged yet.</div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- ================= PAGE VIEW 5: SETTINGS ================= -->
-                  <div class="app-page-view" id="view-settings">
-                    <div class="page-header-nav">
-                      <button class="btn-back-dash" onclick="switchView('view-dashboard')">← Dashboard</button>
-                      <h2 class="page-header-title">Settings & Profile</h2>
-                    </div>
-                    <div class="section-box">
-                      <div class="form-group">
-                        <label>Profile Avatar</label>
-                        <div class="photo-upload-row">
-                          <div id="modalAvatarPreview" class="photo-preview">--</div>
-                          <div style="display:flex; flex-direction:column; gap:8px;">
-                            <button class="btn-photo-action" onclick="document.getElementById('avatarFileInput').click()">📷 Upload Custom Image</button>
-                            <button class="btn-photo-action" onclick="removePhoto()">Remove Photo</button>
-                            <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label>Display Name</label>
-                          <input type="text" id="inputDisplayName" class="form-input" value="">
-                          </div>
-                          <button class="btn-primary-block" onclick="saveProfileChanges()">Save Profile Changes</button>
-                          <!-- ACCOUNT DETAILS SECTION -->
-                          <div style="margin-top: 20px; margin-bottom: 16px; padding-top: 16px; border-top: 1px solid var(--card-border); display: flex; flex-direction: column; gap: 12px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
-                              <span style="color: var(--text-muted); font-weight: 600;">Account Email</span>
-                              <span id="settingsAccountEmail" style="color: #ffffff; font-weight: 700;">loading...</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
-                              <span style="color: var(--text-muted); font-weight: 600;">Account Status</span>
-                              <span style="color: var(--badge-green); font-weight: 800; background: rgba(16, 185, 129, 0.1); padding: 3px 8px; border-radius: 6px;">Active Member</span>
-                            </div>
-                          </div>
-                          <!-- RECONFIGURE SHIFT PRESETS & PAY CYCLE BUTTON -->
-                          <button class="btn-modal-link" style="background: rgba(37, 99, 235, 0.1); border-color: rgba(37, 99, 235, 0.3); color: #60a5fa;" onclick="openReconfigureModal()">
-                            ⚙️ Reconfigure Shift Presets & Pay Cycle
-                          </button>
-                          <button class="btn-modal-link" onclick="downloadCSVReport()">📥 Download Attendance Report (.CSV)</button>
-                          <button class="btn-modal-link btn-reset" onclick="resetSavedData()">Reset Saved Shift Data</button>
-                          <button class="btn-modal-link btn-reset" style="margin-top:12px;" onclick="handleSignOut()">🚪 Sign Out</button>
-                        </div>
-                      </div>
-                      <!-- Global Calendar Modal -->
-                      <div class="cal-modal-overlay" id="calendarModal">
-                        <div class="cal-card">
-                          <div class="cal-header">
-                            <button class="cal-nav-btn" onclick="changeCalMonth(-1)">◄</button>
-                            <span class="cal-title" id="calMonthYearTitle">August 2026</span>
-                            <button class="cal-nav-btn" onclick="changeCalMonth(1)">►</button>
-                          </div>
-                          <div class="cal-weekdays">
-                            <span>Su</span>
-                            <span>Mo</span>
-                            <span>Tu</span>
-                            <span>We</span>
-                            <span>Th</span>
-                            <span>Fr</span>
-                            <span>Sa</span>
-                          </div>
-                          <div class="cal-days-grid" id="calDaysGrid">
-                          </div>
-                          <button class="btn-primary-block" style="margin-bottom:0;" onclick="closeCalendarModal()">Done / Select</button>
-                        </div>
-                      </div>
-                      <!-- Custom Alert Popup -->
-                      <div id="customAlertModal" class="alert-modal-overlay">
-                        <div class="alert-modal-card">
-                          <div class="alert-modal-icon" id="alertModalIcon">⚠️</div>
-                          <h3 id="alertModalTitle">Shift Limit</h3>
-                          <p id="alertModalMessage">A shift is already marked for this date!</p>
-                          <button onclick="closeAlertModal()" class="alert-modal-btn">Got it</button>
-                        </div>
-                      </div>
-                      <!-- SPA Router & Main Application Script -->
-                      <script>
+  </head>
+  <body>
+    <!-- Header Showcase with Side Panel Trigger -->
+    <div class="brand-showcase">
+      <div class="header-left">
+        <button class="hamburger-btn" onclick="openSidePanel()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="brand-logo-container">
+          <div class="logo-icon-box">
+            <img src="ShiftGrid logo.png" alt="ShiftGrid" onerror="this.style.display='none'; document.getElementById('fallbackLogoSvg').style.display='block';">
+            <svg id="fallbackLogoSvg" style="display:none; width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2.5;" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+              <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+              <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+              <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">ShiftGrid</span>
+            <span class="brand-tagline">WORKSPACE NAV</span>
+          </div>
+        </div>
+      </div>
+      <div class="header-status-pill">
+        <span class="pulse-dot"></span>
+        <span id="syncStatusText">Synced</span>
+      </div>
+    </div>
+
+    <!-- Side Panel Drawer -->
+    <div class="side-panel-overlay" id="sidePanelOverlay" onclick="closeSidePanel()"></div>
+    <div class="side-panel" id="sidePanel">
+      <div class="panel-header">
+        <div class="brand-text">
+          <span class="brand-name">ShiftGrid Menu</span>
+          <span class="brand-tagline">WORKSPACE NAVIGATION</span>
+        </div>
+        <button class="panel-close-btn" onclick="closeSidePanel()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="panel-nav-list">
+        <div class="nav-item active" id="nav-item-dashboard" onclick="switchView('view-dashboard')">
+          <div class="nav-icon-box">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <div class="nav-details">
+            <span class="nav-title">Main Dashboard</span>
+            <span class="nav-subtitle">Current Month Shift Logs</span>
+          </div>
+          <div class="nav-edge-badge">H</div>
+        </div>
+        <div class="nav-item" id="nav-item-attendance" onclick="switchView('view-attendance')">
+          <div class="nav-icon-box">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <div class="nav-details">
+            <span class="nav-title">Attendance History</span>
+            <span class="nav-subtitle">View Past Months' Attendance</span>
+          </div>
+          <div class="nav-edge-badge blue">A</div>
+        </div>
+        <div class="nav-item" id="nav-item-salary" onclick="switchView('view-salary')">
+          <div class="nav-icon-box">
+            <svg viewBox="0 0 24 24">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <div class="nav-details">
+            <span class="nav-title">Salary History</span>
+            <span class="nav-subtitle">Historical Monthly Earnings</span>
+          </div>
+          <div class="nav-edge-badge green">$</div>
+        </div>
+        <div class="nav-item" id="nav-item-leave" onclick="switchView('view-leave')">
+          <div class="nav-icon-box">
+            <svg viewBox="0 0 24 24">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <div class="nav-details">
+            <span class="nav-title">Leave & OT Manager</span>
+            <span class="nav-subtitle">Request & Track Overtime</span>
+          </div>
+          <div class="nav-edge-badge purple">+</div>
+        </div>
+        <div class="nav-item" id="nav-item-settings" onclick="switchView('view-settings')" style="margin-top: auto;">
+          <div class="nav-icon-box">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </div>
+          <div class="nav-details">
+            <span class="nav-title">Settings</span>
+            <span class="nav-subtitle">Preferences & Profile Setup</span>
+          </div>
+          <div class="nav-edge-badge" style="background:#475569; box-shadow:none;">⚙</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= PAGE VIEW 1: MAIN DASHBOARD ================= -->
+    <div class="app-page-view active-view" id="view-dashboard">
+      <div class="profile-card">
+        <div class="profile-info">
+          <div id="profileAvatarDisplay" class="avatar-img">--</div>
+          <div class="user-details">
+            <span id="profileNameDisplay" class="user-name">Loading Account...</span>
+            <div class="user-meta">
+              <span id="profileRoleBadge" class="role-badge">EMPLOYEE</span>
+              <span id="profileEmailDisplay" class="user-email">loading...</span>
+            </div>
+          </div>
+        </div>
+        <button class="hamburger-btn" style="width:36px; height:36px; border-radius:12px;" onclick="switchView('view-settings')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="pay-cycle-card">
+        <div class="pay-card-header">
+          <span id="cycleLabel" class="cycle-title">PAY CYCLE</span>
+          <span id="payDateBadge" class="pay-badge">Payday Pending</span>
+        </div>
+        <div class="pay-card-body">
+          <div id="cycleEarnings" class="earnings-amount">0 <span class="currency">LKR</span></div>
+        </div>
+        <div id="pendingPayoutBanner" class="pending-payout-banner" style="display: none;">
+          <div>
+            <div class="pending-title">Pending Payout (1st–15th)</div>
+            <div id="pendingPayDate" class="pending-date">Payday: 25th</div>
+          </div>
+          <div id="pendingPayAmount" class="pending-amount">0 LKR</div>
+        </div>
+        <div class="pay-card-divider"></div>
+        <div class="pay-card-footer">
+          <div class="meta-item">
+            <span class="meta-label">Shifts Tracked</span>
+            <span id="shiftsCount" class="meta-value">0 Shifts</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Active Cycle Period</span>
+            <span id="cyclePeriodText" class="meta-value">--/--</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dynamic Shift Logging Box -->
+      <div class="section-box">
+        <div class="section-header">
+          <h3 class="section-title">Log Shift</h3>
+          <button class="date-picker-btn" onclick="openCalendarModal()">
+            📅 <span id="shiftDateDisplay">--/--/----</span>
+          </button>
+        </div>
+        <div class="shift-list" id="availableShiftsContainer"></div>
+      </div>
+
+      <!-- Main Dashboard Records -->
+      <div class="section-box">
+        <div class="section-header">
+          <h3 class="section-title">Current Month Shift Logs</h3>
+          <span class="month-lock-badge" id="currentMonthBadge">Loading...</span>
+        </div>
+        <div class="history-list" id="recordsContainer"></div>
+      </div>
+    </div>
+
+    <!-- ================= PAGE VIEW 2: ATTENDANCE HISTORY ================= -->
+    <div class="app-page-view" id="view-attendance">
+      <div class="page-header-nav">
+        <button class="btn-back-dash" onclick="switchView('view-dashboard')">← Dashboard</button>
+        <h2 class="page-header-title">Attendance History</h2>
+      </div>
+      <div class="section-box">
+        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+          <select class="history-select" id="attMonthSelect" onchange="renderPageAttendanceView()" style="flex:1;">
+            <option value="0">January</option>
+            <option value="1">February</option>
+            <option value="2">March</option>
+            <option value="3">April</option>
+            <option value="4">May</option>
+            <option value="5">June</option>
+            <option value="6">July</option>
+            <option value="7">August</option>
+            <option value="8">September</option>
+            <option value="9">October</option>
+            <option value="10">November</option>
+            <option value="11">December</option>
+          </select>
+          <select class="history-select" id="attYearSelect" onchange="renderPageAttendanceView()" style="flex:1;">
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+          </select>
+        </div>
+        <div class="history-list" id="pageAttendanceRecords"></div>
+      </div>
+    </div>
+
+    <!-- ================= PAGE VIEW 3: SALARY HISTORY ================= -->
+    <div class="app-page-view" id="view-salary">
+      <div class="page-header-nav">
+        <button class="btn-back-dash" onclick="switchView('view-dashboard')">← Dashboard</button>
+        <h2 class="page-header-title">Salary Archives</h2>
+      </div>
+      <div class="section-box">
+        <div class="history-list" id="pageSalaryArchiveList"></div>
+      </div>
+    </div>
+
+    <!-- ================= PAGE VIEW 4: LEAVE & OT MANAGER ================= -->
+    <div class="app-page-view" id="view-leave">
+      <div class="page-header-nav">
+        <button class="btn-back-dash" onclick="switchView('view-dashboard')">← Dashboard</button>
+        <h2 class="page-header-title">Leave & OT Manager</h2>
+      </div>
+      <div class="section-box">
+        <h3 style="font-size: 15px; font-weight:800; margin-bottom: 12px;">Log Overtime or Request Leave</h3>
+        <div class="form-group">
+          <label>Request Type</label>
+          <select id="leaveTypeInput" class="form-input">
+            <option value="OT">Overtime Hours (OT)</option>
+            <option value="Medical Leave">Medical Leave</option>
+            <option value="Casual Leave">Casual Leave</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Amount / Hours</label>
+          <input type="number" id="leaveAmountInput" class="form-input" placeholder="e.g. 2.5 (Hours or Days)" value="1">
+        </div>
+        <div class="form-group">
+          <label>Notes / Reason</label>
+          <input type="text" id="leaveNoteInput" class="form-input" placeholder="Brief explanation">
+        </div>
+        <button class="btn-primary-block" onclick="submitLeaveRequest()">Submit Request</button>
+      </div>
+      <div class="section-box">
+        <h3 class="section-title" style="margin-bottom:12px;">Submitted Requests</h3>
+        <div class="history-list" id="leaveRequestsLog">
+          <div class="empty-history">No leave or overtime requests logged yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= PAGE VIEW 5: SETTINGS ================= -->
+    <div class="app-page-view" id="view-settings">
+      <div class="page-header-nav">
+        <button class="btn-back-dash" onclick="switchView('view-dashboard')">← Dashboard</button>
+        <h2 class="page-header-title">Settings & Profile</h2>
+      </div>
+      <div class="section-box">
+        <div class="form-group">
+          <label>Profile Avatar</label>
+          <div class="photo-upload-row">
+            <div id="modalAvatarPreview" class="photo-preview">--</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <button class="btn-photo-action" onclick="document.getElementById('avatarFileInput').click()">📷 Upload Custom Image</button>
+              <button class="btn-photo-action" onclick="removePhoto()">Remove Photo</button>
+              <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Display Name</label>
+          <input type="text" id="inputDisplayName" class="form-input" value="">
+        </div>
+        <button class="btn-primary-block" onclick="saveProfileChanges()">Save Profile Changes</button>
+        <!-- ACCOUNT DETAILS SECTION -->
+        <div style="margin-top: 20px; margin-bottom: 16px; padding-top: 16px; border-top: 1px solid var(--card-border); display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+            <span style="color: var(--text-muted); font-weight: 600;">Account Email</span>
+            <span id="settingsAccountEmail" style="color: #ffffff; font-weight: 700;">loading...</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+            <span style="color: var(--text-muted); font-weight: 600;">Account Status</span>
+            <span style="color: var(--badge-green); font-weight: 800; background: rgba(16, 185, 129, 0.1); padding: 3px 8px; border-radius: 6px;">Active Member</span>
+          </div>
+        </div>
+        <!-- RECONFIGURE SHIFT PRESETS & PAY CYCLE BUTTON -->
+        <button class="btn-modal-link" style="background: rgba(37, 99, 235, 0.1); border-color: rgba(37, 99, 235, 0.3); color: #60a5fa;" onclick="openReconfigureModal()">
+          ⚙️ Reconfigure Shift Presets & Pay Cycle
+        </button>
+        <button class="btn-modal-link" onclick="downloadCSVReport()">📥 Download Attendance Report (.CSV)</button>
+        <button class="btn-modal-link btn-reset" onclick="resetSavedData()">Reset Saved Shift Data</button>
+        <button class="btn-modal-link btn-reset" style="margin-top:12px;" onclick="handleSignOut()">🚪 Sign Out</button>
+      </div>
+    </div>
+
+    <!-- Global Calendar Modal -->
+    <div class="cal-modal-overlay" id="calendarModal">
+      <div class="cal-card">
+        <div class="cal-header">
+          <button class="cal-nav-btn" onclick="changeCalMonth(-1)">◄</button>
+          <span class="cal-title" id="calMonthYearTitle">August 2026</span>
+          <button class="cal-nav-btn" onclick="changeCalMonth(1)">►</button>
+        </div>
+        <div class="cal-weekdays">
+          <span>Su</span>
+          <span>Mo</span>
+          <span>Tu</span>
+          <span>We</span>
+          <span>Th</span>
+          <span>Fr</span>
+          <span>Sa</span>
+        </div>
+        <div class="cal-days-grid" id="calDaysGrid"></div>
+        <button class="btn-primary-block" style="margin-bottom:0;" onclick="closeCalendarModal()">Done / Select</button>
+      </div>
+    </div>
+
+    <!-- Custom Alert Popup -->
+    <div id="customAlertModal" class="alert-modal-overlay">
+      <div class="alert-modal-card">
+        <div class="alert-modal-icon" id="alertModalIcon">⚠️</div>
+        <h3 id="alertModalTitle">Shift Limit</h3>
+        <p id="alertModalMessage">A shift is already marked for this date!</p>
+        <button onclick="closeAlertModal()" class="alert-modal-btn">Got it</button>
+      </div>
+    </div>
+
+    <!-- SPA Router & Main Application Script -->
+    <script>
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         
         const defaultSSShifts = [
@@ -1301,7 +1301,6 @@
             if (!container) return;
             container.innerHTML = '';
 
-            // If not yet approved by admin, render the inline pending card box matching the screenshot
             if (!window.isUserApproved) {
                 container.innerHTML = `
                     <div style="background: rgba(13, 21, 34, 0.6); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; text-align: center;">
@@ -1492,7 +1491,6 @@
         }
 
         function logShiftById(shiftIndex, amount) {
-            // Block execution if template is not yet approved
             if (!window.isUserApproved) {
                 showCustomAlert("Shift logging is locked until your template request is approved by an administrator.", "Action Locked", "🔒");
                 return;
@@ -1682,8 +1680,9 @@
             updateCurrentMonthHistoryView();
         });
     </script>
-                      <!-- Firebase SDK Integration Module -->
-                      <script type="module">
+
+    <!-- Firebase SDK Integration Module -->
+    <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -1717,7 +1716,6 @@
                         if (userDoc.exists()) {
                             const data = userDoc.data();
                             
-                            // Robust check across possible database fields for approval status
                             window.isUserApproved = data.templateApproved === true || 
                                                   data.templateApproved === "true" || 
                                                   data.approved === true || 
@@ -1817,5 +1815,5 @@
             }
         };
     </script>
-                    </body>
-                  </html>
+  </body>
+</html>
