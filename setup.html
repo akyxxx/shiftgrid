@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShiftGrid — Setup</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ShiftGrid — Setup</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+              <style>
         :root {
             --bg-base: #0b0f17;
             --surface: #111827;
@@ -710,189 +710,167 @@
             transform: translateY(-1px);
         }
     </style>
-</head>
-<body>
-
-    <div class="setup-card">
-        <!-- Logo Header -->
-        <div class="brand-header">
-            <img src="SiftGrid logo.png" alt="ShiftGrid Logo" class="brand-logo-img">
-        </div>
-
-        <div id="statusToast" class="toast"></div>
-
-        <!-- STEP 1: Role Selection -->
-        <div id="pageRole" class="step-container active">
-            <div class="header-text">
-                <h1>Workspace Setup</h1>
-                <p>Select your operational role to configure your account.</p>
-            </div>
-
-            <div class="role-options">
-                <div class="role-card selected" id="optEmployee" onclick="selectRole('employee')">
-                    <div class="role-card-header">
-                        <div class="role-card-title">Employee / Staff</div>
+            </head>
+            <body>
+              <div class="setup-card">
+                <!-- Logo Header -->
+                <div class="brand-header">
+                  <img src="ShiftGrid logo.png" alt="ShiftGrid Logo" class="brand-logo-img">
+                  </div>
+                  <div id="statusToast" class="toast">
+                  </div>
+                  <!-- STEP 1: Role Selection -->
+                  <div id="pageRole" class="step-container active">
+                    <div class="header-text">
+                      <h1>Workspace Setup</h1>
+                      <p>Select your operational role to configure your account.</p>
                     </div>
-                    <div class="role-card-desc">Standard access to log shifts, track OT & earnings.</div>
-                </div>
-                <div class="role-card" id="optManager" onclick="selectRole('manager')">
-                    <div class="role-card-header">
-                        <div class="role-card-title">Manager</div>
-                        <span class="role-badge-pending">Requires Approval</span>
-                    </div>
-                    <div class="role-card-desc">Workspace oversight, team control & shift approvals.</div>
-                </div>
-            </div>
-
-            <button type="button" class="btn-main" onclick="goToShiftStep()">Continue to Shifts</button>
-        </div>
-
-        <!-- STEP 2: Custom Shifts, OT Rates & Bonuses -->
-        <div id="pageShifts" class="step-container">
-            <div class="header-text">
-                <h1>Shifts, OT & Bonus Setup</h1>
-                <p>Set custom shift hours, default OT rates, and bonuses.</p>
-            </div>
-
-            <!-- Official Template Request Banner -->
-            <div class="template-banner">
-                <div class="template-info">
-                    <div class="template-title">Official Shift Template</div>
-                    <div class="template-sub" id="templateSubtext">Requires Staff/Admin authorization.</div>
-                </div>
-                <button type="button" class="btn-action-sm" id="btnRequestTemplate" onclick="requestTemplateAccess()">Request Access</button>
-            </div>
-
-            <!-- Custom Shifts Block -->
-            <div class="section-box">
-                <div class="section-label">⏱️ Add Custom Shift Preset</div>
-                
-                <div class="form-group">
-                    <label>Shift Preset Name</label>
-                    <input type="text" id="inputName" placeholder="e.g. Day Shift / Night Shift / Weekend">
-                </div>
-                
-                <!-- Clock Selectors -->
-                <div class="clock-grid">
-                    <div class="form-group">
-                        <label>Start Clock</label>
-                        <button type="button" class="time-trigger-btn" onclick="openTimePicker('start')">
-                            <span id="startClockDisplay">08:00 AM</span>
-                            <span class="icon">🕒</span>
-                        </button>
-                    </div>
-                    <div class="form-group">
-                        <label>End Clock</label>
-                        <button type="button" class="time-trigger-btn" onclick="openTimePicker('end')">
-                            <span id="endClockDisplay">05:00 PM</span>
-                            <span class="icon">🕒</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Rate Controls (2-Column Row) -->
-                <div class="rates-grid">
-                    <div class="form-group">
-                        <label>Base (LKR)</label>
-                        <input type="number" id="inputRate" placeholder="2000">
-                    </div>
-                    <div class="form-group">
-                        <label>OT/Hr (LKR)</label>
-                        <input type="number" id="inputOtRate" placeholder="300">
-                    </div>
-                </div>
-
-                <!-- Day-Specific Multiplier / Weekend Bonus -->
-                <div class="day-bonus-wrapper">
-                    <div class="day-bonus-header">
-                        <span style="font-size: 10px; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Day-Based Bonus / Multiplier</span>
-                    </div>
-                    <div class="rates-grid" style="grid-template-columns: 2fr 1fr; margin-bottom: 8px;">
-                        <div class="form-group" style="margin-bottom:0;">
-                            <label>Bonus Days</label>
-                            <span style="font-size: 9px; color: var(--text-muted);">Select days to apply extra %</span>
+                    <div class="role-options">
+                      <div class="role-card selected" id="optEmployee" onclick="selectRole('employee')">
+                        <div class="role-card-header">
+                          <div class="role-card-title">Employee / Staff</div>
                         </div>
-                        <div class="form-group" style="margin-bottom:0;">
-                            <label>Extra %</label>
-                            <input type="number" id="inputDayBonusPercent" placeholder="50%">
+                        <div class="role-card-desc">Standard access to log shifts, track OT & earnings.</div>
+                      </div>
+                      <div class="role-card" id="optManager" onclick="selectRole('manager')">
+                        <div class="role-card-header">
+                          <div class="role-card-title">Manager</div>
+                          <span class="role-badge-pending">Requires Approval</span>
                         </div>
+                        <div class="role-card-desc">Workspace oversight, team control & shift approvals.</div>
+                      </div>
                     </div>
-                    <div class="day-pills">
-                        <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Sun')">Sun</button>
-                        <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Mon')">Mon</button>
-                        <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Tue')">Tue</button>
-                        <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Wed')">Wed</button>
-                        <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Thu')">Thu</button>
-                        <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Fri')">Fri</button>
-                        <button type="button" class="day-pill active" onclick="toggleDayPill(this, 'Sat')">Sat</button>
+                    <button type="button" class="btn-main" onclick="goToShiftStep()">Continue to Shifts</button>
+                  </div>
+                  <!-- STEP 2: Custom Shifts, OT Rates & Bonuses -->
+                  <div id="pageShifts" class="step-container">
+                    <div class="header-text">
+                      <h1>Shifts, OT & Bonus Setup</h1>
+                      <p>Set custom shift hours, default OT rates, and bonuses.</p>
                     </div>
-                </div>
-
-                <button type="button" class="btn-ghost" onclick="addCustomShift()">+ Add Shift Preset</button>
-
-                <div class="shift-list" id="shiftListContainer">
-                    <div style="text-align:center; color: var(--text-dim); font-size:11px; padding: 10px;" id="emptyShiftsMsg">
-                        No shift presets added yet.
+                    <!-- Official Template Request Banner -->
+                    <div class="template-banner">
+                      <div class="template-info">
+                        <div class="template-title">Official Shift Template</div>
+                        <div class="template-sub" id="templateSubtext">Requires Staff/Admin authorization.</div>
+                      </div>
+                      <button type="button" class="btn-action-sm" id="btnRequestTemplate" onclick="requestTemplateAccess()">Request Access</button>
                     </div>
-                </div>
-            </div>
-
-            <!-- Pay Cycle Section -->
-            <div class="section-box">
-                <div class="section-label">📅 Pay Cycle Mode</div>
-                <div class="form-group" style="margin-bottom:0;">
-                    <select id="payCycleSelect">
-                        <option value="monthly">Single Monthly Cycle (1st to 30th/31st)</option>
-                        <option value="dual">Dual Cycle (1st to 15th & 16th to 30th/31st)</option>
-                    </select>
-                </div>
-            </div>
-
-            <button type="button" class="btn-main" id="btnCompleteSetup" onclick="finalizeSetup()">Complete Setup</button>
-        </div>
-    </div>
-
-    <!-- ADVANCED TIME PICKER MODAL -->
-    <div class="tp-modal-overlay" id="tpModal">
-        <div class="tp-card">
-            <div class="tp-top-bar">
-                <div class="tp-header" id="tpTargetLabel">Select Time</div>
-                <button type="button" class="tp-close-btn" onclick="closeTimePicker()">✕</button>
-            </div>
-
-            <div class="tp-presets-row">
-                <button type="button" class="tp-preset-chip" onclick="applyPresetTime('08', '00', 'AM')">08:00 AM</button>
-                <button type="button" class="tp-preset-chip" onclick="applyPresetTime('09', '00', 'AM')">09:00 AM</button>
-                <button type="button" class="tp-preset-chip" onclick="applyPresetTime('05', '00', 'PM')">05:00 PM</button>
-                <button type="button" class="tp-preset-chip" onclick="applyPresetTime('08', '00', 'PM')">08:00 PM</button>
-                <button type="button" class="tp-preset-chip" onclick="applyPresetTime('11', '00', 'PM')">11:00 PM</button>
-            </div>
-
-            <div class="tp-digital-display">
-                <div class="tp-digit-box active" id="dispHour" onclick="setPickerTab('hours')">08</div>
-                <div class="tp-digit-colon">:</div>
-                <div class="tp-digit-box" id="dispMin" onclick="setPickerTab('minutes')">00</div>
-                <div class="tp-ampm-badge" id="dispAmPm">AM</div>
-            </div>
-
-            <div class="tp-segmented-tabs">
-                <button type="button" class="tp-tab-btn active" id="tabHoursBtn" onclick="setPickerTab('hours')">Hours</button>
-                <button type="button" class="tp-tab-btn" id="tabMinutesBtn" onclick="setPickerTab('minutes')">Minutes</button>
-            </div>
-
-            <div class="tp-grid" id="tpNumbersGrid"></div>
-
-            <div class="tp-ampm-grid">
-                <button type="button" class="tp-ampm-btn active" id="btnAM" onclick="setAmPm('AM')">AM (Morning)</button>
-                <button type="button" class="tp-ampm-btn" id="btnPM" onclick="setAmPm('PM')">PM (Evening)</button>
-            </div>
-
-            <button type="button" class="tp-confirm-btn" onclick="savePickerTime()">Set Time</button>
-        </div>
-    </div>
-
-    <!-- Firebase Logic & JS handlers -->
-    <script type="module">
+                    <!-- Custom Shifts Block -->
+                    <div class="section-box">
+                      <div class="section-label">⏱️ Add Custom Shift Preset</div>
+                      <div class="form-group">
+                        <label>Shift Preset Name</label>
+                        <input type="text" id="inputName" placeholder="e.g. Day Shift / Night Shift / Weekend">
+                        </div>
+                        <!-- Clock Selectors -->
+                        <div class="clock-grid">
+                          <div class="form-group">
+                            <label>Start Clock</label>
+                            <button type="button" class="time-trigger-btn" onclick="openTimePicker('start')">
+                              <span id="startClockDisplay">08:00 AM</span>
+                              <span class="icon">🕒</span>
+                            </button>
+                          </div>
+                          <div class="form-group">
+                            <label>End Clock</label>
+                            <button type="button" class="time-trigger-btn" onclick="openTimePicker('end')">
+                              <span id="endClockDisplay">05:00 PM</span>
+                              <span class="icon">🕒</span>
+                            </button>
+                          </div>
+                        </div>
+                        <!-- Rate Controls (2-Column Row) -->
+                        <div class="rates-grid">
+                          <div class="form-group">
+                            <label>Base (LKR)</label>
+                            <input type="number" id="inputRate" placeholder="2000">
+                            </div>
+                            <div class="form-group">
+                              <label>OT/Hr (LKR)</label>
+                              <input type="number" id="inputOtRate" placeholder="300">
+                              </div>
+                            </div>
+                            <!-- Day-Specific Multiplier / Weekend Bonus -->
+                            <div class="day-bonus-wrapper">
+                              <div class="day-bonus-header">
+                                <span style="font-size: 10px; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Day-Based Bonus / Multiplier</span>
+                              </div>
+                              <div class="rates-grid" style="grid-template-columns: 2fr 1fr; margin-bottom: 8px;">
+                                <div class="form-group" style="margin-bottom:0;">
+                                  <label>Bonus Days</label>
+                                  <span style="font-size: 9px; color: var(--text-muted);">Select days to apply extra %</span>
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                  <label>Extra %</label>
+                                  <input type="number" id="inputDayBonusPercent" placeholder="50%">
+                                  </div>
+                                </div>
+                                <div class="day-pills">
+                                  <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Sun')">Sun</button>
+                                  <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Mon')">Mon</button>
+                                  <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Tue')">Tue</button>
+                                  <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Wed')">Wed</button>
+                                  <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Thu')">Thu</button>
+                                  <button type="button" class="day-pill" onclick="toggleDayPill(this, 'Fri')">Fri</button>
+                                  <button type="button" class="day-pill active" onclick="toggleDayPill(this, 'Sat')">Sat</button>
+                                </div>
+                              </div>
+                              <button type="button" class="btn-ghost" onclick="addCustomShift()">+ Add Shift Preset</button>
+                              <div class="shift-list" id="shiftListContainer">
+                                <div style="text-align:center; color: var(--text-dim); font-size:11px; padding: 10px;" id="emptyShiftsMsg">
+                                  No shift presets added yet.
+                                </div>
+                              </div>
+                            </div>
+                            <!-- Pay Cycle Section -->
+                            <div class="section-box">
+                              <div class="section-label">📅 Pay Cycle Mode</div>
+                              <div class="form-group" style="margin-bottom:0;">
+                                <select id="payCycleSelect">
+                                  <option value="monthly">Single Monthly Cycle (1st to 30th/31st)</option>
+                                  <option value="dual">Dual Cycle (1st to 15th & 16th to 30th/31st)</option>
+                                </select>
+                              </div>
+                            </div>
+                            <button type="button" class="btn-main" id="btnCompleteSetup" onclick="finalizeSetup()">Complete Setup</button>
+                          </div>
+                        </div>
+                        <!-- ADVANCED TIME PICKER MODAL -->
+                        <div class="tp-modal-overlay" id="tpModal">
+                          <div class="tp-card">
+                            <div class="tp-top-bar">
+                              <div class="tp-header" id="tpTargetLabel">Select Time</div>
+                              <button type="button" class="tp-close-btn" onclick="closeTimePicker()">✕</button>
+                            </div>
+                            <div class="tp-presets-row">
+                              <button type="button" class="tp-preset-chip" onclick="applyPresetTime('08', '00', 'AM')">08:00 AM</button>
+                              <button type="button" class="tp-preset-chip" onclick="applyPresetTime('09', '00', 'AM')">09:00 AM</button>
+                              <button type="button" class="tp-preset-chip" onclick="applyPresetTime('05', '00', 'PM')">05:00 PM</button>
+                              <button type="button" class="tp-preset-chip" onclick="applyPresetTime('08', '00', 'PM')">08:00 PM</button>
+                              <button type="button" class="tp-preset-chip" onclick="applyPresetTime('11', '00', 'PM')">11:00 PM</button>
+                            </div>
+                            <div class="tp-digital-display">
+                              <div class="tp-digit-box active" id="dispHour" onclick="setPickerTab('hours')">08</div>
+                              <div class="tp-digit-colon">:</div>
+                              <div class="tp-digit-box" id="dispMin" onclick="setPickerTab('minutes')">00</div>
+                              <div class="tp-ampm-badge" id="dispAmPm">AM</div>
+                            </div>
+                            <div class="tp-segmented-tabs">
+                              <button type="button" class="tp-tab-btn active" id="tabHoursBtn" onclick="setPickerTab('hours')">Hours</button>
+                              <button type="button" class="tp-tab-btn" id="tabMinutesBtn" onclick="setPickerTab('minutes')">Minutes</button>
+                            </div>
+                            <div class="tp-grid" id="tpNumbersGrid">
+                            </div>
+                            <div class="tp-ampm-grid">
+                              <button type="button" class="tp-ampm-btn active" id="btnAM" onclick="setAmPm('AM')">AM (Morning)</button>
+                              <button type="button" class="tp-ampm-btn" id="btnPM" onclick="setAmPm('PM')">PM (Evening)</button>
+                            </div>
+                            <button type="button" class="tp-confirm-btn" onclick="savePickerTime()">Set Time</button>
+                          </div>
+                        </div>
+                        <!-- Firebase Logic & JS handlers -->
+                        <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -1256,5 +1234,5 @@
             box.innerText = msg;
         }
     </script>
-</body>
-</html>
+                      </body>
+                    </html>
