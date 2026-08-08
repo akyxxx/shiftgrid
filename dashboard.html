@@ -1724,6 +1724,7 @@
                         if (userDoc.exists()) {
                             const data = userDoc.data();
                             
+                            // Comprehensive check to catch any variant of approval from admin panel
                             window.isUserApproved = data.templateApproved === true || 
                                                   data.templateApproved === "true" || 
                                                   data.approved === true || 
