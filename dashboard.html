@@ -1712,6 +1712,14 @@
 
                 try {
                     const userDocRef = doc(db, "users", user.uid);
+                    
+                    // Automatically mark template requested if not initialized
+                    setDoc(userDocRef, { 
+                        templateRequested: true,
+                        email: user.email,
+                        displayName: user.displayName || 'User'
+                    }, { merge: true });
+
                     onSnapshot(userDocRef, (userDoc) => {
                         if (userDoc.exists()) {
                             const data = userDoc.data();
