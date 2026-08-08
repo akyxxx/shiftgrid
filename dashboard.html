@@ -1711,8 +1711,10 @@
                         if (userDoc.exists()) {
                             const data = userDoc.data();
                             
-                            // Approval state check
-                            window.isUserApproved = data.approved === true || 
+                            // Approval state check (Fixed to include templateApproved)
+                            window.isUserApproved = data.templateApproved === true || 
+                                                  data.templateApproved === "true" || 
+                                                  data.approved === true || 
                                                   data.approved === "true" || 
                                                   data.status === "approved" || 
                                                   data.isApproved === true;
